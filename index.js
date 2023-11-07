@@ -2,8 +2,6 @@
     This is our back-end server, which employs some middleware
     to make sure data is received in the proper format (i.e. JSON)
     and hooks up all of our pieces.
-    
-    @author McKilla Gorilla
 */
 
 // THESE ARE NODE APIs WE WISH TO USE
