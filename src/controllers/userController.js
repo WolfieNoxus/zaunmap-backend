@@ -1,9 +1,14 @@
 const User = require('../models/userModel');
 
-exports.getUsers = async (req, res) => {
+exports.getUserById = async (req, res) => {
   try {
-    const users = await User.find();
-    res.json(users);
+    const userId = req.params.userId; // Get user_id from route parameter
+    const user = await User.findOne({ user_id: userId }); // Find user by user_id
+    if (!user) {
+      res.status(404).send('User not found');
+      return;
+    }
+    res.json(user);
   } catch (error) {
     res.status(500).send(error.message);
   }
