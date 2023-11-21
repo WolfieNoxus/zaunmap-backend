@@ -5,8 +5,7 @@
   "scripts": {
     "start": "node src/app.js",
     "dev": "nodemon src/app.js",
-    "test": "jest",
-    "build": "babel src --out-dir dist --copy-files"
+    "test": "jest"
   },
   "license": "MIT",
   "dependencies": {
