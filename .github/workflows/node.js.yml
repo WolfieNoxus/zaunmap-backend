@@ -1,4 +1,4 @@
-name: Deploy to Heroku
+name: Build, Test, and Deploy to Heroku
 
 on:
   push:
@@ -6,29 +6,55 @@ on:
       - main
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v1
-      with:
-        node-version: '18.x'
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '18.x'
 
-    - name: Install dependencies
-      run: npm install
+      - name: Install dependencies
+        run: npm install
 
-    - name: Run Tests
-      run: npm test
-      env:
-        CI: true  # Ensures tests run in CI-mode
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
 
-    - name: Deploy to Heroku
-      uses: akhileshns/heroku-deploy@v3.12.12 # This action simplifies Heroku deployments
-      with:
-        heroku_api_key: da2799ac-e7da-46a2-956b-e081f7dd23f8
-        heroku_app_name: zaunmap # Set the Heroku app name here
-        heroku_email: zhangwen.hu@stonybrook.edu # Replace with your Heroku account email
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '18.x'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Tests
+        run: npm test
+        env:
+          CI: true
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '18.x'
+
+      - name: Deploy to Heroku
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: da2799ac-e7da-46a2-956b-e081f7dd23f8
+          heroku_app_name: zaunmap
+          heroku_email: zhangwen.hu@stonybrook.edu
