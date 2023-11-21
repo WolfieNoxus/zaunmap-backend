@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 const mapSchema = new Schema({
     owner: { type: Schema.Types.ObjectId, ref: 'User' },
     isPublic: { type: Boolean, default: true },
-    sourceType: { type: String, enum: ['SHP/DBF', 'GeoJSON', 'KML', 'Forked'] },
+    sourceType: { type: String, enum: ['SHP/DBF', 'GeoJSON', 'KML'] },
     sourceData: Buffer,
     regions: [{
         name: String,
