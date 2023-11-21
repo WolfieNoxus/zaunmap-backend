@@ -47,3 +47,15 @@ describe('Always Success Test', () => {
         expect(true).toBe(true);
     });
 });
+
+
+describe('GET /api/hello', () => {
+  it('responds with json containing "Hello, World!"', async () => {
+    const response = await request(app)
+      .get('/api/hello')
+      .expect('Content-Type', /json/)
+      .expect(200);
+
+    expect(response.body).toEqual({ message: 'Hello, World!' });
+  });
+});

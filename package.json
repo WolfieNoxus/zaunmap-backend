@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node src/app.js",
     "dev": "nodemon src/app.js",
-    "test": "jest --detectOpenHandles"
+    "test": "jest"
   },
   "license": "MIT",
   "dependencies": {
