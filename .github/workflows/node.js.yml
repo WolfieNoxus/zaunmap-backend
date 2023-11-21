@@ -21,9 +21,6 @@ jobs:
     - name: Install dependencies
       run: npm install
 
-    - name: Build
-      run: npm run build  # Replace this with your build script if necessary
-
     - name: Deploy to Heroku
       uses: akhileshns/heroku-deploy@v3.12.12 # This action simplifies Heroku deployments
       with:
