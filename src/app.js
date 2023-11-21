@@ -25,5 +25,4 @@ if (process.env.NODE_ENV !== 'test') {
 }
 
 // Secured route with JWT and scope checking
-app.use('/api/users', checkJwt, checkScopes, userRoutes);
-
+app.use('/api/users', userRoutes);
