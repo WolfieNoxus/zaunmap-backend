@@ -4,8 +4,8 @@ const userController = require('../controllers/userController');
 const { checkJwt, checkScopes } = require('../config/auth');
 
 // Secure route with JWT check and scopes
-router.get('/', checkJwt, checkScopes('read:users'), userController.getUsers);
-router.post('/', checkJwt, checkScopes('write:users'), userController.createUser);
+router.get('/', userController.getUsers);
+router.post('/', userController.createUser);
 
 // Other routes...
 

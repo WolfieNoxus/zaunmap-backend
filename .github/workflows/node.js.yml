@@ -21,6 +21,11 @@ jobs:
     - name: Install dependencies
       run: npm install
 
+    - name: Run Tests
+      run: npm test
+      env:
+        CI: true  # Ensures tests run in CI-mode
+
     - name: Deploy to Heroku
       uses: akhileshns/heroku-deploy@v3.12.12 # This action simplifies Heroku deployments
       with:
