@@ -57,8 +57,6 @@ exports.createMap = async (req, res) => {
     }
 };
 
-
-
 exports.importMap = async (req, res) => {
     try {
         const user_id = req.query.user_id;
@@ -84,12 +82,13 @@ exports.importMap = async (req, res) => {
         const config = {
             headers: 'application/json'
         };
-        await axios.put(`https://zaunmap.pages.dev/file/?user_id=${user_id}&object_id=${object_id}`, geoJsonData, config);
+        const targetMap = await Map.findOne({ _id: map_id });
+        const targetMapId = targetMap.object_id;
+        await axios.put(`https://zaunmap.pages.dev/file/?user_id=${user_id}&object_id=${targetMapId}`, geoJsonData, config);
 
         res.send('Map import successful');
     } catch (error) {
-        console.error('Error importing map:', error);
-        res.status(500).send('Error importing map');
+        res.status(500).send('Error importing map', error.message);
     }
 };
 
