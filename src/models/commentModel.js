@@ -6,7 +6,16 @@ const commentSchema = new Schema({
     author: { type: Schema.Types.ObjectId, ref: 'User' },
     content: String,
     map: { type: Schema.Types.ObjectId, ref: 'Map' },
-    createdAt: { type: Date, default: Date.now }
+    likes: {
+        type: Number,
+        default: 0,
+    },
+    dislikes: {
+        type: Number,
+        default: 0,
+    },
+}, {
+    timestamps: true,
 });
 
 module.exports = mongoose.model('Comment', commentSchema);

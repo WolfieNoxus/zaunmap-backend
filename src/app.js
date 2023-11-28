@@ -3,6 +3,8 @@ const express = require('express');
 const connectDB = require('./config/db');
 const { checkJwt, checkScopes } = require('./config/auth');
 const userRoutes = require('./routes/userRoutes');
+const mapRoutes = require('./routes/mapRoutes');
+const commentRoutes = require('./routes/commentRoutes');
 
 const app = express();
 if (process.env.NODE_ENV !== 'test') {
@@ -26,4 +28,6 @@ if (process.env.NODE_ENV !== 'test') {
 }
 
 // Secured route with JWT and scope checking
-app.use('/api/users', userRoutes);
+app.use('/api/user', userRoutes);
+app.use('/api/map', mapRoutes);
+app.use('/api/comment', commentRoutes);

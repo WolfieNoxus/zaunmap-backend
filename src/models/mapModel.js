@@ -3,28 +3,31 @@ const Schema = mongoose.Schema;
 
 // Map Schema
 const mapSchema = new Schema({
-    owner: { type: Schema.Types.ObjectId, ref: 'User' },
-    isPublic: { type: Boolean, default: true },
-    sourceType: { type: String, enum: ['SHP/DBF', 'GeoJSON', 'KML'] },
-    sourceData: Buffer,
-    regions: [{
-        name: String,
-        customData: Schema.Types.Mixed,
-        properties: Schema.Types.Mixed
-    }],
-    graphics: {
-        texts: [{
-            content: String,
-            font: String,
-            position: { x: Number, y: Number }
-        }],
-        colors: {
-            fill: String,
-            border: String,
-            background: String
-        },
-        legendDetails: String
-    }
+    map_id: {
+        type: String,
+        required: true,
+    },
+    author: { type: Schema.Types.ObjectId, ref: 'User' },
+    name: {
+        type: String,
+        required: true,
+    },
+    description: {
+        type: String,
+    },
+    likes: {
+        type: Number,
+        default: 0,
+    },
+    dislikes: {
+        type: Number,
+        default: 0,
+    },
+    data: {
+        type: Schema.Types.Mixed,
+        default: {},
+    },
+    comments: [{ type: Schema.Types.ObjectId, ref: 'Comment' }],
 }, { timestamps: true });
 
 module.exports = mongoose.model('Map', mapSchema);

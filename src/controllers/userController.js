@@ -1,27 +1,45 @@
 const User = require('../models/userModel');
 
-exports.getUserById = async (req, res) => {
+exports.getUser = async (req, res) => {
   try {
-    const userId = req.params.userId; // Get user_id from route parameter
-    const user = await User.findOne({ user_id: userId }); // Find user by user_id
-    if (!user) {
-      res.status(404).send('User not found');
-      return;
-    }
-    res.json(user);
-  } catch (error) {
-    res.status(500).send(error.message);
+    const user = await User.findOne({ user_id: req.params.id });
+    res.status(200).json(user);
   }
-};
+  catch (error) {
+    res.status(404).send(error.message);
+  }
+}
 
 exports.createUser = async (req, res) => {
   try {
     const newUser = new User(req.body);
     await newUser.save();
     res.status(201).json(newUser);
-  } catch (error) {
+  }
+  catch (error) {
     res.status(400).send(error.message);
   }
-};
+}
 
-// Additional controller methods like updateUser, deleteUser, etc.
+exports.updateUser = async (req, res) => {
+  try {
+    const user = await User.findOne({ user_id: req.params.id });
+    Object.assign(user, req.body);
+    await user.save();
+    res.status(200).json(user);
+  }
+  catch (error) {
+    res.status(404).send(error.message);
+  }
+}
+
+exports.deleteUser = async (req, res) => {
+  try {
+    const user = await User.findOne({ user_id: req.params.id });
+    await user.remove();
+    res.status(200).json({ message: 'User deleted successfully' });
+  }
+  catch (error) {
+    res.status(404).send(error.message);
+  }
+}
