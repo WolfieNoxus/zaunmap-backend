@@ -1,5 +1,5 @@
 // const request = require('supertest');
-// const app = require('./app'); // Replace with the path to your Express app
+// const app = require('../src/app'); // Replace with the path to your Express app
 
 // Sample test to ensure Jest is working
 describe('Sample Test', () => {

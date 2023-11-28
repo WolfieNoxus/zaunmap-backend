@@ -1,10 +1,6 @@
-// const request = require('supertest');
-// const express = require('express');
-// const userRouter = require('../routes/userRoutes'); // Update with the correct path
-
-// const app = express();
-// app.use(express.json());
-// app.use('api/user', userRouter); // Mount your router under a specific path
+const supertest = require('supertest');
+const url = 'https://zaunmap-6b1455b08c9b.herokuapp.com/api'; 
+const request = supertest(url);
 
 // Sample test to ensure Jest is working
 describe('Sample Test', () => {
@@ -13,13 +9,13 @@ describe('Sample Test', () => {
   });
 });
 
-// describe('GET /user/', () => {
-//   it('should return a user', async () => {
-//     const response = await request(app).get('/user/?user_id=auth0|656669d317b4bdb501178567');
-//     expect(response.statusCode).toBe(200);
-//     expect(response.body).toHaveProperty('user_id');
-//   });
-// });
+describe('GET /user/', () => {
+  it('should return a user', async () => {
+    const response = await request.get('/user?user_id=auth0|656669d317b4bdb501178567');
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toHaveProperty('user_id');
+  });
+});
 
 // describe('GET /user/list', () => {
 //   it('should return a list of users', async () => {
