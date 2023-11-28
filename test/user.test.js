@@ -17,25 +17,25 @@ describe('GET /user/', () => {
   });
 });
 
-// describe('GET /user/list', () => {
-//   it('should return a list of users', async () => {
-//     const response = await request(app).get('/users/list');
-//     expect(response.statusCode).toBe(200);
-//     expect(Array.isArray(response.body)).toBeTruthy();
-//   });
-// });
+describe('GET /user/list', () => {
+  it('should return a list of users', async () => {
+    const response = await request.get('/user/list');
+    expect(response.statusCode).toBe(200);
+    expect(Array.isArray(response.body)).toBeTruthy();
+  });
+});
 
-// describe('POST /user/', () => {
-//   it('should create a new user', async () => {
-//     const newUser = {
-//       user_id: '123',
-//       user_name: 'Test User'
-//     };
-//     const response = await request(app).post('/user/').send(newUser);
-//     expect(response.statusCode).toBe(201);
-//     expect(response.body).toEqual(expect.objectContaining(newUser));
-//   });
-// });
+describe('POST /user/', () => {
+  it('should create a new user', async () => {
+    const newUser = {
+      user_id: '123',
+      user_name: 'Test User'
+    };
+    const response = await request.post('/user/').send(newUser);
+    expect(response.statusCode).toBe(201);
+    expect(response.body).toEqual(expect.objectContaining(newUser));
+  });
+});
 
 // describe('PUT /user/rename', () => {
 //   it('should rename a user', async () => {
