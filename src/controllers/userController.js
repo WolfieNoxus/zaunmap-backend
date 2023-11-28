@@ -3,11 +3,11 @@ const User = require('../models/userModel');
 exports.getUser = async (req, res) => {
   try {
     // Validate query parameters
-    if (!req.query.user_id) {
-      return res.status(400).send('Invalid query parameters');
-    }
+    // if (!req.query.user_id) {
+    //   return res.status(400).send('Invalid query parameters');
+    // }
 
-    const user = await User.findOne({ user_id: req.query.user_id });
+    const user = await User.findOne({ user_id: req.user.sub });
     if (!user) {
       return res.status(404).send('User not found');
     }
