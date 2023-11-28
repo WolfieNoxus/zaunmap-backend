@@ -7,7 +7,7 @@ const mapSchema = new Schema({
         type: String,
         default: 'Unnamed Map'
     },
-    owner: {
+    author: {
         type: String,
     },
     public: {
