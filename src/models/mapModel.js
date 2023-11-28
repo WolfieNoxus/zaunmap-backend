@@ -3,31 +3,36 @@ const Schema = mongoose.Schema;
 
 // Map Schema
 const mapSchema = new Schema({
-    map_id: {
-        type: String,
-        required: true,
-    },
-    author: { type: Schema.Types.ObjectId, ref: 'User' },
     name: {
         type: String,
-        required: true,
     },
-    description: {
+    owner: {
         type: String,
+    },
+    Public: {
+        type: Boolean,
+        default: true
     },
     likes: {
         type: Number,
-        default: 0,
+        default: 0
     },
     dislikes: {
         type: Number,
-        default: 0,
+        default: 0
     },
-    data: {
-        type: Schema.Types.Mixed,
-        default: {},
+    object_id: {
+        type: String,
+        required: true
     },
-    comments: [{ type: Schema.Types.ObjectId, ref: 'Comment' }],
-}, { timestamps: true });
+    tags: [{
+        type: String,
+    }],
+    description: {
+        type: String,
+    },
+}, {
+    timestamps: true,
+});
 
 module.exports = mongoose.model('Map', mapSchema);
