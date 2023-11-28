@@ -6,17 +6,11 @@ const userSchema = mongoose.Schema({
         required: true,
     },
     user_name: { type: String },
-    role: { type: String, 
+    role: {
+        type: String,
         enum: ['user', 'banned_user', 'admin'],
-        default: 'user' },
-    maps: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Map' }],
-    likedMaps: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Map' }],
-    dislikedMaps: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Map' }],
-    comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }],
-    likedComments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }],
-    dislikedComments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }],
-}, {
-    timestamps: true,
+        default: 'user'
+    },
 });
 
 module.exports = mongoose.model('User', userSchema);

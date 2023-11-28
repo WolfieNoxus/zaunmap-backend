@@ -1,7 +1,6 @@
 require('dotenv').config();
 const express = require('express');
 const connectDB = require('./config/db');
-const { checkJwt, checkScopes } = require('./config/auth');
 const userRoutes = require('./routes/userRoutes');
 const mapRoutes = require('./routes/mapRoutes');
 const commentRoutes = require('./routes/commentRoutes');

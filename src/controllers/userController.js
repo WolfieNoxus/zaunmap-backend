@@ -43,3 +43,39 @@ exports.deleteUser = async (req, res) => {
     res.status(404).send(error.message);
   }
 }
+
+exports.changeName = async (req, res) => {
+  try {
+    const user = await User.findOne({ user_id: req.params.id });
+    user.user_name = req.body.user_name;
+    await user.save();
+    res.status(200).json(user);
+  }
+  catch (error) {
+    res.status(404).send(error.message);
+  }
+}
+
+exports.banUser = async (req, res) => {
+  try {
+    const user = await User.findOne({ user_id: req.params.id });
+    user.role = 'banned_user';
+    await user.save();
+    res.status(200).json(user);
+  }
+  catch (error) {
+    res.status(404).send(error.message);
+  }
+}
+
+exports.unbanUser = async (req, res) => {
+  try {
+    const user = await User.findOne({ user_id: req.params.id });
+    user.role = 'user';
+    await user.save();
+    res.status(200).json(user);
+  }
+  catch (error) {
+    res.status(404).send(error.message);
+  }
+}
