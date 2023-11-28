@@ -8,5 +8,6 @@ router.put('/', MapController.updateMapMetadata);
 router.get('/', MapController.getMap);
 router.get('/public', MapController.getAllPublicMaps);
 router.get('/all', MapController.getAllMaps);
+router.get('/json', MapController.getMapJSON);
 
 module.exports = router;

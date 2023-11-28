@@ -3,6 +3,9 @@ const Schema = mongoose.Schema;
 
 // Map Schema
 const mapSchema = new Schema({
+    map_id: {
+        type: Number
+    },
     name: {
         type: String,
         default: 'Unnamed Map'

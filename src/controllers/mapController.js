@@ -6,7 +6,6 @@ const toGeoJSON = require('@tmcw/togeojson');
 const shpjs = require('shpjs');
 const JSZip = require('jszip');
 const { parse } = require('fast-xml-parser');
-const mongoose = require('mongoose');
 
 exports.createMap = async (req, res) => {
     try {
@@ -16,48 +15,77 @@ exports.createMap = async (req, res) => {
             return res.status(400).json({ message: "Missing user_id in query parameters" });
         }
 
-        const newMap = new Map({
-            owner: user_id
-        });
+        // Initialize an empty GeoJSON object
+        const emptyGeoJSON = {
+            "type": "FeatureCollection",
+            "features": []
+        };
 
+        // Set headers for raw data payload
+        const config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        };
+
+        // Perform the HTTP POST request to send the empty GeoJSON
+        const postResponse = await axios.post(`https://zaunmap.pages.dev/file?user_id=${user_id}`, emptyGeoJSON, config);
+
+        // check and Extract the object_id from the POST response
+        const object_id = postResponse.data.object_id;
+
+        // Create a new Map instance with the user_id and object_id
+        const newMap = new Map({ author: user_id, object_id: object_id, map_id: Date.now()});
+        
+        // Save the new map to the database
+        await newMap.save();
+
+        // Simulated database operations for finding the user and saving the map
         const user = await User.findOne({ user_id: user_id });
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
+
         user.maps.push(newMap._id);
         await user.save();
 
-        // Save the new map
-        await newMap.save();
-
-        // Send a successful response
+        // Send a successful response with the new map details
         res.status(201).json(newMap);
     } catch (error) {
         // Handle any errors that occur during the process
-        res.status(500).json({ message: "Error creating map", error: error.message });
+        res.status(500).json({ message: "Error creating map", error: error.message, error: error, stack: error.stack });
     }
 };
+
 
 
 exports.importMap = async (req, res) => {
     try {
         const user_id = req.query.user_id;
         const map_id = req.query.map_id;
-        const object_id = req.body.object_id;
-        const format = req.body.format;
+        const object_id = req.query.object_id;
+
+        // link the object_id to the map
+        Object.assign(Map.findOne({ _id: map_id }), { object_id: object_id });
 
         // Get raw data
         const rawDataResponse = await axios.get(`https://zaunmap.pages.dev/file/?user_id=${user_id}&object_id=${object_id}`, { responseType: 'arraybuffer' });
         let rawData = rawDataResponse.data;
 
+        // Get format from response headers Content-Type
+        const format = rawDataResponse.headers['content-type'].split('/')[1];
+
         // Convert to GeoJSON
-        let geoJsonData = await convertToGeoJson(rawData, format);
+        let geoJsonData = await convertToGeoJson(rawData, 'json');
+        console.log("geojson data successful");
+
+        res.send(geoJsonData);
 
         // PUT the converted data
         const formData = new FormData();
         formData.append('file', JSON.stringify(geoJsonData));
         const config = {
-            headers: formData.getHeaders(),
+            headers: 'application/json'
         };
         await axios.put(`https://zaunmap.pages.dev/file/?user_id=${user_id}&object_id=${object_id}`, formData, config);
 
@@ -70,13 +98,13 @@ exports.importMap = async (req, res) => {
 
 async function convertToGeoJson(data, format) {
     switch (format) {
-        case 'geojson':
-            return JSON.parse(data); // Assuming the data is in GeoJSON format as a string
-        case 'kml':
+        case 'json':
+            return JSON.parse(data);
+        case 'xml':
             const xml = data.toString('utf-8');
             const kmlObject = parse(xml, { ignoreAttributes: false });
             return toGeoJSON.kml(kmlObject);
-        case 'shp':
+        case 'x-esri-shape':
             return await shpjs.parseZip(data);
         case 'zip': // Assuming ZIP contains SHP files
             const zip = await JSZip.loadAsync(data);
@@ -151,6 +179,22 @@ exports.updateMapMetadata = async (req, res) => {
         Object.assign(map, req.body);
         await map.save();
         res.status(200).json(map);
+    }
+    catch (error) {
+        res.status(404).send(error.message);
+    }
+}
+
+exports.getMapJSON = async (req, res) => {
+    try {
+        const _id = req.query._id;
+        const map = await Map.findOne({ _id: _id });
+        const object_id = map.object_id;
+        const user_id = map.author;
+        const rawDataResponse = await axios.get(`https://zaunmap.pages.dev/file/?user_id=${user_id}&object_id=${object_id}`, { responseType: 'arraybuffer' });
+        let rawData = rawDataResponse.data;
+        let geoJsonData = await convertToGeoJson(rawData, 'json');
+        res.send(geoJsonData);
     }
     catch (error) {
         res.status(404).send(error.message);
