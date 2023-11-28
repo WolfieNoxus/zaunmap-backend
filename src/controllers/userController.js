@@ -64,12 +64,17 @@ exports.restrict = async (req, res) => {
       return res.status(400).send('Invalid query parameters');
     }
 
+    const restrictParam = req.query.restrict?.toLowerCase();
+    if (restrictParam !== 'true' && restrictParam !== 'false') {
+      return res.status(400).send('Invalid query parameters: restrict must be true or false');
+    }
+
     const user = await User.findOne({ user_id: req.query.user_id });
     if (!user) {
       return res.status(404).send('User not found');
     }
 
-    user.role = req.query.restrict ? 'restricted' : 'user';
+    user.role = restrictParam === 'true' ? 'restricted' : 'user';
     await user.save();
     res.status(200).send('User role updated successfully');
   }
@@ -81,20 +86,29 @@ exports.restrict = async (req, res) => {
 exports.disable = async (req, res) => {
   try {
     // Validate query parameters
-    if (!req.query.user_id || req.query.disable === undefined) {
-      return res.status(400).send('Invalid query parameters');
+    if (!req.query.user_id) {
+      return res.status(400).send('Invalid query parameters: user_id is required');
     }
 
+    // Convert the disable parameter to lowercase and check if it is 'true' or 'false'
+    const disableParam = req.query.disable.toLowerCase();
+    if (disableParam !== 'true' && disableParam !== 'false') {
+      return res.status(400).send('Invalid query parameters: disable must be true or false');
+    }
+
+    // Find the user
     const user = await User.findOne({ user_id: req.query.user_id });
     if (!user) {
       return res.status(404).send('User not found');
     }
 
-    user.role = req.query.disable ? 'disabled' : 'user';
+    // Set user role
+    user.role = disableParam === 'true' ? 'disabled' : 'user';
     await user.save();
+
     res.status(200).send('User status updated successfully');
   }
   catch (error) {
     res.status(500).send('Internal Server Error: ' + error.message);
   }
-}
+};
