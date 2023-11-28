@@ -2,7 +2,7 @@ const User = require('../models/userModel');
 
 exports.getUser = async (req, res) => {
   try {
-    const user = await User.findOne({ user_id: req.params.id });
+    const user = await User.findOne({ user_id: req.query.user_id });
     res.status(200).json(user);
   }
   catch (error) {
@@ -44,36 +44,24 @@ exports.deleteUser = async (req, res) => {
   }
 }
 
-exports.changeName = async (req, res) => {
+exports.rename = async (req, res) => {
   try {
-    const user = await User.findOne({ user_id: req.params.id });
-    user.user_name = req.body.user_name;
+    const user = await User.findOne({ user_id: req.query.user_id });
+    user.user_name = req.query.user_name;
     await user.save();
-    res.status(200).json(user);
+    res.status(200);
   }
   catch (error) {
     res.status(404).send(error.message);
   }
 }
 
-exports.banUser = async (req, res) => {
+exports.restrict = async (req, res) => {
   try {
-    const user = await User.findOne({ user_id: req.params.id });
-    user.role = 'banned_user';
+    const user = await User.findOne({ user_id: req.query.user_id });
+    user.role = req.query.restrict ? 'banned_user' : 'user';
     await user.save();
-    res.status(200).json(user);
-  }
-  catch (error) {
-    res.status(404).send(error.message);
-  }
-}
-
-exports.unbanUser = async (req, res) => {
-  try {
-    const user = await User.findOne({ user_id: req.params.id });
-    user.role = 'user';
-    await user.save();
-    res.status(200).json(user);
+    res.status(200);
   }
   catch (error) {
     res.status(404).send(error.message);
