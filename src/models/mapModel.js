@@ -9,7 +9,7 @@ const mapSchema = new Schema({
     owner: {
         type: String,
     },
-    Public: {
+    public: {
         type: Boolean,
         default: true
     },
@@ -23,7 +23,6 @@ const mapSchema = new Schema({
     },
     object_id: {
         type: String,
-        required: true
     },
     tags: [{
         type: String,

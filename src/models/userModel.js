@@ -7,6 +7,7 @@ const userSchema = mongoose.Schema({
         required: true,
     },
     user_name: { type: String },
+    // role may be changed to auth0 in the future development
     role: {
         type: String,
         enum: ['user', 'disabled', 'admin', 'restricted'],

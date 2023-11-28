@@ -6,23 +6,20 @@ const toGeoJSON = require('@tmcw/togeojson');
 const shpjs = require('shpjs');
 const JSZip = require('jszip');
 const { parse } = require('fast-xml-parser');
+const mongoose = require('mongoose');
 
 exports.createMap = async (req, res) => {
     try {
-        const user_id = req.user.sub;
-        const map_id = req.query.map_id;
+        const user_id = req.query.user_id;
         // Validate the query parameters
         if (!user_id) {
-            return res.status(400).json({ message: "Missing map_id or user_id in query parameters" });
+            return res.status(400).json({ message: "Missing user_id in query parameters" });
         }
 
-        // Create a new map with the provided details from query parameters
         const newMap = new Map({
-            map_id: map_id,
             owner: user_id
         });
 
-        // find the user with the provided user_id and add the map to their maps array
         const user = await User.findOne({ user_id: user_id });
         if (!user) {
             return res.status(404).json({ message: "User not found" });
@@ -34,7 +31,7 @@ exports.createMap = async (req, res) => {
         await newMap.save();
 
         // Send a successful response
-        res.status(201).json({ message: "Map created successfully", map: newMap });
+        res.status(201).json(newMap);
     } catch (error) {
         // Handle any errors that occur during the process
         res.status(500).json({ message: "Error creating map", error: error.message });
@@ -44,7 +41,8 @@ exports.createMap = async (req, res) => {
 
 exports.importMap = async (req, res) => {
     try {
-        const user_id = req.user.sub;
+        const user_id = req.query.user_id;
+        const map_id = req.query.map_id;
         const object_id = req.body.object_id;
         const format = req.body.format;
 
@@ -98,17 +96,16 @@ async function findFileInZip(zip, extension) {
     return await zip.file(fileNames[0]).async('arraybuffer');
 }
 
-
-
 exports.getMap = async (req, res) => {
     try {
+        const _id = req.query._id;
         // Validate the query parameters
-        if (!req.query.map_id) {
-            return res.status(400).json({ message: "Missing map_id in query parameters" });
+        if (!_id) {
+            return res.status(400).json({ message: "Missing _id in query parameters" });
         }
 
         // Find the map with the provided map_id
-        const map = await Map.findOne({ map_id: req.query.map_id });
+        const map = await Map.findOne({ _id: _id });
         if (!map) {
             return res.status(404).json({ message: "Map not found" });
         }
