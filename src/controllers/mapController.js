@@ -130,3 +130,29 @@ exports.getAllPublicMaps = async (req, res) => {
         res.status(500).json({ message: "Error getting maps", error: error.message });
     }
 }
+
+exports.getAllMaps = async (req, res) => {
+    try {
+        // Find all maps that are public
+        const maps = await Map.find({});
+
+        // Send the maps in the response
+        res.status(200).json(maps);
+    } catch (error) {
+        // Handle any errors that occur during the process
+        res.status(500).json({ message: "Error getting maps", error: error.message });
+    }
+}
+
+exports.updateMapMetadata = async (req, res) => {
+    try {
+        const _id = req.query._id;
+        const map = await Map.findOne({ _id: _id });
+        Object.assign(map, req.body);
+        await map.save();
+        res.status(200).json(map);
+    }
+    catch (error) {
+        res.status(404).send(error.message);
+    }
+}
