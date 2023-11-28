@@ -5,6 +5,7 @@ const Schema = mongoose.Schema;
 const mapSchema = new Schema({
     name: {
         type: String,
+        default: 'Unnamed Map'
     },
     owner: {
         type: String,
