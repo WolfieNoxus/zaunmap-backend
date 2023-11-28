@@ -73,21 +73,18 @@ exports.importMap = async (req, res) => {
         let rawData = rawDataResponse.data;
 
         // Get format from response headers Content-Type
-        const format = rawDataResponse.headers['content-type'].split('/')[1];
+        const format = rawDataResponse.headers['content-type'].split('/')[1] || 'json';
 
         // Convert to GeoJSON
-        let geoJsonData = await convertToGeoJson(rawData, 'json');
+        let geoJsonData = await convertToGeoJson(rawData, format);
         console.log("geojson data successful");
 
         res.send(geoJsonData);
 
-        // PUT the converted data
-        const formData = new FormData();
-        formData.append('file', JSON.stringify(geoJsonData));
         const config = {
             headers: 'application/json'
         };
-        await axios.put(`https://zaunmap.pages.dev/file/?user_id=${user_id}&object_id=${object_id}`, formData, config);
+        await axios.put(`https://zaunmap.pages.dev/file/?user_id=${user_id}&object_id=${object_id}`, geoJsonData, config);
 
         res.send('Map import successful');
     } catch (error) {
