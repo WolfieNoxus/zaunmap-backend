@@ -124,3 +124,24 @@ exports.listUsers = async (req, res) => {
     res.status(500).send('Internal Server Error: ' + error.message);
   }
 }
+
+exports.getUserMaps = async (req, res) => {
+  try {
+    const user_id = req.query.user_id;
+
+    if (!user_id) {
+      return res.status(400).send('Invalid query parameters');
+    }
+
+    const user = await User.findOne({ user_id: user_id });
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
+
+    const maps = await Map.find({ _id: { $in: user.maps } });
+    res.status(200).json(maps);
+  }
+  catch (error) {
+    res.status(500).send('Internal Server Error: ' + error.message);
+  }
+}

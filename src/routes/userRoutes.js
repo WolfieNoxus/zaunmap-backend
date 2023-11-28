@@ -9,5 +9,6 @@ router.post('/', userController.createUser);
 router.put('/rename', userController.rename);
 router.put('/restrict', userController.restrict);
 router.put('/disable', userController.disable);
+router.get('/maps', userController.getUserMaps);
 
 module.exports = router;
