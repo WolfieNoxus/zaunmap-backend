@@ -39,7 +39,7 @@ exports.createUser = async (req, res) => {
 exports.rename = async (req, res) => {
   try {
     // Validate query parameters
-    if (!req.query.user_id || !req.query.user_name) {
+    if (!req.query.user_id || !req.query.new_name) {
       return res.status(400).send('Invalid query parameters');
     }
 
@@ -48,7 +48,7 @@ exports.rename = async (req, res) => {
       return res.status(404).send('User not found');
     }
 
-    user.user_name = req.query.user_name;
+    user.user_name = req.query.new_name;
     await user.save();
     res.status(200).send('User name updated successfully');
   }
