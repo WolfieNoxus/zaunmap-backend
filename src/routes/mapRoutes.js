@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const mapController = require('../controllers/mapController');
+const MapController = require('../controllers/mapController');
 
-router.get('/:id', mapController.getMap);
-router.post('/', mapController.createMap);
-router.put('/:id', mapController.updateMap);
-router.delete('/:id', mapController.deleteMap);
+router.get('/:id', MapController.getMap);
+router.post('/', MapController.createMap);
+router.put('/:id', MapController.updateMap);
+router.delete('/:id', MapController.deleteMap);
 
 module.exports = router;
