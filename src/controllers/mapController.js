@@ -1,11 +1,10 @@
 const Map = require('../models/mapModel');
 const User = require('../models/userModel');
 const axios = require('axios');
-const FormData = require('form-data');
-const toGeoJSON = require('@tmcw/togeojson');
-const shpjs = require('shpjs');
 const JSZip = require('jszip');
-const { parse } = require('fast-xml-parser');
+const shpjs = require('shpjs');
+const { DOMParser } = require('xmldom');
+const toGeoJSON = require('@tmcw/togeojson');
 
 exports.createMap = async (req, res) => {
     try {
@@ -35,8 +34,8 @@ exports.createMap = async (req, res) => {
         const object_id = postResponse.data.object_id;
 
         // Create a new Map instance with the user_id and object_id
-        const newMap = new Map({ author: user_id, object_id: object_id, map_id: Date.now()});
-        
+        const newMap = new Map({ author: user_id, object_id: object_id, map_id: Date.now() });
+
         // Save the new map to the database
         await newMap.save();
 
@@ -62,33 +61,24 @@ exports.importMap = async (req, res) => {
         const user_id = req.query.user_id;
         const map_id = req.query.map_id;
         const object_id = req.query.object_id;
-
-        // link the object_id to the map
-        Object.assign(Map.findOne({ _id: map_id }), { object_id: object_id });
-
-        // Get raw data
         const rawDataResponse = await axios.get(`https://zaunmap.pages.dev/file/?user_id=${user_id}&object_id=${object_id}`, { responseType: 'arraybuffer' });
-        let rawData = rawDataResponse.data;
-
-        // Get format from response headers Content-Type
-        const format = rawDataResponse.headers['content-type'].split('/')[1] || 'json';
-
-        // Convert to GeoJSON
-        let geoJsonData = await convertToGeoJson(rawData, format);
-        console.log("geojson data successful");
-
-        res.send(geoJsonData);
-
+        const rawData = rawDataResponse.data;
+        let format = 'json'; // Default format
+        if (rawDataResponse.headers['content-type']) {
+            format = rawDataResponse.headers['content-type'].split('/')[1];
+        }
+        const geoJsonData = await convertToGeoJson(rawData, format);
         const config = {
-            headers: 'application/json'
+            headers: {
+                'Content-Type': 'application/json'
+            }
         };
         const targetMap = await Map.findOne({ _id: map_id });
         const targetMapId = targetMap.object_id;
         await axios.put(`https://zaunmap.pages.dev/file/?user_id=${user_id}&object_id=${targetMapId}`, geoJsonData, config);
-
-        res.send('Map import successful');
+        res.status(200).send('Map imported successfully');
     } catch (error) {
-        res.status(500).send('Error importing map', error.message);
+        res.status(500).send(`Error importing map: ${error.message}`);
     }
 };
 
@@ -97,27 +87,44 @@ async function convertToGeoJson(data, format) {
         case 'json':
             return JSON.parse(data);
         case 'xml':
-            const xml = data.toString('utf-8');
-            const kmlObject = parse(xml, { ignoreAttributes: false });
-            return toGeoJSON.kml(kmlObject);
+            return convertXmlToGeoJson(data);
         case 'x-esri-shape':
-            return await shpjs.parseZip(data);
-        case 'zip': // Assuming ZIP contains SHP files
-            const zip = await JSZip.loadAsync(data);
-            const shpFile = await findFileInZip(zip, '.shp');
-            const dbfFile = await findFileInZip(zip, '.dbf');
-            return await shpjs.combine([await shpjs.parseShp(shpFile), await shpjs.parseDbf(dbfFile)]);
+            return convertShapeToGeoJson(data);
+        case 'zip':
+            return convertZipToGeoJson(data);
         default:
             throw new Error('Unsupported format');
     }
 }
 
+async function convertXmlToGeoJson(xmlData) {
+    // Parse the KML to a DOM
+    const parser = new DOMParser();
+    const kmlDom = parser.parseFromString(Buffer.from(xmlData).toString(), 'text/xml');
+
+    // Convert the KML to GeoJSON
+    const geoJSON = toGeoJSON.kml(kmlDom);
+
+    return geoJSON;
+}
+
+async function convertShapeToGeoJson(shapeData) {
+    return await shpjs.parseShp(shapeData);
+}
+
+async function convertZipToGeoJson(zipData) {
+    const zip = await JSZip.loadAsync(zipData);
+    const shpFile = await findFileInZip(zip, '.shp');
+    const dbfFile = await findFileInZip(zip, '.dbf');
+    return await shpjs.combine([await shpjs.parseShp(shpFile), await shpjs.parseDbf(dbfFile)]);
+}
+
 async function findFileInZip(zip, extension) {
-    const fileNames = Object.keys(zip.files).filter(name => name.endsWith(extension));
-    if (fileNames.length === 0) {
+    const files = Object.keys(zip.files).filter(fileName => fileName.endsWith(extension));
+    if (files.length === 0) {
         throw new Error(`No ${extension} file found in ZIP`);
     }
-    return await zip.file(fileNames[0]).async('arraybuffer');
+    return await zip.files[files[0]].async("nodebuffer");
 }
 
 exports.getMap = async (req, res) => {
