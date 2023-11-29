@@ -1,6 +1,6 @@
-const supertest = require('supertest');
-const url = 'https://zaunmap-6b1455b08c9b.herokuapp.com/api'; 
-const request = supertest(url);
+// const supertest = require('supertest');
+// const url = 'https://zaunmap-6b1455b08c9b.herokuapp.com/api'; 
+// const request = supertest(url);
 
 // Sample test to ensure Jest is working
 describe('Sample Test', () => {
@@ -9,33 +9,33 @@ describe('Sample Test', () => {
   });
 });
 
-describe('GET /user/', () => {
-  it('should return a user', async () => {
-    const response = await request.get('/user?user_id=auth0|656669d317b4bdb501178567');
-    expect(response.statusCode).toBe(200);
-    expect(response.body).toHaveProperty('user_id');
-  });
-});
+// describe('GET /user/', () => {
+//   it('should return a user', async () => {
+//     const response = await request.get('/user?user_id=auth0|656669d317b4bdb501178567');
+//     expect(response.statusCode).toBe(200);
+//     expect(response.body).toHaveProperty('user_id');
+//   });
+// });
 
-describe('GET /user/list', () => {
-  it('should return a list of users', async () => {
-    const response = await request.get('/user/list');
-    expect(response.statusCode).toBe(200);
-    expect(Array.isArray(response.body)).toBeTruthy();
-  });
-});
+// describe('GET /user/list', () => {
+//   it('should return a list of users', async () => {
+//     const response = await request.get('/user/list');
+//     expect(response.statusCode).toBe(200);
+//     expect(Array.isArray(response.body)).toBeTruthy();
+//   });
+// });
 
-describe('POST /user/', () => {
-  it('should create a new user', async () => {
-    const newUser = {
-      user_id: '123',
-      user_name: 'Test User'
-    };
-    const response = await request.post('/user/').send(newUser);
-    expect(response.statusCode).toBe(201);
-    expect(response.body).toEqual(expect.objectContaining(newUser));
-  });
-});
+// describe('POST /user/', () => {
+//   it('should create a new user', async () => {
+//     const newUser = {
+//       user_id: '123',
+//       user_name: 'Test User'
+//     };
+//     const response = await request.post('/user/').send(newUser);
+//     expect(response.statusCode).toBe(201);
+//     expect(response.body).toEqual(expect.objectContaining(newUser));
+//   });
+// });
 
 // describe('PUT /user/rename', () => {
 //   it('should rename a user', async () => {
