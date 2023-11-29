@@ -1,11 +1,12 @@
-# https://zaunmap-6b1455b08c9b.herokuapp.com/api
+# zaunmap-backend
+
+## https://zaunmap-6b1455b08c9b.herokuapp.com/api
 
 ## user
 
 ### get
  - route: /user
  - method: GET
- - type: public
  - args: user_id(str)
  - payload: (empty)
  - return: 
@@ -58,7 +59,6 @@
             "user_name": "",
             "role": "",
         },
-        ...
     ]
     ```
  - todo: *needs to be improved to include a token to verify that the user is the admin.*
@@ -83,7 +83,6 @@
             "tags": [],
             "description": "",
         },
-        ...
     ]
     ```
 
