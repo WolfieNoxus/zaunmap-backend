@@ -21,9 +21,9 @@ exports.createComment = async (req, res) => {
             postedBy: user_id
         });
         await comment.save();
-        // const map = await Map.findById(map_id);
-        // map.comments.push(comment._id);
-        // await map.save();
+        const map = await Map.findById(map_id);
+        map.comments.push(comment._id);
+        await map.save();
         res.status(200).json({ message: 'Comment created successfully' });
     } catch (error) {
         res.status(404).send(error.message);
