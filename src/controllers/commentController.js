@@ -1,9 +1,9 @@
 const Comment = require('../models/commentModel');
-const User = require('../models/userModel');
 
 exports.getComment = async (req, res) => {
     try {
-        const comment = await Comment.findOne({ _id: req.params.id });
+        const comment_id = req.query.comment_id;
+        const comment = await Comment.findById(comment_id);
         res.status(200).json(comment);
     }
     catch (error) {
@@ -13,32 +13,93 @@ exports.getComment = async (req, res) => {
 
 exports.createComment = async (req, res) => {
     try {
-        const newComment = new Comment(req.body);
-        await newComment.save();
-        res.status(201).json(newComment);
-    }
-    catch (error) {
-        res.status(400).send(error.message);
+        const user_id = req.query.user_id;
+        const map_id = req.query.map_id;
+        const comment = new Comment({
+            content: req.body.content,
+            postedBy: user_id
+        });
+        await comment.save();
+        const map = await Map.findById(map_id);
+        map.comments.push(comment._id);
+        await map.save();
+        res.status(200).json({ message: 'Comment created successfully' });
+    } catch (error) {
+        res.status(404).send(error.message);
     }
 }
 
-exports.updateComment = async (req, res) => {
+exports.replyComment = async (req, res) => {
     try {
-        const comment = await Comment.findOne({ _id: req.params.id });
-        Object.assign(comment, req.body);
+        const user_id = req.query.user_id;
+        const comment_id = req.query.comment_id;
+        const comment = await Comment.findById(comment_id);
+        const reply = new Comment({
+            content: req.body.content,
+            postedBy: user_id
+        });
+        await reply.save();
+        comment.replies.push(reply._id);
         await comment.save();
-        res.status(200).json(comment);
-    }
-    catch (error) {
+        res.status(200).json({ message: 'Comment replied successfully' });
+    } catch (error) {
         res.status(404).send(error.message);
     }
 }
 
 exports.deleteComment = async (req, res) => {
     try {
-        const comment = await Comment.findOne({ _id: req.params.id });
-        await comment.remove();
+        // reomve the comment and all its replies and their replies and so on
+        const comment_id = req.query.comment_id;
+        const comment = await Comment.findById(comment_id);
+
+        // Recursively delete all replies
+        for (let replyId of comment.replies) {
+            await deleteCommentAndReplies(replyId);
+        }
+
+        // Delete the comment itself
+        await Comment.findByIdAndDelete(commentId);
+
         res.status(200).json({ message: 'Comment deleted successfully' });
+    }
+    catch (error) {
+        res.status(404).send(error.message);
+    }
+}
+
+exports.likeComment = async (req, res) => {
+    try {
+        const comment_id = req.query.comment_id;
+        const user_id = req.query.user_id;
+        const comment = await Comment.findById(comment_id);
+        if (comment.likes.includes(user_id)) {
+            res.status(200).json({ message: 'Comment already liked' });
+        }
+        else {
+            comment.likes.push(user_id);
+            await comment.save();
+            res.status(200).json({ message: 'Comment liked successfully' });
+        }
+    }
+    catch (error) {
+        res.status(404).send(error.message);
+    }
+}
+
+exports.dislikeComment = async (req, res) => {
+    try {
+        const comment_id = req.query.comment_id;
+        const user_id = req.query.user_id;
+        const comment = await Comment.findById(comment_id);
+        if (comment.dislikes.includes(user_id)) {
+            res.status(200).json({ message: 'Comment already disliked' });
+        }
+        else {
+            comment.dislikes.push(user_id);
+            await comment.save();
+            res.status(200).json({ message: 'Comment disliked successfully' });
+        }
     }
     catch (error) {
         res.status(404).send(error.message);

@@ -3,12 +3,15 @@ const Schema = mongoose.Schema;
 
 // Map Schema
 const mapSchema = new Schema({
+    // for unkown purpose
     map_id: {
-        type: Number
+        type: Number,
+        required: false,
+        unique: false
     },
     name: {
         type: String,
-        default: 'Unnamed Map'
+        default: 'Untitled Map'
     },
     author: {
         type: String,
@@ -16,14 +19,6 @@ const mapSchema = new Schema({
     public: {
         type: Boolean,
         default: true
-    },
-    likes: {
-        type: Number,
-        default: 0
-    },
-    dislikes: {
-        type: Number,
-        default: 0
     },
     object_id: {
         type: String,

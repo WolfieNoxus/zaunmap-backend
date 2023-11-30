@@ -3,17 +3,25 @@ const Schema = mongoose.Schema;
 
 // Comment Schema
 const commentSchema = new Schema({
-    author: { type: Schema.Types.ObjectId, ref: 'User' },
-    content: String,
-    map: { type: Schema.Types.ObjectId, ref: 'Map' },
-    likes: {
-        type: Number,
-        default: 0,
+    content: {
+        type: String
     },
-    dislikes: {
-        type: Number,
-        default: 0,
+    postedBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
     },
+    likes: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }],
+    dislikes: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }],
+    replies: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Comment'
+    }]
 }, {
     timestamps: true,
 });

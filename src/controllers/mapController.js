@@ -188,18 +188,19 @@ exports.updateMapMetadata = async (req, res) => {
     }
 }
 
-exports.getMapJSON = async (req, res) => {
-    try {
-        const _id = req.query._id;
-        const map = await Map.findOne({ _id: _id });
-        const object_id = map.object_id;
-        const user_id = map.author;
-        const rawDataResponse = await axios.get(`https://zaunmap.pages.dev/file/?user_id=${user_id}&object_id=${object_id}`, { responseType: 'arraybuffer' });
-        let rawData = rawDataResponse.data;
-        let geoJsonData = await convertToGeoJson(rawData, 'json');
-        res.send(geoJsonData);
-    }
-    catch (error) {
-        res.status(404).send(error.message);
-    }
-}
+// Retired
+// exports.getMapJSON = async (req, res) => {
+//     try {
+//         const _id = req.query._id;
+//         const map = await Map.findOne({ _id: _id });
+//         const object_id = map.object_id;
+//         const user_id = map.author;
+//         const rawDataResponse = await axios.get(`https://zaunmap.pages.dev/file/?user_id=${user_id}&object_id=${object_id}`, { responseType: 'arraybuffer' });
+//         let rawData = rawDataResponse.data;
+//         let geoJsonData = await convertToGeoJson(rawData, 'json');
+//         res.send(geoJsonData);
+//     }
+//     catch (error) {
+//         res.status(404).send(error.message);
+//     }
+// }

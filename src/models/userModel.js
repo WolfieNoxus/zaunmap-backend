@@ -1,12 +1,15 @@
 const mongoose = require('mongoose');
 
 const userSchema = mongoose.Schema({
-    // user_id is from Auth0
+    // user_id from Auth0
     user_id: {
         type: String,
         required: true,
     },
-    user_name: { type: String },
+    user_name: { 
+        type: String,
+        default: 'Anonymous'
+     },
     // role may be changed to auth0 in the future development
     role: {
         type: String,
