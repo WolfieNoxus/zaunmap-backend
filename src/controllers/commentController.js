@@ -1,4 +1,5 @@
 const Comment = require('../models/commentModel');
+const Map = require('../models/mapModel');
 
 exports.getComment = async (req, res) => {
     try {
@@ -20,9 +21,9 @@ exports.createComment = async (req, res) => {
             postedBy: user_id
         });
         await comment.save();
-        const map = await Map.findById(map_id);
-        map.comments.push(comment._id);
-        await map.save();
+        // const map = await Map.findById(map_id);
+        // map.comments.push(comment._id);
+        // await map.save();
         res.status(200).json({ message: 'Comment created successfully' });
     } catch (error) {
         res.status(404).send(error.message);
@@ -49,22 +50,29 @@ exports.replyComment = async (req, res) => {
 
 exports.deleteComment = async (req, res) => {
     try {
-        // reomve the comment and all its replies and their replies and so on
-        const comment_id = req.query.comment_id;
-        const comment = await Comment.findById(comment_id);
-
-        // Recursively delete all replies
-        for (let replyId of comment.replies) {
-            await deleteCommentAndReplies(replyId);
-        }
-
-        // Delete the comment itself
-        await Comment.findByIdAndDelete(commentId);
-
+        await deleteCommentHelper(req.query.comment_id);
         res.status(200).json({ message: 'Comment deleted successfully' });
     }
     catch (error) {
         res.status(404).send(error.message);
+    }
+}
+
+async function deleteCommentHelper(comment_id) {
+    try {
+        // reomve the comment and all its replies and their replies and so on
+        const comment = await Comment.findById(comment_id);
+
+        // Recursively delete all replies
+        for (let reply_id of comment.replies) {
+            await deleteCommentHelper(reply_id);
+        }
+
+        // Delete the comment itself
+        await Comment.findByIdAndDelete(comment_id);
+    }
+    catch (error) {
+        console.log(error.message);
     }
 }
 

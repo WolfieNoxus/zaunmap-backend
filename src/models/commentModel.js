@@ -7,16 +7,13 @@ const commentSchema = new Schema({
         type: String
     },
     postedBy: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        type: String
     },
     likes: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        type: String
     }],
     dislikes: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        type: String
     }],
     replies: [{
         type: mongoose.Schema.Types.ObjectId,
