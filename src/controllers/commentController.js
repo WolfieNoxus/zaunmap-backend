@@ -95,6 +95,24 @@ exports.likeComment = async (req, res) => {
     }
 }
 
+exports.unlikeComment = async (req, res) => {
+    try {
+        const comment_id = req.query.comment_id;
+        const user_id = req.query.user_id;
+        const comment = await Comment.findById(comment_id);
+        if (!comment.likes.includes(user_id)) {
+            res.status(200).json({ message: 'Comment not liked' });
+        }
+        else {
+            comment.likes.pull(user_id);
+            await comment.save();
+            res.status(200).json({ message: 'Comment unliked successfully' });
+        }
+    } catch (error) {
+        res.status(404).send(error.message);
+    }
+}
+
 exports.dislikeComment = async (req, res) => {
     try {
         const comment_id = req.query.comment_id;
@@ -110,6 +128,24 @@ exports.dislikeComment = async (req, res) => {
         }
     }
     catch (error) {
+        res.status(404).send(error.message);
+    }
+}
+
+exports.undislikeComment = async (req, res) => {
+    try {
+        const comment_id = req.query.comment_id;
+        const user_id = req.query.user_id;
+        const comment = await Comment.findById(comment_id);
+        if (!comment.dislikes.includes(user_id)) {
+            res.status(200).json({ message: 'Comment not disliked' });
+        }
+        else {
+            comment.dislikes.pull(user_id);
+            await comment.save();
+            res.status(200).json({ message: 'Comment undisliked successfully' });
+        }
+    } catch (error) {
         res.status(404).send(error.message);
     }
 }
