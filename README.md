@@ -7,12 +7,12 @@
 ### get
  - route: /user
  - method: GET
- - args: user_id(str)
+ - args: userId(str)
  - payload: (empty)
  - return: 
     ```json
     {
-        "user_id": "",
+        "userId": "",
         "user_name": "",
         "role": "",
     }
@@ -22,7 +22,7 @@
  - route: /user/rename
  - method: put
  - type: restricted
- - args: user_id(str), new_name(str)
+ - args: userId(str), new_name(str)
  - payload: (empty)
  - return: (HTTP_CODE ONLY)
  - todo: *needs to be improved to include a token to verify that the user can only change their own name.*
@@ -31,7 +31,7 @@
  - route: /user/restrict
  - method: put
  - type: admin-only
- - args: user_id(str), restrict(bool)
+ - args: userId(str), restrict(bool)
  - payload: (empty)
  - return: (HTTP_CODE ONLY)
  - todo: *needs to be improved to include a token to verify that the user is the admin.*
@@ -40,7 +40,7 @@
  - route: /user/disable
  - method: put
  - type: admin-only
- - args: user_id(str), disable(bool)
+ - args: userId(str), disable(bool)
  - payload: (empty)
  - return: (HTTP_CODE ONLY)
  - todo: *needs to be improved to include a token to verify that the user is the admin.*
@@ -55,7 +55,7 @@
     ```json
     [
         {
-            "user_id": "",
+            "userId": "",
             "user_name": "",
             "role": "",
         },
@@ -67,7 +67,7 @@
  - route: /list/get
  - method: get
  - type: restricted
- - args: user_id(str)
+ - args: userId(str)
  - payload: (empty)
  - return: 
     ```json
@@ -92,7 +92,7 @@
  - route: /map
  - method: POST
  - type: restricted
- - args: user_id(str)
+ - args: userId(str)
  - payload: (empty)
  - return:
    ```json
@@ -103,7 +103,7 @@
             "public": true,
             "likes": 0,
             "dislikes": 0,
-            "object_id": "",
+            "objectId": "",
             "description": "",
             "tags": [],
             "createdAt": 2023-11-28T15:47:18.178+00:00,
@@ -125,7 +125,7 @@
             "public": true,
             "likes": 0,
             "dislikes": 0,
-            "object_id": "",
+            "objectId": "",
             "description": "",
             "tags": [],
             "createdAt": 2023-11-28T15:47:18.178+00:00,
@@ -138,10 +138,10 @@
  - route: /map/import
  - method: put
  - type: restricted
- - args: user_id(str), map_id(str)
+ - args: userId(str), map_id(str)
  - payload: (empty)
  - return: (HTTP_CODE ONLY)
- - note: *The backend gets the corresponding uploaded file from the object storage using user_id and object_id, converts it to geojson format and creates the corresponding geojson in the object storage. It then converts it to geojson format and creates the corresponding geojson in the object storage, passing the object_id of the created geojson back to the frontend. Note that the object_id is an uuid.*
+ - note: *The backend gets the corresponding uploaded file from the object storage using userId and objectId, converts it to geojson format and creates the corresponding geojson in the object storage. It then converts it to geojson format and creates the corresponding geojson in the object storage, passing the objectId of the created geojson back to the frontend. Note that the objectId is an uuid.*
  - todo: *needs to be improved to include a token to verify that only logged-in users can import to their own map.*
 
 ### get
@@ -159,7 +159,7 @@
             "public": true,
             "likes": 0,
             "dislikes": 0,
-            "object_id": "",
+            "objectId": "",
             "description": "",
             "tags": [],
             "createdAt": 2023-11-28T15:47:18.178+00:00,
@@ -183,7 +183,7 @@
             "public": true,
             "likes": 0,
             "dislikes": 0,
-            "object_id": "",
+            "objectId": "",
             "description": "",
             "tags": [],
             "createdAt": 2023-11-28T15:47:18.178+00:00,
@@ -206,7 +206,7 @@
             "public": true,
             "likes": 0,
             "dislikes": 0,
-            "object_id": "",
+            "objectId": "",
             "description": "",
             "tags": [],
             "createdAt": 2023-11-28T15:47:18.178+00:00,
