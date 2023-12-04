@@ -1,216 +1,518 @@
-# zaunmap-backend
+# ZaunMap Backend API Documentation
 
-## https://zaunmap-6b1455b08c9b.herokuapp.com/api
+## Base URL
+`https://zaunmap-6b1455b08c9b.herokuapp.com/api`
 
-## user
+## Endpoints
 
-### get
- - route: /user
- - method: GET
- - args: userId(str)
- - payload: (empty)
- - return: 
+### Comment Endpoints
+
+#### Get Comment
+- **Endpoint:** `/comment`
+- **Method:** GET
+- **Parameters:**
+  - `commentId` (required): The id of the comment to retrieve.
+- **Example Request:**
+    ```
+    GET https://zaunmap-6b1455b08c9b.herokuapp.com/api/comment?commentId=65680d250505420b42427a82
+    ```
+- **Example Response:**
     ```json
     {
-        "userId": "",
-        "user_name": "",
-        "role": "",
+        "_id": "65680d250505420b42427a82",
+        "content": "This is a test comment",
+        "postedBy": "auth0|656669d317b4bdb501178567",
+        "likes": [],
+        "dislikes": [],
+        "replies": [
+            "65680d840505420b42427a8e"
+        ],
+        "createdAt": "2023-11-30T04:18:45.285Z",
+        "updatedAt": "2023-11-30T04:20:20.244Z"
     }
     ```
 
-### rename
- - route: /user/rename
- - method: put
- - type: restricted
- - args: userId(str), newName(str)
- - payload: (empty)
- - return: (HTTP_CODE ONLY)
- - todo: *needs to be improved to include a token to verify that the user can only change their own name.*
-
-### restrict
- - route: /user/restrict
- - method: put
- - type: admin-only
- - args: userId(str), restrict(bool)
- - payload: (empty)
- - return: (HTTP_CODE ONLY)
- - todo: *needs to be improved to include a token to verify that the user is the admin.*
-
-### disable
- - route: /user/disable
- - method: put
- - type: admin-only
- - args: userId(str), disable(bool)
- - payload: (empty)
- - return: (HTTP_CODE ONLY)
- - todo: *needs to be improved to include a token to verify that the user is the admin.*
-
-### maps
- - route: /user/maps
- - method: GET
- - type: admin-only
- - args: (empty)
- - payload: (empty)
- - return: 
-    ```json
-    [
-        {
-            "userId": "",
-            "user_name": "",
-            "role": "",
-        },
-    ]
+#### Create Comment
+- **Endpoint:** `/comment`
+- **Method:** POST
+- **Parameters:**
+  - `userId` (required): The id of the user who created the comment.
+  - `mapId` (required): The id of the map the comment is posted on.
+- **Example Request:**
     ```
- - todo: *needs to be improved to include a token to verify that the user is the admin.*
-
-### get
- - route: /list/get
- - method: get
- - type: restricted
- - args: userId(str)
- - payload: (empty)
- - return: 
+    POST https://zaunmap-6b1455b08c9b.herokuapp.com/api/comment?userId=auth0|656669d317b4bdb501178567&mapId=65680d250505420b42427a82
+    ```
+- **Example Payload:**
     ```json
-    [
-        {
-            "mapId": "",
-            "map_name": "",
+    {
+        "content": "This is a test comment"
+    }
+    ```
+- **Example Response:**
+    ```json
+    {
+        "_id": "65680d250505420b42427a82",
+        "content": "This is a test comment",
+        "postedBy": "auth0|656669d317b4bdb501178567",
+        "likes": [],
+        "dislikes": [],
+        "replies": [],
+        "createdAt": "2023-11-30T04:18:45.285Z",
+        "updatedAt": "2023-11-30T04:20:20.244Z"
+    }
+    ```
+
+#### Reply Comment
+- **Endpoint:** `/reply`
+- **Method:** POST
+- **Parameters:**
+  - `userId` (required): The id of the user who created the comment.
+  - `commentId` (required): The id of the comment to reply to.
+- **Example Request:**
+    ```
+    POST https://zaunmap-6b1455b08c9b.herokuapp.com/api/reply?userId=auth0|656669d317b4bdb501178567&commentId=65680d250505420b42427a82
+    ```
+- **Example Payload:**
+    ```json
+    {
+        "content": "This is a test reply"
+    }
+    ```
+- **Example Response:**
+    ```json
+    {
+        "_id": "65680d840505420b42427a8e",
+        "content": "This is a test reply",
+        "postedBy": "auth0|656669d317b4bdb501178567",
+        "likes": [],
+        "dislikes": [],
+        "replies": [],
+        "createdAt": "2023-11-30T04:18:45.285Z",
+        "updatedAt": "2023-11-30T04:20:20.244Z"
+    }
+    ```
+
+#### Like Comment
+- **Endpoint:** `/like`
+- **Method:** PUT
+- **Parameters:**
+  - `userId` (required): The id of the user who liked the comment.
+  - `commentId` (required): The id of the comment to like.
+- **Example Request:**
+    ```
+    POST https://zaunmap-6b1455b08c9b.herokuapp.com/api/like?userId=auth0|656669d317b4bdb501178567&commentId=65680d250505420b42427a82
+    ```
+- **Example Response:**
+    ```json
+    {
+        "_id": "65680d250505420b42427a82",
+        "content": "This is a test comment",
+        "postedBy": "auth0|656669d317b4bdb501178567",
+        "likes": [
+            "auth0|656669d317b4bdb501178567"
+        ],
+        "dislikes": [],
+        "replies": [
+            "65680d840505420b42427a8e"
+        ],
+        "createdAt": "2023-11-30T04:18:45.285Z",
+        "updatedAt": "2023-11-30T04:20:20.244Z"
+    }
+    ```
+
+#### Dislike Comment
+- **Endpoint:** `/dislike`
+- **Method:** PUT
+- **Parameters:**
+  - `userId` (required): The id of the user who disliked the comment.
+  - `commentId` (required): The id of the comment to dislike.
+- **Example Request:**
+    ```
+    POST https://zaunmap-6b1455b08c9b.herokuapp.com/api/dislike?userId=auth0|656669d317b4bdb501178567&commentId=65680d250505420b42427a82
+    ```
+- **Example Response:**
+    ```json
+    {
+        "_id": "65680d250505420b42427a82",
+        "content": "This is a test comment",
+        "postedBy": "auth0|656669d317b4bdb501178567",
+        "likes": [],
+        "dislikes": [
+            "auth0|656669d317b4bdb501178567"
+        ],
+        "replies": [
+            "65680d840505420b42427a8e"
+        ],
+        "createdAt": "2023-11-30T04:18:45.285Z",
+        "updatedAt": "2023-11-30T04:20:20.244Z"
+    }
+    ```
+
+#### Delete Comment
+- **Endpoint:** `/comment`
+- **Method:** DELETE
+- **Parameters:**
+  - `commentId` (required): The id of the comment to delete.
+- **Example Request:**
+    ```
+    DELETE https://zaunmap-6b1455b08c9b.herokuapp.com/api/comment?commentId=65680d250505420b42427a82&userId=auth0|656669d317b4bdb501178567
+    ```
+- **Example Response:**
+    ```json
+    {
+        "_id": "65680d250505420b42427a82",
+        "content": "This is a test comment",
+        "postedBy": "auth0|656669d317b4bdb501178567",
+        "likes": [],
+        "dislikes": [],
+        "replies": [
+            "65680d840505420b42427a8e"
+        ],
+        "createdAt": "2023-11-30T04:18:45.285Z",
+        "updatedAt": "2023-11-30T04:20:20.244Z"
+    }
+    ```
+    
+### User Endpoints
+
+#### Get User
+- **Endpoint:** `/user`
+- **Method:** GET
+- **Parameters:**
+  - `userId` (required): The id of the user to retrieve.
+- **Example Request:**
+    ```
+    GET https://zaunmap-6b1455b08c9b.herokuapp.com/api/user?userId=auth0|656669d317b4bdb501178567
+    ```
+- **Example Response:**
+    ```json
+    {
+        "_id": "65680d250505420b42427a82",
+        "UserId": "auth0|656669d317b4bdb501178567",
+        "name": "testuser",
+        "role": "user",
+        "maps": [
+            "65680d250505420b42427a82"
+        ],
+        "following": [],
+        "followers": [],
+        "blocked": [],
+        "messagesReceived": [],
+        "createdAt": "2023-11-30T04:18:45.285Z",
+        "updatedAt": "2023-11-30T04:20:20.244Z"
+    }
+    ```
+
+#### Create User
+- **Endpoint:** `/user`
+- **Method:** POST
+- **Parameters:**
+  - `userId` (required): The id of the user to create.
+- **Example Request:**
+    ```
+    POST https://zaunmap-6b1455b08c9b.herokuapp.com/api/user?userId=auth0|656669d317b4bdb501178567
+    ```
+- **Example Response:**
+    ```json
+    {
+        "_id": "65680d250505420b42427a82",
+        "UserId": "auth0|656669d317b4bdb501178567",
+        "name": "testuser",
+        "role": "user",
+        "maps": [],
+        "following": [],
+        "followers": [],
+        "blocked": [],
+        "messagesReceived": [],
+        "createdAt": "2023-11-30T04:18:45.285Z",
+        "updatedAt": "2023-11-30T04:20:20.244Z"
+    }
+    ```
+
+#### Rename User
+- **Endpoint:** `/user/rename`
+- **Method:** PUT
+- **Parameters:**
+  - `userId` (required): The id of the user to rename.
+  - `newName` (required): The new name of the user.
+- **Example Request:**
+    ```
+    PUT https://zaunmap-6b1455b08c9b.herokuapp.com/api/user/rename?userId=auth0|656669d317b4bdb501178567&newName=testuser2
+    ```
+- **Example Response:**
+    ```json
+    {
+        "_id": "65680d250505420b42427a82",
+        "UserId": "auth0|656669d317b4bdb501178567",
+        "name": "testuser2",
+        "role": "user",
+        "maps": [],
+        "following": [],
+        "followers": [],
+        "blocked": [],
+        "messagesReceived": [],
+        "createdAt": "2023-11-30T04:18:45.285Z",
+        "updatedAt": "2023-12-01T04:20:20.244Z"
+    }
+    ```
+
+#### Follow User
+- **Endpoint:** `/follow`
+- **Method:** PUT
+- **Parameters:**
+  - `userId` (required): The id of the user who is following.
+  - `followId` (required): The id of the user to follow.
+  - `follow` (required): Boolean value indicating whether to follow or unfollow.
+- **Example Request:**
+    ```
+    PUT https://zaunmap-6b1455b08c9b.herokuapp.com/api/follow?userId=auth0|656669d317b4bdb501178567&followId=auth0|656669d317b4bdb501178567&follow=true
+    ```
+- **Example Response:**
+    ```json
+    {
+        "_id": "65680d250505420b42427a82",
+        "UserId": "auth0|656669d317b4bdb501178567",
+        "name": "testuser",
+        "role": "user",
+        "maps": [],
+        "following": [
+            "auth0|656669d317b4bdb501178567"
+        ],
+        "followers": [],
+        "blocked": [],
+        "messagesReceived": [],
+        "createdAt": "2023-11-30T04:18:45.285Z",
+        "updatedAt": "2023-11-30T04:20:20.244Z"
+    }
+    ```
+
+#### Block User
+- **Endpoint:** `/block`
+- **Method:** PUT
+- **Parameters:**
+  - `userId` (required): The id of the user who is blocking.
+  - `blockId` (required): The id of the user to block.
+  - `block` (required): Boolean value indicating whether to block or unblock.
+- **Example Request:**
+    ```
+    PUT https://zaunmap-6b1455b08c9b.herokuapp.com/api/block?userId=auth0|656669d317b4bdb501178567&blockId=auth0|656669d317b4bdb501178567&block=true
+    ```
+- **Example Response:**
+    ```json
+    {
+        "_id": "65680d250505420b42427a82",
+        "UserId": "auth0|656669d317b4bdb501178567",
+        "name": "testuser",
+        "role": "user",
+        "maps": [],
+        "following": [],
+        "followers": [],
+        "blocked": [
+            "auth0|656669d317b4bdb501178567"
+        ],
+        "messagesReceived": [],
+        "createdAt": "2023-11-30T04:18:45.285Z",
+        "updatedAt": "2023-11-30T04:20:20.244Z"
+    }
+    ```
+
+#### Disable User
+- **Endpoint:** `/disable`
+- **Method:** PUT
+- **Parameters:**
+  - `userId` (required): The id of the user to disable.
+  - `disable` (required): Boolean value indicating whether to disable or enable.
+- **Example Request:**
+    ```
+    PUT https://zaunmap-6b1455b08c9b.herokuapp.com/api/disable?userId=auth0|656669d317b4bdb501178567&disable=true
+    ```
+- **Example Response:**
+    ```json
+    {
+        "_id": "65680d250505420b42427a82",
+        "UserId": "auth0|656669d317b4bdb501178567",
+        "name": "testuser",
+        "role": "user",
+        "maps": [],
+        "following": [],
+        "followers": [],
+        "blocked": [],
+        "messagesReceived": [],
+        "createdAt": "2023-11-30T04:18:45.285Z",
+        "updatedAt": "2023-12-01T04:20:20.244Z"
+    }
+    ```
+
+#### Restrict User
+- **Endpoint:** `/restrict`
+- **Method:** PUT
+- **Parameters:**
+  - `userId` (required): The id of the user to restrict.
+  - `restrict` (required): Boolean value indicating whether to restrict or unrestrict.
+- **Example Request:**
+    ```
+    PUT https://zaunmap-6b1455b08c9b.herokuapp.com/api/restrict?userId=auth0|656669d317b4bdb501178567&restrict=true
+    ```
+- **Example Response:**
+    ```json
+    {
+        "_id": "65680d250505420b42427a82",
+        "UserId": "auth0|656669d317b4bdb501178567",
+        "name": "testuser",
+        "role": "restricted",
+        "maps": [],
+        "following": [],
+        "followers": [],
+        "blocked": [],
+        "messagesReceived": [],
+        "createdAt": "2023-11-30T04:18:45.285Z",
+        "updatedAt": "2023-12-01T04:20:20.244Z"
+    }
+    ```
+
+#### Get User Maps
+- **Endpoint:** `/user/maps`
+- **Method:** GET
+- **Parameters:**
+  - `userId` (required): The id of the user to retrieve maps for.
+- **Example Request:**
+    ```
+    GET https://zaunmap-6b1455b08c9b.herokuapp.com/api/user/maps?userId=auth0|656669d317b4bdb501178567
+    ```
+- **Example Response:**
+      ```json
+    {
+        "maps": ["65680d250505420b42427a82", "65680d250505420b42427a77"]
+    }
+    ```
+#### Get All Users
+- **Endpoint:** `/user/list`
+- **Method:** GET
+- **Example Request:**
+    ```
+    GET https://zaunmap-6b1455b08c9b.herokuapp.com/api/user/list
+    ```
+- **Example Response:**
+      ```json
+    {
+        "users": ["auth0|656669d317b4bdb501178567", "auth0|656669d317b4bdb501178568"]
+    }
+    ```
+
+### Map Endpoints
+
+#### Get Map
+- **Endpoint:** `/map`
+- **Method:** GET
+- **Parameters:**
+  - `mapId` (required): The id of the map to retrieve.
+- **Example Request:**
+    ```
+    GET https://zaunmap-6b1455b08c9b.herokuapp.com/api/map?mapId=65680d250505420b42427a82
+    ```
+- **Example Response:**
+    ```json
+    {
+            "_id": "",
+            "map_id": "",
+            "name": "",
             "owner": "",
-            "created_time": "",
-            "public": false,
-            "likes": 0,
-            "dislikes": 0,
-            "tags": [],
-            "description": "",
-        },
-    ]
-    ```
-
-## map
-
-### create
- - route: /map
- - method: POST
- - type: restricted
- - args: userId(str)
- - payload: (empty)
- - return:
-   ```json
-    {
-            "_id": "",
-            "name": "",
-            "author": "",
-            "public": true,
-            "likes": 0,
-            "dislikes": 0,
+            "isPublic": true,
             "objectId": "",
-            "description": "",
             "tags": [],
-            "createdAt": 2023-11-28T15:47:18.178+00:00,
-            "updatedAt": 2023-11-28T15:47:18.178+00:00,
+            "description": "",
+            "ratings": [],
+            "averageRating": 0,
+            "ratingsCount": 0,
+            "createdAt": "2023-11-30T04:18:45.285Z",
+            "updatedAt": "2023-11-30T04:18:45.285Z"
     }
     ```
- - todo: *needs to be improved to include a token to verify that only logged-in users can create.*
 
-### update map metadata
- - route: /map
- - method: POST
- - args: _id(str)
- - payload:
-   ```json
-    {
-            "_id": "",
-            "name": "",
-            "author": "",
-            "public": true,
-            "likes": 0,
-            "dislikes": 0,
-            "objectId": "",
-            "description": "",
-            "tags": [],
-            "createdAt": 2023-11-28T15:47:18.178+00:00,
-            "updatedAt": 2023-11-28T15:47:18.178+00:00,
-    }
+#### Create Map
+- **Endpoint:** `/map`
+- **Method:** POST
+- **Parameters:**
+  - `userId` (required): The id of the user who created the map.
+- **Example Request:**
     ```
- - return: (HTTP_CODE ONLY)
-
-### import
- - route: /map/import
- - method: put
- - type: restricted
- - args: userId(str), mapId(str)
- - payload: (empty)
- - return: (HTTP_CODE ONLY)
- - note: *The backend gets the corresponding uploaded file from the object storage using userId and objectId, converts it to geojson format and creates the corresponding geojson in the object storage. It then converts it to geojson format and creates the corresponding geojson in the object storage, passing the objectId of the created geojson back to the frontend. Note that the objectId is an uuid.*
- - todo: *needs to be improved to include a token to verify that only logged-in users can import to their own map.*
-
-### get
- - route: /map
- - method: get
- - type: restricted
- - args: _id(str)
- - payload: (empty)
- - return:
+    POST https://zaunmap-6b1455b08c9b.herokuapp.com/api/map?userId=auth0|656669d317b4bdb501178567
+    ```
+- **Example Response**
     ```json
     {
             "_id": "",
+            "map_id": "",
             "name": "",
-            "author": "",
-            "public": true,
-            "likes": 0,
-            "dislikes": 0,
+            "owner": "",
+            "isPublic": true,
             "objectId": "",
-            "description": "",
             "tags": [],
-            "createdAt": 2023-11-28T15:47:18.178+00:00,
-            "updatedAt": 2023-11-28T15:47:18.178+00:00,
+            "description": "",
+            "ratings": [],
+            "averageRating": 0,
+            "ratingsCount": 0,
+            "createdAt": "2023-11-30T04:18:45.285Z",
+            "updatedAt": "2023-11-30T04:18:45.285Z"
     }
     ```
- - todo: *needs to be improved to include a token to verify the user's permission.*
+#### Import Map
+- **Endpoint:** `/map/import`
+- **Method:** PUT
+- **Parameters:**
+  - `userId` (required): The id of the user who imported the map.
+  - `mapId` (required): The id of the map to import.
+  - `object_id` (required): The id of the map to import.
+- **Example Request:**
+    ```
+    PUT https://zaunmap-6b1455b08c9b.herokuapp.com/api/map/import?userId=auth0|656669d317b4bdb501178567&mapId=65680d250505420b42427a82&object_id=65680d250505420b42427a82
+    ```
+- **Example Response**
+    ```json
+    {
+            "_id": "",
+            "map_id": "",
+            "name": "",
+            "owner": "",
+            "isPublic": true,
+            "objectId": "",
+            "tags": [],
+            "description": "",
+            "ratings": [],
+            "averageRating": 0,
+            "ratingsCount": 0,
+            "createdAt": "2023-11-30T04:18:45.285Z",
+            "updatedAt": "2023-11-30T04:18:45.285Z"
+    }
+    ```
 
-### public
- - route: /map/public
- - method: GET
- - args: (empty)
- - payload: (empty)
- - return: 
+#### Get All Public Maps
+- **Endpoint:** `/map/public`
+- **Method:** GET
+- **Example Request:**
+    ```
+    GET https://zaunmap-6b1455b08c9b.herokuapp.com/api/map/public
+    ```
+- **Example Response**
     ```json
     [
         {
             "_id": "",
+            "map_id": "",
             "name": "",
-            "author": "",
-            "public": true,
-            "likes": 0,
-            "dislikes": 0,
+            "owner": "",
+            "isPublic": true,
             "objectId": "",
-            "description": "",
             "tags": [],
-            "createdAt": 2023-11-28T15:47:18.178+00:00,
-            "updatedAt": 2023-11-28T15:47:18.178+00:00,
+            "description": "",
+            "ratings": [],
+            "averageRating": 0,
+            "ratingsCount": 0,
+            "createdAt": "2023-11-30T04:18:45.285Z",
+            "updatedAt": "2023-11-30T04:18:45.285Z"
         },
     ]
     ```
-### all
- - route: /map/all
- - method: GET
- - args: (empty)
- - payload: (empty)
- - return: 
-    ```json
-    [
-        {
-            "_id": "",
-            "name": "",
-            "author": "",
-            "public": true,
-            "likes": 0,
-            "dislikes": 0,
-            "objectId": "",
-            "description": "",
-            "tags": [],
-            "createdAt": 2023-11-28T15:47:18.178+00:00,
-            "updatedAt": 2023-11-28T15:47:18.178+00:00,
-        },
-    ]
-    ```
+
+## Error Handling
+WeatherAPI uses standard HTTP response codes to indicate the success or failure of an API request.
