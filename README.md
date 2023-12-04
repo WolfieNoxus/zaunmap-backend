@@ -172,7 +172,209 @@
         "updatedAt": "2023-11-30T04:20:20.244Z"
     }
     ```
-    
+
+### Map Endpoints
+
+#### Get Map
+- **Endpoint:** `/map`
+- **Method:** GET
+- **Parameters:**
+  - `mapId` (required): The id of the map to retrieve.
+- **Example Request:**
+    ```
+    GET https://zaunmap-6b1455b08c9b.herokuapp.com/api/map?mapId=65680d250505420b42427a82
+    ```
+- **Example Response:**
+    ```json
+    {
+            "_id": "",
+            "map_id": "",
+            "name": "",
+            "owner": "",
+            "isPublic": true,
+            "objectId": "",
+            "tags": [],
+            "description": "",
+            "ratings": [],
+            "averageRating": 0,
+            "ratingsCount": 0,
+            "createdAt": "2023-11-30T04:18:45.285Z",
+            "updatedAt": "2023-11-30T04:18:45.285Z"
+    }
+    ```
+
+#### Create Map
+- **Endpoint:** `/map`
+- **Method:** POST
+- **Parameters:**
+  - `userId` (required): The id of the user who created the map.
+- **Example Request:**
+    ```
+    POST https://zaunmap-6b1455b08c9b.herokuapp.com/api/map?userId=auth0|656669d317b4bdb501178567
+    ```
+- **Example Response**
+    ```json
+    {
+            "_id": "",
+            "map_id": "",
+            "name": "",
+            "owner": "",
+            "isPublic": true,
+            "objectId": "",
+            "tags": [],
+            "description": "",
+            "ratings": [],
+            "averageRating": 0,
+            "ratingsCount": 0,
+            "createdAt": "2023-11-30T04:18:45.285Z",
+            "updatedAt": "2023-11-30T04:18:45.285Z"
+    }
+    ```
+#### Import Map
+- **Endpoint:** `/map/import`
+- **Method:** PUT
+- **Parameters:**
+  - `userId` (required): The id of the user who imported the map.
+  - `mapId` (required): The id of the map to import.
+  - `object_id` (required): The id of the map to import.
+- **Example Request:**
+    ```
+    PUT https://zaunmap-6b1455b08c9b.herokuapp.com/api/map/import?userId=auth0|656669d317b4bdb501178567&mapId=65680d250505420b42427a82&object_id=65680d250505420b42427a82
+    ```
+- **Example Response**
+    ```json
+    {
+            "_id": "",
+            "map_id": "",
+            "name": "",
+            "owner": "",
+            "isPublic": true,
+            "objectId": "",
+            "tags": [],
+            "description": "",
+            "ratings": [],
+            "averageRating": 0,
+            "ratingsCount": 0,
+            "createdAt": "2023-11-30T04:18:45.285Z",
+            "updatedAt": "2023-11-30T04:18:45.285Z"
+    }
+    ```
+
+#### Get All Public Maps
+- **Endpoint:** `/map/public`
+- **Method:** GET
+- **Example Request:**
+    ```
+    GET https://zaunmap-6b1455b08c9b.herokuapp.com/api/map/public
+    ```
+- **Example Response**
+    ```json
+    [
+        {
+            "_id": "",
+            "map_id": "",
+            "name": "",
+            "owner": "",
+            "isPublic": true,
+            "objectId": "",
+            "tags": [],
+            "description": "",
+            "ratings": [],
+            "averageRating": 0,
+            "ratingsCount": 0,
+            "createdAt": "2023-11-30T04:18:45.285Z",
+            "updatedAt": "2023-11-30T04:18:45.285Z"
+        },
+    ]
+    ```
+
+### Message Endpoints
+
+#### Get Message
+- **Endpoint:** `/message`
+- **Method:** GET
+- **Parameters:**
+  - `messageId` (required): The id of the message to retrieve.
+- **Example Request:**
+    ```
+    GET https://zaunmap-6b1455b08c9b.herokuapp.com/api/message?messageId=65680d250505420b42427a82
+    ```
+- **Example Response:**
+    ```json
+    {
+        "_id": "65680d250505420b42427a82",
+        "content": "This is a test message",
+        "sentBy": "auth0|656669d317b4bdb501178567",
+        "sentTo": "auth0|656669d317b4bdb501178567",
+        "createdAt": "2023-11-30T04:18:45.285Z",
+        "updatedAt": "2023-11-30T04:20:20.244Z"
+    }
+    ```
+
+#### Create Message
+- **Endpoint:** `/message`
+- **Method:** POST
+- **Parameters:**
+  - `senderId` (required): The id of the user who created the message.
+- **Example Request:**
+    ```
+    POST https://zaunmap-6b1455b08c9b.herokuapp.com/api/message?senderId=auth0|656669d317b4bdb501178567
+    ```
+- **Example Payload:**
+    ```json
+    {
+        "receiverId": "auth0|656669d317b4bdb501178567",
+        "subject": "test subject",
+        "content": "This is a test message"
+    }
+    ```
+- **Example Response:**
+    ```json
+    {
+        "_id": "65680d250505420b42427a82",
+        "senderId": "auth0|656669d317b4bdb501178567",
+        "receiverId": "auth0|656669d317b4bdb501178567",
+        "subject": "test subject",
+        "content": "This is a test message",
+        "createdAt": "2023-11-30T04:18:45.285Z",
+        "updatedAt": "2023-11-30T04:20:20.244Z"
+    }
+    ```
+#### Read/Unread Message
+- **Endpoint:** `/message/read`
+- **Method:** PUT
+- **Parameters:**
+  - `messageId` (required): The id of the message to mark as read/unread.
+  - `read` (required): Boolean value indicating whether to mark as read or unread.
+- **Example Request:**
+    ```
+    PUT https://zaunmap-6b1455b08c9b.herokuapp.com/api/message/read?messageId=65680d250505420b42427a82&read=true
+    ```
+- **Example Response:**
+    ```json
+    {
+        "_id": "65680d250505420b42427a82",
+        "senderId": "auth0|656669d317b4bdb501178567",
+        "receiverId": "auth0|656669d317b4bdb501178567",
+        "subject": "test subject",
+        "content": "This is a test message",
+        "read": true,
+        "createdAt": "2023-11-30T04:18:45.285Z",
+        "updatedAt": "2023-12-01T04:20:20.244Z"
+    }
+    ```
+
+#### Delete Message
+- **Endpoint:** `/message`
+- **Method:** DELETE
+- **Parameters:**
+  - `messageId` (required): The id of the message to delete.
+- **Example Request:**
+    ```
+    DELETE https://zaunmap-6b1455b08c9b.herokuapp.com/api/message?messageId=65680d250505420b42427a82
+    ```
+
+   
 ### User Endpoints
 
 #### Get User
@@ -397,207 +599,6 @@
     {
         "users": ["auth0|656669d317b4bdb501178567", "auth0|656669d317b4bdb501178568"]
     }
-    ```
-
-### Map Endpoints
-
-#### Get Map
-- **Endpoint:** `/map`
-- **Method:** GET
-- **Parameters:**
-  - `mapId` (required): The id of the map to retrieve.
-- **Example Request:**
-    ```
-    GET https://zaunmap-6b1455b08c9b.herokuapp.com/api/map?mapId=65680d250505420b42427a82
-    ```
-- **Example Response:**
-    ```json
-    {
-            "_id": "",
-            "map_id": "",
-            "name": "",
-            "owner": "",
-            "isPublic": true,
-            "objectId": "",
-            "tags": [],
-            "description": "",
-            "ratings": [],
-            "averageRating": 0,
-            "ratingsCount": 0,
-            "createdAt": "2023-11-30T04:18:45.285Z",
-            "updatedAt": "2023-11-30T04:18:45.285Z"
-    }
-    ```
-
-#### Create Map
-- **Endpoint:** `/map`
-- **Method:** POST
-- **Parameters:**
-  - `userId` (required): The id of the user who created the map.
-- **Example Request:**
-    ```
-    POST https://zaunmap-6b1455b08c9b.herokuapp.com/api/map?userId=auth0|656669d317b4bdb501178567
-    ```
-- **Example Response**
-    ```json
-    {
-            "_id": "",
-            "map_id": "",
-            "name": "",
-            "owner": "",
-            "isPublic": true,
-            "objectId": "",
-            "tags": [],
-            "description": "",
-            "ratings": [],
-            "averageRating": 0,
-            "ratingsCount": 0,
-            "createdAt": "2023-11-30T04:18:45.285Z",
-            "updatedAt": "2023-11-30T04:18:45.285Z"
-    }
-    ```
-#### Import Map
-- **Endpoint:** `/map/import`
-- **Method:** PUT
-- **Parameters:**
-  - `userId` (required): The id of the user who imported the map.
-  - `mapId` (required): The id of the map to import.
-  - `object_id` (required): The id of the map to import.
-- **Example Request:**
-    ```
-    PUT https://zaunmap-6b1455b08c9b.herokuapp.com/api/map/import?userId=auth0|656669d317b4bdb501178567&mapId=65680d250505420b42427a82&object_id=65680d250505420b42427a82
-    ```
-- **Example Response**
-    ```json
-    {
-            "_id": "",
-            "map_id": "",
-            "name": "",
-            "owner": "",
-            "isPublic": true,
-            "objectId": "",
-            "tags": [],
-            "description": "",
-            "ratings": [],
-            "averageRating": 0,
-            "ratingsCount": 0,
-            "createdAt": "2023-11-30T04:18:45.285Z",
-            "updatedAt": "2023-11-30T04:18:45.285Z"
-    }
-    ```
-
-#### Get All Public Maps
-- **Endpoint:** `/map/public`
-- **Method:** GET
-- **Example Request:**
-    ```
-    GET https://zaunmap-6b1455b08c9b.herokuapp.com/api/map/public
-    ```
-- **Example Response**
-    ```json
-    [
-        {
-            "_id": "",
-            "map_id": "",
-            "name": "",
-            "owner": "",
-            "isPublic": true,
-            "objectId": "",
-            "tags": [],
-            "description": "",
-            "ratings": [],
-            "averageRating": 0,
-            "ratingsCount": 0,
-            "createdAt": "2023-11-30T04:18:45.285Z",
-            "updatedAt": "2023-11-30T04:18:45.285Z"
-        },
-    ]
-    ```
-
-### Message Endpoints
-
-#### Get Message
-- **Endpoint:** `/message`
-- **Method:** GET
-- **Parameters:**
-  - `messageId` (required): The id of the message to retrieve.
-- **Example Request:**
-    ```
-    GET https://zaunmap-6b1455b08c9b.herokuapp.com/api/message?messageId=65680d250505420b42427a82
-    ```
-- **Example Response:**
-    ```json
-    {
-        "_id": "65680d250505420b42427a82",
-        "content": "This is a test message",
-        "sentBy": "auth0|656669d317b4bdb501178567",
-        "sentTo": "auth0|656669d317b4bdb501178567",
-        "createdAt": "2023-11-30T04:18:45.285Z",
-        "updatedAt": "2023-11-30T04:20:20.244Z"
-    }
-    ```
-
-#### Create Message
-- **Endpoint:** `/message`
-- **Method:** POST
-- **Parameters:**
-  - `senderId` (required): The id of the user who created the message.
-- **Example Request:**
-    ```
-    POST https://zaunmap-6b1455b08c9b.herokuapp.com/api/message?senderId=auth0|656669d317b4bdb501178567
-    ```
-- **Example Payload:**
-    ```json
-    {
-        "receiverId": "auth0|656669d317b4bdb501178567",
-        "subject": "test subject",
-        "content": "This is a test message"
-    }
-    ```
-- **Example Response:**
-    ```json
-    {
-        "_id": "65680d250505420b42427a82",
-        "senderId": "auth0|656669d317b4bdb501178567",
-        "receiverId": "auth0|656669d317b4bdb501178567",
-        "subject": "test subject",
-        "content": "This is a test message",
-        "createdAt": "2023-11-30T04:18:45.285Z",
-        "updatedAt": "2023-11-30T04:20:20.244Z"
-    }
-    ```
-#### Read/Unread Message
-- **Endpoint:** `/message/read`
-- **Method:** PUT
-- **Parameters:**
-  - `messageId` (required): The id of the message to mark as read/unread.
-  - `read` (required): Boolean value indicating whether to mark as read or unread.
-- **Example Request:**
-    ```
-    PUT https://zaunmap-6b1455b08c9b.herokuapp.com/api/message/read?messageId=65680d250505420b42427a82&read=true
-    ```
-- **Example Response:**
-    ```json
-    {
-        "_id": "65680d250505420b42427a82",
-        "senderId": "auth0|656669d317b4bdb501178567",
-        "receiverId": "auth0|656669d317b4bdb501178567",
-        "subject": "test subject",
-        "content": "This is a test message",
-        "read": true,
-        "createdAt": "2023-11-30T04:18:45.285Z",
-        "updatedAt": "2023-12-01T04:20:20.244Z"
-    }
-    ```
-
-#### Delete Message
-- **Endpoint:** `/message`
-- **Method:** DELETE
-- **Parameters:**
-  - `messageId` (required): The id of the message to delete.
-- **Example Request:**
-    ```
-    DELETE https://zaunmap-6b1455b08c9b.herokuapp.com/api/message?messageId=65680d250505420b42427a82
     ```
 
 ## Error Handling
