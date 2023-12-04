@@ -48,7 +48,7 @@ describe('Sample Test', () => {
 
 // describe('PUT /user/rename', () => {
 //   it('should rename a user', async () => {
-//     const response = await request(app).put('/user/rename').query({ userId: 'auth0|656669d317b4bdb501178567', new_name: 'NewName' });
+//     const response = await request(app).put('/user/rename').query({ userId: 'auth0|656669d317b4bdb501178567', newName: 'NewName' });
 //     expect(response.statusCode).toBe(200);
 //   });
 // });

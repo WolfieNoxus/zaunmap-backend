@@ -22,7 +22,7 @@
  - route: /user/rename
  - method: put
  - type: restricted
- - args: userId(str), new_name(str)
+ - args: userId(str), newName(str)
  - payload: (empty)
  - return: (HTTP_CODE ONLY)
  - todo: *needs to be improved to include a token to verify that the user can only change their own name.*
