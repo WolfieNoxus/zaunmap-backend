@@ -1,27 +1,28 @@
 // const request = require('supertest');
 // const app = require('../src/app'); // Replace with the path to your Express app
+// const { connectDB, disconnectDB } = require('../src/config/db');
+
+// beforeAll(async () => {
+//   await connectDB();
+// });
+
+// afterAll(async () => {
+//   await disconnectDB();
+// }
+// );
 
 // Sample test to ensure Jest is working
 describe('Sample Test', () => {
-    it('should test that true === true', () => {
-      expect(true).toBe(true);
-    });
+  it('should test that true === true', () => {
+    expect(true).toBe(true);
   });
+});
 
-// describe('GET /map', () => {
-//     it('should return a specific map', async () => {
-//         const _id = 'some-map-id'; // Replace with a valid ID
-//         const response = await request(app)
-//             .get(`/map?_id=${_id}`)
-//             .expect(200);
-//         expect(response.body).toHaveProperty('_id', _id);
-//     });
-
-//     it('should return 400 for missing _id', async () => {
-//         await request(app)
-//             .get('/map')
-//             .expect(400);
-//     });
+// describe('GET /api/map', () => {
+//   it('should return 200 OK', async () => {
+//     const response = await request(app).get('/api/map?_id=65666bac0d95f64b2c542802');
+//     expect(response.status).toBe(200);
+//   });
 // });
 
 // describe('GET /map/public', () => {
