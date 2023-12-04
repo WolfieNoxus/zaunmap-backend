@@ -230,14 +230,3 @@ exports.rateMap = async (req, res) => {
         res.status(404).send(error.message);
     }
 }
-
-exports.searchMaps = async (req, res) => {
-    try {
-        const query = req.query.query;
-        const maps = await Map.find({ $text: { $search: query } });
-        res.status(200).json(maps);
-    }
-    catch (error) {
-        res.status(404).send(error.message);
-    }
-}

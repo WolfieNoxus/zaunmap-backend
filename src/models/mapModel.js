@@ -34,7 +34,7 @@ const mapSchema = new mongoose.Schema({
         },
         rating: {
             type: Number,
-            min: 1,       // minimum rating value
+            min: 0,       // minimum rating value
             max: 5        // maximum rating value
         }
     }],
