@@ -514,5 +514,91 @@
     ]
     ```
 
+### Message Endpoints
+
+#### Get Message
+- **Endpoint:** `/message`
+- **Method:** GET
+- **Parameters:**
+  - `messageId` (required): The id of the message to retrieve.
+- **Example Request:**
+    ```
+    GET https://zaunmap-6b1455b08c9b.herokuapp.com/api/message?messageId=65680d250505420b42427a82
+    ```
+- **Example Response:**
+    ```json
+    {
+        "_id": "65680d250505420b42427a82",
+        "content": "This is a test message",
+        "sentBy": "auth0|656669d317b4bdb501178567",
+        "sentTo": "auth0|656669d317b4bdb501178567",
+        "createdAt": "2023-11-30T04:18:45.285Z",
+        "updatedAt": "2023-11-30T04:20:20.244Z"
+    }
+    ```
+
+#### Create Message
+- **Endpoint:** `/message`
+- **Method:** POST
+- **Parameters:**
+  - `senderId` (required): The id of the user who created the message.
+- **Example Request:**
+    ```
+    POST https://zaunmap-6b1455b08c9b.herokuapp.com/api/message?senderId=auth0|656669d317b4bdb501178567
+    ```
+- **Example Payload:**
+    ```json
+    {
+        "receiverId": "auth0|656669d317b4bdb501178567",
+        "subject": "test subject",
+        "content": "This is a test message"
+    }
+    ```
+- **Example Response:**
+    ```json
+    {
+        "_id": "65680d250505420b42427a82",
+        "senderId": "auth0|656669d317b4bdb501178567",
+        "receiverId": "auth0|656669d317b4bdb501178567",
+        "subject": "test subject",
+        "content": "This is a test message",
+        "createdAt": "2023-11-30T04:18:45.285Z",
+        "updatedAt": "2023-11-30T04:20:20.244Z"
+    }
+    ```
+#### Read/Unread Message
+- **Endpoint:** `/message/read`
+- **Method:** PUT
+- **Parameters:**
+  - `messageId` (required): The id of the message to mark as read/unread.
+  - `read` (required): Boolean value indicating whether to mark as read or unread.
+- **Example Request:**
+    ```
+    PUT https://zaunmap-6b1455b08c9b.herokuapp.com/api/message/read?messageId=65680d250505420b42427a82&read=true
+    ```
+- **Example Response:**
+    ```json
+    {
+        "_id": "65680d250505420b42427a82",
+        "senderId": "auth0|656669d317b4bdb501178567",
+        "receiverId": "auth0|656669d317b4bdb501178567",
+        "subject": "test subject",
+        "content": "This is a test message",
+        "read": true,
+        "createdAt": "2023-11-30T04:18:45.285Z",
+        "updatedAt": "2023-12-01T04:20:20.244Z"
+    }
+    ```
+
+#### Delete Message
+- **Endpoint:** `/message`
+- **Method:** DELETE
+- **Parameters:**
+  - `messageId` (required): The id of the message to delete.
+- **Example Request:**
+    ```
+    DELETE https://zaunmap-6b1455b08c9b.herokuapp.com/api/message?messageId=65680d250505420b42427a82
+    ```
+
 ## Error Handling
 WeatherAPI uses standard HTTP response codes to indicate the success or failure of an API request.
