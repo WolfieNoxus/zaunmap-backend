@@ -8,8 +8,8 @@ router.put('/', MapController.updateMapMetadata);
 router.get('/', MapController.getMap);
 router.get('/public', MapController.getAllPublicMaps);
 router.get('/all', MapController.getAllMaps);
-// router.get('/search', MapController.searchMaps);
-// Retired
-// router.get('/json', MapController.getMapJSON);
+router.put('/rating', MapController.rateMap);
+router.delete('/', MapController.deleteMap);
+router.get('/search', MapController.searchMaps);
 
 module.exports = router;

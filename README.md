@@ -73,7 +73,7 @@
     ```json
     [
         {
-            "map_id": "",
+            "mapId": "",
             "map_name": "",
             "owner": "",
             "created_time": "",
@@ -138,7 +138,7 @@
  - route: /map/import
  - method: put
  - type: restricted
- - args: userId(str), map_id(str)
+ - args: userId(str), mapId(str)
  - payload: (empty)
  - return: (HTTP_CODE ONLY)
  - note: *The backend gets the corresponding uploaded file from the object storage using userId and objectId, converts it to geojson format and creates the corresponding geojson in the object storage. It then converts it to geojson format and creates the corresponding geojson in the object storage, passing the objectId of the created geojson back to the frontend. Note that the objectId is an uuid.*

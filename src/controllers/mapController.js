@@ -8,10 +8,10 @@ const toGeoJSON = require('@tmcw/togeojson');
 
 exports.createMap = async (req, res) => {
     try {
-        const user_id = req.query.user_id;
+        const userId = req.query.userId;
         // Validate the query parameters
-        if (!user_id) {
-            return res.status(400).json({ message: "Missing user_id in query parameters" });
+        if (!userId) {
+            return res.status(400).json({ message: "Missing userId in query parameters" });
         }
 
         // Initialize an empty GeoJSON object
@@ -28,19 +28,19 @@ exports.createMap = async (req, res) => {
         };
 
         // Perform the HTTP POST request to send the empty GeoJSON
-        const postResponse = await axios.post(`https://zaunmap.pages.dev/file?user_id=${user_id}`, emptyGeoJSON, config);
+        const postResponse = await axios.post(`https://zaunmap.pages.dev/file?user_id=${userId}`, emptyGeoJSON, config);
 
-        // check and Extract the object_id from the POST response
-        const object_id = postResponse.data.object_id;
+        // check and Extract the objectId from the POST response
+        const objectId = postResponse.data.object_id;
 
-        // Create a new Map instance with the user_id and object_id
-        const newMap = new Map({ author: user_id, object_id: object_id, map_id: Date.now() });
+        // Create a new Map instance with the userId and objectId
+        const newMap = new Map({ author: userId, objectId: objectId, mapId: Date.now() });
 
         // Save the new map to the database
         await newMap.save();
 
         // Simulated database operations for finding the user and saving the map
-        const user = await User.findOne({ user_id: user_id });
+        const user = await User.findOne({ userId: userId });
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
@@ -58,10 +58,10 @@ exports.createMap = async (req, res) => {
 
 exports.importMap = async (req, res) => {
     try {
-        const user_id = req.query.user_id;
-        const map_id = req.query.map_id;
-        const object_id = req.query.object_id;
-        const rawDataResponse = await axios.get(`https://zaunmap.pages.dev/file/?user_id=${user_id}&object_id=${object_id}`, { responseType: 'arraybuffer' });
+        const userId = req.query.userId;
+        const mapId = req.query.mapId;
+        const objectId = req.query.objectId;
+        const rawDataResponse = await axios.get(`https://zaunmap.pages.dev/file/?user_id=${userId}&object_id=${objectId}`, { responseType: 'arraybuffer' });
         const rawData = rawDataResponse.data;
         let format = 'json'; // Default format
         if (rawDataResponse.headers['content-type']) {
@@ -73,9 +73,9 @@ exports.importMap = async (req, res) => {
                 'Content-Type': 'application/json'
             }
         };
-        const targetMap = await Map.findOne({ _id: map_id });
-        const targetMapId = targetMap.object_id;
-        await axios.put(`https://zaunmap.pages.dev/file/?user_id=${user_id}&object_id=${targetMapId}`, geoJsonData, config);
+        const targetMap = await Map.findOne({ _id: mapId });
+        const targetMapId = targetMap.objectId;
+        await axios.put(`https://zaunmap.pages.dev/file/?user_id=${userId}&object_id=${targetMapId}`, geoJsonData, config);
         res.status(200).send('Map imported successfully');
     } catch (error) {
         res.status(500).send(`Error importing map: ${error.message}`);
@@ -135,7 +135,7 @@ exports.getMap = async (req, res) => {
             return res.status(400).json({ message: "Missing _id in query parameters" });
         }
 
-        // Find the map with the provided map_id
+        // Find the map with the provided mapId
         const map = await Map.findOne({ _id: _id });
         if (!map) {
             return res.status(404).json({ message: "Map not found" });
@@ -188,19 +188,56 @@ exports.updateMapMetadata = async (req, res) => {
     }
 }
 
-// Retired
-// exports.getMapJSON = async (req, res) => {
-//     try {
-//         const _id = req.query._id;
-//         const map = await Map.findOne({ _id: _id });
-//         const object_id = map.object_id;
-//         const user_id = map.author;
-//         const rawDataResponse = await axios.get(`https://zaunmap.pages.dev/file/?user_id=${user_id}&object_id=${object_id}`, { responseType: 'arraybuffer' });
-//         let rawData = rawDataResponse.data;
-//         let geoJsonData = await convertToGeoJson(rawData, 'json');
-//         res.send(geoJsonData);
-//     }
-//     catch (error) {
-//         res.status(404).send(error.message);
-//     }
-// }
+exports.deleteMap = async (req, res) => {
+    try {
+        const mapId = req.query.mapId;
+        const map = await Map.findById(mapId);
+        const userId = map.owner;
+        const objectId = map.objectId;
+        await axios.delete(`https://zaunmap.pages.dev/file/?user_id=${userId}&object_id=${objectId}`);
+        await map.delete();
+        res.status(200).send('Map deleted successfully');
+    }
+    catch (error) {
+        res.status(404).send(error.message);
+    }
+}
+
+exports.rateMap = async (req, res) => {
+    try {
+        const mapId = req.query.mapId;
+        const userId = req.query.userId;
+        const rating = req.query.rating;
+        const map = await Map.findById(mapId);
+        const ratingObj = { userId: userId, rating: rating };
+        const ratings = map.ratings;
+        const existingRating = ratings.find(rating => rating.userId === userId);
+        if (existingRating) {
+            existingRating.rating = rating;
+        }
+        else {
+            ratings.push(ratingObj);
+        }
+        map.ratings = ratings;
+        const ratingCount = ratings.length;
+        const ratingSum = ratings.reduce((sum, rating) => sum + rating.rating, 0);
+        map.averageRating = ratingSum / ratingCount;
+        map.ratingCount = ratingCount;
+        await map.save();
+        res.status(200).send('Map rated successfully');
+    }
+    catch (error) {
+        res.status(404).send(error.message);
+    }
+}
+
+exports.searchMaps = async (req, res) => {
+    try {
+        const query = req.query.query;
+        const maps = await Map.find({ $text: { $search: query } });
+        res.status(200).json(maps);
+    }
+    catch (error) {
+        res.status(404).send(error.message);
+    }
+}

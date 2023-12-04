@@ -3,13 +3,13 @@ const Map = require('../models/mapModel');
 
 exports.getUser = async (req, res) => {
   try {
-    const user_id = req.query.user_id;
+    const userId = req.query.userId;
 
-    if (!user_id) {
+    if (!userId) {
       return res.status(400).send('Invalid query parameters');
     }
 
-    const user = await User.findOne({ user_id: user_id });
+    const user = await User.findOne({ userId: userId });
     if (!user) {
       return res.status(404).send('User not found');
     }
@@ -41,11 +41,11 @@ exports.createUser = async (req, res) => {
 exports.rename = async (req, res) => {
   try {
     // Validate query parameters
-    if (!req.query.user_id || !req.query.new_name) {
+    if (!req.query.userId || !req.query.new_name) {
       return res.status(400).send('Invalid query parameters');
     }
 
-    const user = await User.findOne({ user_id: req.query.user_id });
+    const user = await User.findOne({ userId: req.query.userId });
     if (!user) {
       return res.status(404).send('User not found');
     }
@@ -62,7 +62,7 @@ exports.rename = async (req, res) => {
 exports.restrict = async (req, res) => {
   try {
     // Validate query parameters
-    if (!req.query.user_id || req.query.restrict === undefined) {
+    if (!req.query.userId || req.query.restrict === undefined) {
       return res.status(400).send('Invalid query parameters');
     }
 
@@ -71,7 +71,7 @@ exports.restrict = async (req, res) => {
       return res.status(400).send('Invalid query parameters: restrict must be true or false');
     }
 
-    const user = await User.findOne({ user_id: req.query.user_id });
+    const user = await User.findOne({ userId: req.query.userId });
     if (!user) {
       return res.status(404).send('User not found');
     }
@@ -88,8 +88,8 @@ exports.restrict = async (req, res) => {
 exports.disable = async (req, res) => {
   try {
     // Validate query parameters
-    if (!req.query.user_id) {
-      return res.status(400).send('Invalid query parameters: user_id is required');
+    if (!req.query.userId) {
+      return res.status(400).send('Invalid query parameters: userId is required');
     }
 
     // Convert the disable parameter to lowercase and check if it is 'true' or 'false'
@@ -99,7 +99,7 @@ exports.disable = async (req, res) => {
     }
 
     // Find the user
-    const user = await User.findOne({ user_id: req.query.user_id });
+    const user = await User.findOne({ userId: req.query.userId });
     if (!user) {
       return res.status(404).send('User not found');
     }
@@ -127,13 +127,13 @@ exports.listUsers = async (req, res) => {
 
 exports.getUserMaps = async (req, res) => {
   try {
-    const user_id = req.query.user_id;
+    const userId = req.query.userId;
 
-    if (!user_id) {
+    if (!userId) {
       return res.status(400).send('Invalid query parameters');
     }
 
-    const user = await User.findOne({ user_id: user_id });
+    const user = await User.findOne({ userId: userId });
     if (!user) {
       return res.status(404).send('User not found');
     }
