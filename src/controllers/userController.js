@@ -50,7 +50,7 @@ exports.rename = async (req, res) => {
       return res.status(404).send('User not found');
     }
 
-    user.user_name = req.query.newName;
+    user.name = req.query.newName;
     await user.save();
     res.status(200).send('User name updated successfully');
   }
