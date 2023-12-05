@@ -156,3 +156,20 @@ exports.changeUserRole = async (req, res) => {
     res.status(500).send('Internal Server Error: ' + error.message);
   }
 }
+
+exports.deleteUser = async (req, res) => {
+  try {
+    const userId = req.query.userId;
+    if (!userId) {
+      return res.status(400).send('Invalid query parameters');
+    }
+    const user = await User.findOne({ userId: userId });
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
+    await user.remove();
+    res.status(200).send('User deleted successfully');
+  } catch (error) {
+    res.status(500).send('Internal Server Error: ' + error.message);
+  }
+}
