@@ -110,6 +110,36 @@ exports.createMap = async (req, res) => {
     }
 };
 
+exports.updateMap = async (req, res) => {
+    try {
+        const mapId = req.query.mapId;
+        const map = await Map.findById(mapId);
+        if (!map) {
+            return res.status(404).json({ message: "Map not found" });
+        }
+        const newName = req.body.name;
+        const newDescription = req.body.description;
+        const newTags = req.body.tags;
+        const newIsPublic = req.body.isPublic;
+        if (newName) {
+            map.name = newName;
+        }
+        if (newDescription) {
+            map.description = newDescription;
+        }
+        if (newTags) {
+            map.tags = newTags;
+        }
+        if (newIsPublic) {
+            map.isPublic = newIsPublic;
+        }
+        await map.save();
+        res.status(200).json(map);
+    } catch (error) {
+        res.status(500).json({ message: "Error updating map", error: error.message });
+    }
+}
+
 exports.rateMap = async (req, res) => {
     try {
         const mapId = req.query.mapId;
