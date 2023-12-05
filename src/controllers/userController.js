@@ -1,5 +1,4 @@
 const User = require('../models/userModel');
-const Map = require('../models/mapModel');
 
 exports.getUser = async (req, res) => {
   try {
@@ -84,7 +83,7 @@ exports.renameUser = async (req, res) => {
 
     user.name = req.query.newName;
     await user.save();
-    res.status(200).send('User name updated successfully');
+    res.status(200).json(user);
   }
   catch (error) {
     res.status(500).send('Internal Server Error: ' + error.message);
@@ -122,6 +121,9 @@ exports.followUser = async (req, res) => {
       user.following.pull(followId);
       followedUser.followers.pull(userId);
     }
+    await user.save();
+    await followedUser.save();
+    res.status(200).send('User updated successfully');
   } catch (error) {
     res.status(500).send('Internal Server Error: ' + error.message);
   }
@@ -156,6 +158,8 @@ exports.blockUser = async (req, res) => {
       }
       user.blocked.pull(blockId);
     }
+    await user.save();
+    res.status(200).send('User updated successfully');
   } catch (error) {
     res.status(500).send('Internal Server Error: ' + error.message);
   }
@@ -174,6 +178,7 @@ exports.changeUserRole = async (req, res) => {
     }
     user.role = role;
     await user.save();
+    res.status(200).send('User updated successfully');
   } catch (error) {
     res.status(500).send('Internal Server Error: ' + error.message);
   }
