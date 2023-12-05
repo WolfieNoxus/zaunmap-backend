@@ -560,7 +560,7 @@
     ```
 
 #### Follow/Unfollow User
-- **Endpoint:** `/follow`
+- **Endpoint:** `/user/follow`
 - **Method:** PUT
 - **Parameters:**
   - `userId` (required): The id of the user who is following.
@@ -590,7 +590,7 @@
     ```
 
 #### Block/Unblock User
-- **Endpoint:** `/block`
+- **Endpoint:** `/user/block`
 - **Method:** PUT
 - **Parameters:**
   - `userId` (required): The id of the user who is blocking.
@@ -620,7 +620,7 @@
     ```
 
 #### Change User Role
-- **Endpoint:** `/role`
+- **Endpoint:** `/user/role`
 - **Method:** PUT
 - **Parameters:**
   - `userId` (required): The id of the user to disable.
