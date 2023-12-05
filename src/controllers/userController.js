@@ -23,7 +23,29 @@ exports.getUser = async (req, res) => {
 
 exports.searchUsers = async (req, res) => {
   try {
-    const users = await User.find();
+    const name = req.query.name;
+    const role = req.query.role;
+    const sortBy = req.query.sortBy;
+    const sortOrder = req.query.sortOrder;
+
+    let users = await User.find();
+    if (name) {
+      users = users.filter(user => user.name.toLowerCase().includes(name.toLowerCase()));
+    }
+    if (role) {
+      users = users.filter(user => user.role === role);
+    }
+    if (sortBy && sortOrder) {
+      users = users.sort((a, b) => {
+        if (a[sortBy] < b[sortBy]) {
+          return sortOrder === 'asc' ? -1 : 1;
+        }
+        if (a[sortBy] > b[sortBy]) {
+          return sortOrder === 'asc' ? 1 : -1;
+        }
+        return 0;
+      });
+    }
     res.status(200).json(users);
   }
   catch (error) {
