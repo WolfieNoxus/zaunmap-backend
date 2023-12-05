@@ -37,14 +37,14 @@
 - **Method:** POST
 - **Parameters:**
   - `userId` (required): The id of the user who created the comment.
-  - `mapId` (required): The id of the map the comment is posted on.
 - **Example Request:**
     ```
-    POST https://zaunmap-6b1455b08c9b.herokuapp.com/api/comment?userId=auth0|656669d317b4bdb501178567&mapId=65680d250505420b42427a82
+    POST https://zaunmap-6b1455b08c9b.herokuapp.com/api/comment?userId=auth0|656669d317b4bdb501178567
     ```
 - **Example Payload:**
     ```json
     {
+        "mapId": "65680d250505420b42427a82",
         "content": "This is a test comment"
     }
     ```
@@ -67,14 +67,14 @@
 - **Method:** POST
 - **Parameters:**
   - `userId` (required): The id of the user who created the comment.
-  - `commentId` (required): The id of the comment to reply to.
 - **Example Request:**
     ```
-    POST https://zaunmap-6b1455b08c9b.herokuapp.com/api/reply?userId=auth0|656669d317b4bdb501178567&commentId=65680d250505420b42427a82
+    POST https://zaunmap-6b1455b08c9b.herokuapp.com/api/reply?userId=auth0|656669d317b4bdb501178567
     ```
 - **Example Payload:**
     ```json
     {
+        "commentId": "65680d250505420b42427a82",
         "content": "This is a test reply"
     }
     ```
@@ -200,6 +200,7 @@
             "ratings": [],
             "averageRating": 0,
             "ratingsCount": 0,
+            "comments": [],
             "createdAt": "2023-11-30T04:18:45.285Z",
             "updatedAt": "2023-11-30T04:18:45.285Z"
     }
@@ -231,6 +232,7 @@
             "ratings": [],
             "averageRating": 0,
             "ratingsCount": 0,
+            "comments": [],
             "createdAt": "2023-11-30T04:18:45.285Z",
             "updatedAt": "2023-11-30T04:18:45.285Z"
         },
@@ -246,6 +248,7 @@
             "ratings": [],
             "averageRating": 0,
             "ratingsCount": 0,
+            "comments": [],
             "createdAt": "2023-11-30T04:18:45.285Z",
             "updatedAt": "2023-11-30T04:18:45.285Z"
         }
@@ -275,6 +278,7 @@
             "ratings": [],
             "averageRating": 0,
             "ratingsCount": 0,
+            "comments": [],
             "createdAt": "2023-11-30T04:18:45.285Z",
             "updatedAt": "2023-11-30T04:18:45.285Z"
     }
@@ -312,6 +316,7 @@
             "ratings": [],
             "averageRating": 0,
             "ratingsCount": 0,
+            "comments": [],
             "createdAt": "2023-11-30T04:18:45.285Z",
             "updatedAt": "2023-11-30T04:18:45.285Z"
     }
@@ -342,6 +347,7 @@
             "ratings": [],
             "averageRating": 0,
             "ratingsCount": 0,
+            "comments": [],
             "createdAt": "2023-11-30T04:18:45.285Z",
             "updatedAt": "2023-11-30T04:18:45.285Z"
     }
@@ -372,6 +378,7 @@
             "ratings": [],
             "averageRating": 0,
             "ratingsCount": 0,
+            "comments": [],
             "createdAt": "2023-11-30T04:18:45.285Z",
             "updatedAt": "2023-11-30T04:18:45.285Z"
     }
@@ -400,6 +407,7 @@
             "ratings": [],
             "averageRating": 0,
             "ratingsCount": 0,
+            "comments": [],
             "createdAt": "2023-11-30T04:18:45.285Z",
             "updatedAt": "2023-11-30T04:18:45.285Z"
     }

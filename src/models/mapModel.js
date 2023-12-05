@@ -46,7 +46,11 @@ const mapSchema = new mongoose.Schema({
     ratingCount: {
         type: Number,
         default: 0       // default count of ratings
-    }
+    },
+    comments: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Comment'   // reference to the comments on the map
+    }],
 }, {
     timestamps: true     // timestamps for creation and last update
 });

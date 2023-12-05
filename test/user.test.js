@@ -2,7 +2,6 @@ const request = require('supertest');
 const app = require('../src/app');
 const { connectDB, disconnectDB } = require('../src/config/db');
 const User = require('../src/models/userModel');
-const e = require('express');
 
 beforeAll(async () => {
     await connectDB();

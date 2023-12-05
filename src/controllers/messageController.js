@@ -1,4 +1,5 @@
 const Message = require('../models/messageModel');
+const User = require('../models/userModel');
 
 exports.getMessage = async (req, res) => {
     try {
@@ -16,19 +17,28 @@ exports.getMessage = async (req, res) => {
 exports.createMessage = async (req, res) => {
     try {
         const userId = req.query.userId;
+        if (!userId) {
+            return res.status(400).send('Missing userId in query parameters');
+        }
         const receiverId = req.body.receiverId;
-        const reveiver = await User.findOne({ userId: receiverId });
-        if (!reveiver) {
+        if (!receiverId) {
+            return res.status(400).send('Missing receiverId in request body');
+        }
+        const receiver = await User.findOne({ userId: receiverId });
+        if (!receiver) {
             return res.status(404).send('Receiver not found');
         }
-        if (reveiver.blocked.includes(userId)) {
+        if (receiver.blocked.includes(userId)) {
             return res.status(403).send('Receiver has blocked you');
         }
         const newMessage = new Message(req.body);
+        newMessage.senderId = userId;
         await newMessage.save();
+        receiver.messagesReceived.push(newMessage._id);
+        await receiver.save();
         res.status(201).json(newMessage);
     } catch (error) {
-        res.status(400).send('Error creating message: ' + error.message);
+        res.status(500).send('Internal Server Error: ' + error.message);
     }
 }
 
@@ -43,9 +53,9 @@ exports.readMessage = async (req, res) => {
         if (!readStr || (readStr !== 'true' && readStr !== 'false')) {
             return res.status(400).send('Invalid query parameters: read must be true or false');
         }
-        message.read = readStr === 'true';
+        message.isRead = readStr === 'true';
         await message.save();
-        res.status(200).send('Message read successfully');
+        res.status(200).json(message);
     } catch (error) {
         res.status(500).send('Internal Server Error: ' + error.message);
     }

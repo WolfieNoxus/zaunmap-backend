@@ -5,7 +5,6 @@ const JSZip = require('jszip');
 const shpjs = require('shpjs');
 const { DOMParser } = require('xmldom');
 const toGeoJSON = require('@tmcw/togeojson');
-const e = require('express');
 
 exports.getMap = async (req, res) => {
     try {
@@ -180,7 +179,7 @@ exports.rateMap = async (req, res) => {
         res.status(200).send('Map rated successfully');
     }
     catch (error) {
-        res.status(404).send(error.message);
+        res.status(500).send(`Error rating map: ${error.message}`);
     }
 }
 
