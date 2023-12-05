@@ -535,11 +535,10 @@
 - **Method:** GET
 - **parameters:**
   - `name` (optional): The name of the user to search for.
-  - `role` (optional): The role of the user to search for.
   - `sortBy` & `sortOrder` (optional): The field to sort by and the order to sort by.
 - **Example Request:**
     ```
-    GET https://zaunmap-6b1455b08c9b.herokuapp.com/api/user/search?name=testuser&role=user&sortBy=name&sortOrder=asc
+    GET https://zaunmap-6b1455b08c9b.herokuapp.com/api/user/search?name=testuser&sortBy=name&sortOrder=asc
     ```
 - **Example Response:**
     ```json

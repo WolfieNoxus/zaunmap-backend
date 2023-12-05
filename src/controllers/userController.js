@@ -32,9 +32,6 @@ exports.searchUsers = async (req, res) => {
     if (name) {
       users = users.filter(user => user.name.toLowerCase().includes(name.toLowerCase()));
     }
-    if (role) {
-      users = users.filter(user => user.role === role);
-    }
     if (sortBy && sortOrder) {
       users = users.sort((a, b) => {
         if (a[sortBy] < b[sortBy]) {
