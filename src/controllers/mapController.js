@@ -5,6 +5,29 @@ const JSZip = require('jszip');
 const shpjs = require('shpjs');
 const { DOMParser } = require('xmldom');
 const toGeoJSON = require('@tmcw/togeojson');
+const e = require('express');
+
+exports.getMap = async (req, res) => {
+    try {
+        const mapId = req.query.mapId;
+        // Validate the query parameters
+        if (!mapId) {
+            return res.status(400).json({ message: "Missing mapId in query parameters" });
+        }
+
+        // Find the map with the provided mapId
+        const map = await Map.findOne({ _id: mapId });
+        if (!map) {
+            return res.status(404).json({ message: "Map not found" });
+        }
+
+        // Send the map in the response
+        res.status(200).json(map);
+    } catch (error) {
+        // Handle any errors that occur during the process
+        res.status(500).json({ message: "Error getting map", error: error.message });
+    }
+}
 
 exports.createMap = async (req, res) => {
     try {
@@ -125,28 +148,6 @@ async function findFileInZip(zip, extension) {
         throw new Error(`No ${extension} file found in ZIP`);
     }
     return await zip.files[files[0]].async("nodebuffer");
-}
-
-exports.getMap = async (req, res) => {
-    try {
-        const mapId = req.query.mapId;
-        // Validate the query parameters
-        if (!mapId) {
-            return res.status(400).json({ message: "Missing mapId in query parameters" });
-        }
-
-        // Find the map with the provided mapId
-        const map = await Map.findOne({ _id: mapId });
-        if (!map) {
-            return res.status(404).json({ message: "Map not found" });
-        }
-
-        // Send the map in the response
-        res.status(200).json(map);
-    } catch (error) {
-        // Handle any errors that occur during the process
-        res.status(500).json({ message: "Error getting map", error: error.message });
-    }
 }
 
 exports.getAllPublicMaps = async (req, res) => {
