@@ -48,85 +48,102 @@ exports.replyComment = async (req, res) => {
         await reply.save();
         comment.replies.push(reply._id);
         await comment.save();
-        res.status(200).json({ message: 'Comment replied successfully' });
+        res.status(200).json(reply);
     } catch (error) {
-        res.status(404).send(error.message);
+        res.status(500).json({ message: 'Error replying to comment', error: error.message });
     }
 }
 
 exports.likeComment = async (req, res) => {
     try {
         const commentId = req.query.commentId;
-        const userId = req.query.userId;
-        const comment = await Comment.findById(commentId);
-        if (comment.likes.includes(userId)) {
-            res.status(200).json({ message: 'Comment already liked' });
+        if (!commentId) {
+            return res.status(400).json({ message: 'Comment ID not provided' });
         }
-        else {
-            comment.likes.push(userId);
-            await comment.save();
-            res.status(200).json({ message: 'Comment liked successfully' });
+
+        const userId = req.query.userId;
+        if (!userId) {
+            return res.status(400).json({ message: 'User ID not provided' });
+        }
+
+        const likeStr = req.query.like.toLowerCase();
+        if (likeStr !== 'true' && likeStr !== 'false') {
+            return res.status(400).json({ message: 'Invalid like parameter' });
+        }
+        const like = likeStr === 'true';
+
+        const comment = await Comment.findById(commentId);
+        if (!comment) {
+            return res.status(404).json({ message: 'Comment not found' });
+        }
+        if (like) {
+            if (comment.likes.includes(userId)) {
+                res.status(200).json({ message: 'Comment already liked' });
+            }
+            else {
+                comment.likes.push(userId);
+                await comment.save();
+                res.status(200).json({ message: 'Comment liked successfully' });
+            }
+        } else {
+            if (!comment.likes.includes(userId)) {
+                res.status(200).json({ message: 'Comment not liked' });
+            } else {
+                comment.likes.pull(userId);
+                await comment.save();
+                res.status(200).json({ message: 'Comment unliked successfully' });
+            }
         }
     }
     catch (error) {
-        res.status(404).send(error.message);
-    }
-}
-
-exports.unlikeComment = async (req, res) => {
-    try {
-        const commentId = req.query.commentId;
-        const userId = req.query.userId;
-        const comment = await Comment.findById(commentId);
-        if (!comment.likes.includes(userId)) {
-            res.status(200).json({ message: 'Comment not liked' });
-        }
-        else {
-            comment.likes.pull(userId);
-            await comment.save();
-            res.status(200).json({ message: 'Comment unliked successfully' });
-        }
-    } catch (error) {
-        res.status(404).send(error.message);
+        res.status(500).json({ message: 'Error liking comment', error: error.message });
     }
 }
 
 exports.dislikeComment = async (req, res) => {
     try {
         const commentId = req.query.commentId;
+        if (!commentId) {
+            return res.status(400).json({ message: 'Comment ID not provided' });
+        }
         const userId = req.query.userId;
+        if (!userId) {
+            return res.status(400).json({ message: 'User ID not provided' });
+        }
+        const dislikeStr = req.query.dislike.toLowerCase();
+        if (dislikeStr !== 'true' && dislikeStr !== 'false') {
+            return res.status(400).json({ message: 'Invalid dislike parameter' });
+        }
+        const dislike = dislikeStr === 'true';
+
         const comment = await Comment.findById(commentId);
-        if (comment.dislikes.includes(userId)) {
-            res.status(200).json({ message: 'Comment already disliked' });
+        if (!comment) {
+            return res.status(404).json({ message: 'Comment not found' });
         }
-        else {
-            comment.dislikes.push(userId);
-            await comment.save();
-            res.status(200).json({ message: 'Comment disliked successfully' });
+
+        if (dislike) {
+            if (comment.dislikes.includes(userId)) {
+                res.status(200).json({ message: 'Comment already disliked' });
+            }
+            else {
+                comment.dislikes.push(userId);
+                await comment.save();
+                res.status(200).json({ message: 'Comment disliked successfully' });
+            }
+        } else {
+            if (!comment.dislikes.includes(userId)) {
+                res.status(200).json({ message: 'Comment not disliked' });
+            } else {
+                comment.dislikes.pull(userId);
+                await comment.save();
+                res.status(200).json({ message: 'Comment undisliked successfully' });
+            }
         }
-    }
-    catch (error) {
-        res.status(404).send(error.message);
+    } catch (error) {
+        res.status(500).json({ message: 'Error disliking comment', error: error.message });
     }
 }
 
-exports.undislikeComment = async (req, res) => {
-    try {
-        const commentId = req.query.commentId;
-        const userId = req.query.userId;
-        const comment = await Comment.findById(commentId);
-        if (!comment.dislikes.includes(userId)) {
-            res.status(200).json({ message: 'Comment not disliked' });
-        }
-        else {
-            comment.dislikes.pull(userId);
-            await comment.save();
-            res.status(200).json({ message: 'Comment undisliked successfully' });
-        }
-    } catch (error) {
-        res.status(404).send(error.message);
-    }
-}
 
 exports.deleteComment = async (req, res) => {
     try {

@@ -176,7 +176,7 @@ exports.rateMap = async (req, res) => {
         map.averageRating = ratingSum / ratingCount;
         map.ratingCount = ratingCount;
         await map.save();
-        res.status(200).send('Map rated successfully');
+        res.status(200).json({ ratingCount: ratingCount });
     }
     catch (error) {
         res.status(500).send(`Error rating map: ${error.message}`);
