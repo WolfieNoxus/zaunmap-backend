@@ -657,4 +657,4 @@
     ```
 
 ## Error Handling
- ZaunMap Backend API uses standard HTTP response codes to indicate the success or failure of an API request.
+ZaunMap Backend API uses standard HTTP response codes to indicate the success or failure of an API request.
