@@ -471,7 +471,7 @@
     ```json
     {
         "_id": "65680d250505420b42427a82",
-        "UserId": "auth0|656669d317b4bdb501178567",
+        "userId": "auth0|656669d317b4bdb501178567",
         "name": "testuser",
         "role": "user",
         "maps": [
@@ -517,7 +517,7 @@
     ```json
     {
         "_id": "65680d250505420b42427a82",
-        "UserId": "auth0|656669d317b4bdb501178567",
+        "userId": "auth0|656669d317b4bdb501178567",
         "name": "testuser",
         "role": "user",
         "maps": [],
@@ -544,7 +544,7 @@
     ```json
     {
         "_id": "65680d250505420b42427a82",
-        "UserId": "auth0|656669d317b4bdb501178567",
+        "userId": "auth0|656669d317b4bdb501178567",
         "name": "testuser2",
         "role": "user",
         "maps": [],
@@ -572,7 +572,7 @@
     ```json
     {
         "_id": "65680d250505420b42427a82",
-        "UserId": "auth0|656669d317b4bdb501178567",
+        "userId": "auth0|656669d317b4bdb501178567",
         "name": "testuser",
         "role": "user",
         "maps": [],
@@ -602,7 +602,7 @@
     ```json
     {
         "_id": "65680d250505420b42427a82",
-        "UserId": "auth0|656669d317b4bdb501178567",
+        "userId": "auth0|656669d317b4bdb501178567",
         "name": "testuser",
         "role": "user",
         "maps": [],
@@ -631,7 +631,7 @@
     ```json
     {
         "_id": "65680d250505420b42427a82",
-        "UserId": "auth0|656669d317b4bdb501178567",
+        "userId": "auth0|656669d317b4bdb501178567",
         "name": "testuser",
         "role": "user",
         "maps": [],

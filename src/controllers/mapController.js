@@ -36,23 +36,24 @@ exports.searchMaps = async (req, res) => {
         const sortBy = req.query.sortBy;
         const sortOrder = req.query.sortOrder;
 
-        let maps = await Map.find({ isPublic: true});
-        // if (name) {
-        //     maps = maps.filter(map => map.name.toLowerCase().includes(name.toLowerCase()));
-        // }
-        // if (tags) {
-        //     maps = maps.filter(map => map.tags.some(tag => tags.includes(tag)));
-        // }
-        // if (sortBy && sortOrder) {
-        //     maps = maps.sort((a, b) => {
-        //         if (sortOrder === 'asc') {
-        //             return a[sortBy] - b[sortBy];
-        //         }
-        //         else {
-        //             return b[sortBy] - a[sortBy];
-        //         }
-        //     });
-        // }
+        let maps = await Map.find({ isPublic: true });
+        if (name) {
+            maps = maps.filter(map => map.name.toLowerCase().includes(name.toLowerCase()));
+        }
+        if (tags) {
+            maps = maps.filter(map => map.tags.some(tag => tags.includes(tag)));
+        }
+        if (sortBy && sortOrder) {
+            maps = maps.sort((a, b) => {
+                if (a[sortBy] < b[sortBy]) {
+                    return sortOrder === 'asc' ? -1 : 1;
+                }
+                if (a[sortBy] > b[sortBy]) {
+                    return sortOrder === 'asc' ? 1 : -1;
+                }
+                return 0;
+            });
+        }
         res.status(200).json(maps);
     } catch (error) {
         res.status(500).json({ message: "Error searching maps", error: error.message });
