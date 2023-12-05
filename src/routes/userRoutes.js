@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController');
-const { checkJwt, requiredScopes } = require('../config/auth');
+const { checkJwt, checkScopes } = require('../config/auth');
 
 router.get('/', userController.getUser);
 router.get('/search', userController.searchUsers);
