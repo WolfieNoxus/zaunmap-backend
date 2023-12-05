@@ -7,8 +7,9 @@ const mongoose = require('mongoose');
 const mapSchema = new mongoose.Schema({
     map_id: {
         type: Number,
-        required: false, // not required as it's for unknown purposes
-        unique: false    // not unique
+        default: Date.now,
+        unique: false,
+        required: false
     },
     name: {
         type: String      // name of the map
