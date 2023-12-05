@@ -129,14 +129,14 @@ async function findFileInZip(zip, extension) {
 
 exports.getMap = async (req, res) => {
     try {
-        const _id = req.query._id;
+        const mapId = req.query.mapId;
         // Validate the query parameters
-        if (!_id) {
-            return res.status(400).json({ message: "Missing _id in query parameters" });
+        if (!mapId) {
+            return res.status(400).json({ message: "Missing mapId in query parameters" });
         }
 
         // Find the map with the provided mapId
-        const map = await Map.findOne({ _id: _id });
+        const map = await Map.findOne({ _id: mapId });
         if (!map) {
             return res.status(404).json({ message: "Map not found" });
         }
@@ -177,8 +177,8 @@ exports.getAllMaps = async (req, res) => {
 
 exports.updateMapMetadata = async (req, res) => {
     try {
-        const _id = req.query._id;
-        const map = await Map.findOne({ _id: _id });
+        const mapId = req.query.mapId;
+        const map = await Map.findOne({ _id: mapId });
         Object.assign(map, req.body);
         await map.save();
         res.status(200).json(map);

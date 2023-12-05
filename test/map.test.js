@@ -20,7 +20,7 @@ describe('Sample Test', () => {
 
 // describe('GET /api/map', () => {
 //   it('should return 200 OK', async () => {
-//     const response = await request(app).get('/api/map?_id=65666bac0d95f64b2c542802');
+//     const response = await request(app).get('/api/map?mapId=65666bac0d95f64b2c542802');
 //     expect(response.status).toBe(200);
 //   });
 // });
@@ -46,10 +46,10 @@ describe('Sample Test', () => {
 
 // describe('PUT /map/update', () => {
 //     it('should update map metadata', async () => {
-//         const _id = 'some-map-id'; // Replace with a valid ID
+//         const mapId = 'some-map-id'; // Replace with a valid ID
 //         const updatedData = { name: 'New Map Name' };
 //         const response = await request(app)
-//             .put(`/map/update?_id=${_id}`)
+//             .put(`/map/update?mapId=${mapId}`)
 //             .send(updatedData)
 //             .expect(200);
 //         expect(response.body).toHaveProperty('name', 'New Map Name');
@@ -58,9 +58,9 @@ describe('Sample Test', () => {
 
 // describe('GET /map/json', () => {
 //     it('should return map JSON', async () => {
-//         const _id = 'some-map-id'; // Replace with a valid ID
+//         const mapId = 'some-map-id'; // Replace with a valid ID
 //         const response = await request(app)
-//             .get(`/map/json?_id=${_id}`)
+//             .get(`/map/json?mapId=${mapId}`)
 //             .expect(200);
 //         // Additional checks can be added based on expected JSON structure
 //     });
