@@ -173,6 +173,26 @@ exports.importMap = async (req, res) => {
         const userId = req.query.userId;
         const mapId = req.query.mapId;
         const objectId = req.query.objectId;
+        // check the query parameters
+        if (!userId) {
+            return res.status(400).json({ message: "Missing userId in query parameters" });
+        }
+        if (!mapId) {
+            return res.status(400).json({ message: "Missing mapId in query parameters" });
+        }
+        if (!objectId) {
+            return res.status(400).json({ message: "Missing objectId in query parameters" });
+        }
+        // check if the user and map exist
+        if (!await User.findOne({ userId: userId })) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        // check if the map exists
+        if (!await Map.findById(mapId)) {
+            return res.status(404).json({ message: "Map not found" });
+        }
+
         const rawDataResponse = await axios.get(`https://zaunmap.pages.dev/file/?user_id=${userId}&object_id=${objectId}`, { responseType: 'arraybuffer' });
         const rawData = rawDataResponse.data;
         let format = 'json'; // Default format
