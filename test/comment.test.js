@@ -87,9 +87,8 @@ describe('GET /comment', () => {
 // Test for POST /comment
 describe('POST /comment', () => {
     it('should create a new comment', async () => {
-        const user = await User.findOne({ userId: 'testuser' });
         const map = await Map.findOne({ name: 'Test Map' });
-        const userId = user.userId;
+        const userId = 'testuser';
         const mapId = map._id.toString();
         const res = await request(app)
             .post('/api/comment')

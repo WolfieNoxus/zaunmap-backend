@@ -49,6 +49,7 @@ beforeEach(async () => {
 
 afterEach(async () => {
     await Map.deleteOne({ name: 'Test Map' });
+    await Map.deleteOne({ name: 'Test Map 2' });
     await User.deleteOne({ userId: 'testuser' });
     await User.deleteOne({ userId: 'testuser2' });
 });
@@ -73,42 +74,35 @@ describe('GET /map/search', () => {
     });
 });
 
-// // POST /map
-// describe('POST /map', () => {
-//     it('should create a new map', async () => {
-//         const res = await request(app)
-//             .post('/api/map')
-//             .query({ userId: 'testuser' })
-//         expect(res.statusCode).toEqual(200);
-//         expect(res.body).toHaveProperty('_id');
-//     });
-// });
+// PUT /map
+describe('PUT /map', () => {
+    it('should update a map', async () => {
+        const map = await Map.findOne({ name: 'Test Map' });
+        const mapId = map._id.toString();
+        const res = await request(app)
+            .put('/api/map')
+            .query({ mapId: mapId })
+            .send({
+                name: 'Test Map 2'
+            })
+            expect(res.statusCode).toEqual(200);
+        expect(res.body).toHaveProperty('name', 'Test Map 2');
+    });
+});
 
-// // PUT /map
-// describe('PUT /map', () => {
-//     it('should update a map', async () => {
-//     });
-// });
-
-// // PUT /map/rate
-// describe('PUT /map/rate', () => {
-//     it('should rate a map', async () => {
-//         const map = await Map.findOne({ name: 'Test Map' });
-//         const mapId = map._id.toString();
-//         const userId = 'testuser'
-//         const res = await request(app)
-//             .put('/api/map/rate')
-//             .query({ mapId: mapId, userId: userId, rating: 5 });
-//         expect(res.statusCode).toEqual(200);
-//         expect(res.body).toHaveProperty('averageRating');
-//     });
-// });
-
-// // PUT /map/import
-// describe('PUT /map/import', () => {
-//     it('should import a map', async () => {
-//     });
-// });
+// PUT /map/rate
+describe('PUT /map/rate', () => {
+    it('should rate a map', async () => {
+        const map = await Map.findOne({ name: 'Test Map' });
+        const mapId = map._id.toString();
+        const userId = 'testuser'
+        const res = await request(app)
+            .put('/api/map/rate')
+            .query({ mapId: mapId, userId: userId, rating: 5 });
+        expect(res.statusCode).toEqual(200);
+        expect(res.body).toHaveProperty('averageRating');
+    });
+});
 
 // DELETE /map
 describe('DELETE /map', () => {
