@@ -1,4 +1,5 @@
 const User = require('../models/userModel');
+const Map = require('../models/mapModel');
 
 exports.getUser = async (req, res) => {
   try {
