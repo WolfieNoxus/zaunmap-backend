@@ -280,6 +280,43 @@
     }
     ```
 
+#### Update Map
+- **Endpoint:** `/map`
+- **Method:** PUT
+- **Parameters:**
+  - `mapId` (required): The id of the map to update.
+- **Example Request:**
+    ```
+    PUT https://zaunmap-6b1455b08c9b.herokuapp.com/api/map?mapId=65680d250505420b42427a82&userId=auth0|656669d317b4bdb501178567
+    ```
+- **Example Payload:**
+    ```json
+    {
+        "name": "testmap",
+        "isPublic": true,
+        "tags": ["tag1", "tag2"],
+        "description": "This is a test map"
+    }
+    ```
+- **Example Response**
+    ```json
+    {
+            "_id": "",
+            "map_id": "",
+            "name": "",
+            "owner": "",
+            "isPublic": true,
+            "objectId": "",
+            "tags": [],
+            "description": "",
+            "ratings": [],
+            "averageRating": 0,
+            "ratingsCount": 0,
+            "createdAt": "2023-11-30T04:18:45.285Z",
+            "updatedAt": "2023-11-30T04:18:45.285Z"
+    }
+    ```
+
 #### Rate Map
 - **Endpoint:** `/map/rate`
 - **Method:** PUT
