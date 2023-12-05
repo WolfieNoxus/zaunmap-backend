@@ -4,11 +4,12 @@ const userController = require('../controllers/userController');
 const { checkJwt, requiredScopes } = require('../config/auth');
 
 router.get('/', userController.getUser);
-router.get('/list', userController.listUsers);
+router.get('/search', userController.searchUsers);
 router.post('/', userController.createUser);
-router.put('/rename', userController.rename);
-router.put('/restrict', userController.restrict);
-router.put('/disable', userController.disable);
-router.get('/maps', userController.getUserMaps);
+router.put('/rename', userController.renameUser);
+router.put('/follow', userController.followUser);
+router.put('/block', userController.blockUser);
+router.put('/role', userController.changeUserRole);
+router.delete('/', userController.deleteUser);
 
 module.exports = router;

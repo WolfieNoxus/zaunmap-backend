@@ -21,6 +21,16 @@ exports.getUser = async (req, res) => {
   }
 }
 
+exports.searchUsers = async (req, res) => {
+  try {
+    const users = await User.find();
+    res.status(200).json(users);
+  }
+  catch (error) {
+    res.status(500).send('Internal Server Error: ' + error.message);
+  }
+}
+
 exports.createUser = async (req, res) => {
   try {
     // Validate request body
@@ -38,7 +48,7 @@ exports.createUser = async (req, res) => {
   }
 }
 
-exports.rename = async (req, res) => {
+exports.renameUser = async (req, res) => {
   try {
     // Validate query parameters
     if (!req.query.userId || !req.query.newName) {
@@ -59,89 +69,90 @@ exports.rename = async (req, res) => {
   }
 }
 
-exports.restrict = async (req, res) => {
-  try {
-    // Validate query parameters
-    if (!req.query.userId || req.query.restrict === undefined) {
-      return res.status(400).send('Invalid query parameters');
-    }
-
-    const restrictParam = req.query.restrict?.toLowerCase();
-    if (restrictParam !== 'true' && restrictParam !== 'false') {
-      return res.status(400).send('Invalid query parameters: restrict must be true or false');
-    }
-
-    const user = await User.findOne({ userId: req.query.userId });
-    if (!user) {
-      return res.status(404).send('User not found');
-    }
-
-    user.role = restrictParam === 'true' ? 'restricted' : 'user';
-    await user.save();
-    res.status(200).send('User role updated successfully');
-  }
-  catch (error) {
-    res.status(500).send('Internal Server Error: ' + error.message);
-  }
-}
-
-exports.disable = async (req, res) => {
-  try {
-    // Validate query parameters
-    if (!req.query.userId) {
-      return res.status(400).send('Invalid query parameters: userId is required');
-    }
-
-    // Convert the disable parameter to lowercase and check if it is 'true' or 'false'
-    const disableParam = req.query.disable.toLowerCase();
-    if (disableParam !== 'true' && disableParam !== 'false') {
-      return res.status(400).send('Invalid query parameters: disable must be true or false');
-    }
-
-    // Find the user
-    const user = await User.findOne({ userId: req.query.userId });
-    if (!user) {
-      return res.status(404).send('User not found');
-    }
-
-    // Set user role
-    user.role = disableParam === 'true' ? 'disabled' : 'user';
-    await user.save();
-
-    res.status(200).send('User status updated successfully');
-  }
-  catch (error) {
-    res.status(500).send('Internal Server Error: ' + error.message);
-  }
-};
-
-exports.listUsers = async (req, res) => {
-  try {
-    const users = await User.find();
-    res.status(200).json(users);
-  }
-  catch (error) {
-    res.status(500).send('Internal Server Error: ' + error.message);
-  }
-}
-
-exports.getUserMaps = async (req, res) => {
+exports.followUser = async (req, res) => {
   try {
     const userId = req.query.userId;
-
-    if (!userId) {
-      return res.status(400).send('Invalid query parameters');
+    const followId = req.query.followId;
+    const followStr = req.query.follow.toLowerCase();
+    if (followStr !== 'true' && followStr !== 'false') {
+      return res.status(400).send('Invalid query parameters: follow must be true or false');
     }
-
+    const follow = followStr === 'true';
     const user = await User.findOne({ userId: userId });
     if (!user) {
       return res.status(404).send('User not found');
     }
-
-    const maps = await Map.find({ _id: { $in: user.maps } });
-    res.status(200).json(maps);
+    const followedUser = await User.findOne({ userId: followId });
+    if (!followedUser) {
+      return res.status(404).send('Followed user not found');
+    }
+    if (follow) {
+      if (user.following.includes(followId)) {
+        return res.status(200).send('User already following');
+      }
+      user.following.push(followId);
+      followedUser.followers.push(userId);
+    }
+    else {
+      if (!user.following.includes(followId)) {
+        return res.status(200).send('User not following');
+      }
+      user.following.pull(followId);
+      followedUser.followers.pull(userId);
+    }
+  } catch (error) {
+    res.status(500).send('Internal Server Error: ' + error.message);
   }
-  catch (error) {
+}
+
+exports.blockUser = async (req, res) => {
+  try {
+    const userId = req.query.userId;
+    const blockId = req.query.blockId;
+    const blockStr = req.query.block.toLowerCase();
+    if (blockStr !== 'true' && blockStr !== 'false') {
+      return res.status(400).send('Invalid query parameters: block must be true or false');
+    }
+    const block = blockStr === 'true';
+    const user = await User.findOne({ userId: userId });
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
+    const blockedUser = await User.findOne({ userId: blockId });
+    if (!blockedUser) {
+      return res.status(404).send('Blocked user not found');
+    }
+    if (block) {
+      if (user.blocked.includes(blockId)) {
+        return res.status(200).send('User already blocked');
+      }
+      user.blocked.push(blockId);
+    }
+    else {
+      if (!user.blocked.includes(blockId)) {
+        return res.status(200).send('User not blocked');
+      }
+      user.blocked.pull(blockId);
+    }
+  } catch (error) {
+    res.status(500).send('Internal Server Error: ' + error.message);
+  }
+}
+
+exports.changeUserRole = async (req, res) => {
+  try {
+    const userId = req.query.userId;
+    const role = req.query.role;
+    if (!userId || !role) {
+      return res.status(400).send('Invalid query parameters');
+    }
+    const user = await User.findOne({ userId: userId });
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
+    user.role = role;
+    await user.save();
+  } catch (error) {
     res.status(500).send('Internal Server Error: ' + error.message);
   }
 }

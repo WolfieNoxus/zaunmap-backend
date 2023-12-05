@@ -138,8 +138,8 @@ async function deleteCommentHelper(commentId) {
         const comment = await Comment.findById(commentId);
 
         // Recursively delete all replies
-        for (let reply_id of comment.replies) {
-            await deleteCommentHelper(reply_id);
+        for (let replyId of comment.replies) {
+            await deleteCommentHelper(replyId);
         }
 
         // Delete the comment itself
