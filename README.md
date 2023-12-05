@@ -199,7 +199,7 @@
             "description": "",
             "ratings": [],
             "averageRating": 0,
-            "ratingsCount": 0,
+            "ratingCount": 0,
             "comments": [],
             "createdAt": "2023-11-30T04:18:45.285Z",
             "updatedAt": "2023-11-30T04:18:45.285Z"
@@ -231,7 +231,7 @@
             "description": "",
             "ratings": [],
             "averageRating": 0,
-            "ratingsCount": 0,
+            "ratingCount": 0,
             "comments": [],
             "createdAt": "2023-11-30T04:18:45.285Z",
             "updatedAt": "2023-11-30T04:18:45.285Z"
@@ -247,7 +247,7 @@
             "description": "",
             "ratings": [],
             "averageRating": 0,
-            "ratingsCount": 0,
+            "ratingCount": 0,
             "comments": [],
             "createdAt": "2023-11-30T04:18:45.285Z",
             "updatedAt": "2023-11-30T04:18:45.285Z"
@@ -277,7 +277,7 @@
             "description": "",
             "ratings": [],
             "averageRating": 0,
-            "ratingsCount": 0,
+            "ratingCount": 0,
             "comments": [],
             "createdAt": "2023-11-30T04:18:45.285Z",
             "updatedAt": "2023-11-30T04:18:45.285Z"
@@ -315,7 +315,7 @@
             "description": "",
             "ratings": [],
             "averageRating": 0,
-            "ratingsCount": 0,
+            "ratingCount": 0,
             "comments": [],
             "createdAt": "2023-11-30T04:18:45.285Z",
             "updatedAt": "2023-11-30T04:18:45.285Z"
@@ -346,7 +346,7 @@
             "description": "",
             "ratings": [],
             "averageRating": 0,
-            "ratingsCount": 0,
+            "ratingCount": 0,
             "comments": [],
             "createdAt": "2023-11-30T04:18:45.285Z",
             "updatedAt": "2023-11-30T04:18:45.285Z"
@@ -377,7 +377,7 @@
             "description": "",
             "ratings": [],
             "averageRating": 0,
-            "ratingsCount": 0,
+            "ratingCount": 0,
             "comments": [],
             "createdAt": "2023-11-30T04:18:45.285Z",
             "updatedAt": "2023-11-30T04:18:45.285Z"
@@ -406,7 +406,7 @@
             "description": "",
             "ratings": [],
             "averageRating": 0,
-            "ratingsCount": 0,
+            "ratingCount": 0,
             "comments": [],
             "createdAt": "2023-11-30T04:18:45.285Z",
             "updatedAt": "2023-11-30T04:18:45.285Z"
