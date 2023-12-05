@@ -36,27 +36,16 @@ exports.readMessage = async (req, res) => {
     try {
         const messageId = req.query.messageId;
         const message = await Message.findById(messageId);
+        const readStr = req.query.read.toLowerCase();
         if (!message) {
             return res.status(404).send('Message not found');
         }
-        message.isRead = true;
+        if (!readStr || (readStr !== 'true' && readStr !== 'false')) {
+            return res.status(400).send('Invalid query parameters: read must be true or false');
+        }
+        message.read = readStr === 'true';
         await message.save();
         res.status(200).send('Message read successfully');
-    } catch (error) {
-        res.status(500).send('Internal Server Error: ' + error.message);
-    }
-}
-
-exports.unreadMessage = async (req, res) => {
-    try {
-        const messageId = req.query.messageId;
-        const message = await Message.findById(messageId);
-        if (!message) {
-            return res.status(404).send('Message not found');
-        }
-        message.isRead = false;
-        await message.save();
-        res.status(200).send('Message unread successfully');
     } catch (error) {
         res.status(500).send('Internal Server Error: ' + error.message);
     }

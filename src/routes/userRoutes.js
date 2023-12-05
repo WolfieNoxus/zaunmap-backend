@@ -10,6 +10,6 @@ router.put('/rename', userController.renameUser);
 router.put('/follow', userController.followUser);
 router.put('/block', userController.blockUser);
 router.put('/role', userController.changeUserRole);
-router.delete('/', userController.deleteUser);
+// router.delete('/', userController.deleteUser);
 
 module.exports = router;
