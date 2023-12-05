@@ -145,7 +145,23 @@ exports.rateMap = async (req, res) => {
         const mapId = req.query.mapId;
         const userId = req.query.userId;
         const rating = req.query.rating;
+        if (!mapId) {
+            return res.status(400).json({ message: "Missing mapId in query parameters" });
+        }
+        if (!userId) {
+            return res.status(400).json({ message: "Missing userId in query parameters" });
+        }
+        if (!rating) {
+            return res.status(400).json({ message: "Missing rating in query parameters" });
+        } else {
+            if (rating < 0 || rating > 5) {
+                return res.status(400).json({ message: "Rating must be between 0 and 5" });
+            }
+        }
         const map = await Map.findById(mapId);
+        if (!map) {
+            return res.status(404).json({ message: "Map not found" });
+        }
         const ratingObj = { userId: userId, rating: rating };
         const ratings = map.ratings;
         const existingRating = ratings.find(rating => rating.userId === userId);
