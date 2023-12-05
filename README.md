@@ -209,10 +209,9 @@
 - **Endpoint:** `/map/search`
 - **Method:** GET
 - **Parameters:**
-  - `name` (required): The name of the map to search for.
-  - `tags` (required): The tags of the map to search for.
-  - `sortBy` (required): The field to sort by.
-  - `sortOrder` (required): The order to sort by.
+  - `name` (optional): The name of the map to search for.
+  - `tags` (optional): The tags of the map to search for.
+  - `sortBy` & `sortOrder` (optional): The field to sort by and the order to sort by.
 - **Example Request:**
     ```
     GET https://zaunmap-6b1455b08c9b.herokuapp.com/api/map/search?name=testmap&tags=tag1,tag2&sortBy=name&sortOrder=asc
@@ -491,10 +490,9 @@
 - **Endpoint:** `/user/search`
 - **Method:** GET
 - **parameters:**
-  - `name` (required): The name of the user to search for.
-  - `role` (required): The role of the user to search for.
-  - `sortBy` (required): The field to sort by.
-  - `sortOrder` (required): The order to sort by.
+  - `name` (optional): The name of the user to search for.
+  - `role` (optional): The role of the user to search for.
+  - `sortBy` & `sortOrder` (optional): The field to sort by and the order to sort by.
 - **Example Request:**
     ```
     GET https://zaunmap-6b1455b08c9b.herokuapp.com/api/user/search?name=testuser&role=user&sortBy=name&sortOrder=asc

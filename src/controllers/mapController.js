@@ -29,6 +29,36 @@ exports.getMap = async (req, res) => {
     }
 }
 
+exports.searchMaps = async (req, res) => {
+    try {
+        const name = req.query.name;
+        const tags = req.query.tags;
+        const sortBy = req.query.sortBy;
+        const sortOrder = req.query.sortOrder;
+
+        let maps = await Map.find({ isPublic: true});
+        // if (name) {
+        //     maps = maps.filter(map => map.name.toLowerCase().includes(name.toLowerCase()));
+        // }
+        // if (tags) {
+        //     maps = maps.filter(map => map.tags.some(tag => tags.includes(tag)));
+        // }
+        // if (sortBy && sortOrder) {
+        //     maps = maps.sort((a, b) => {
+        //         if (sortOrder === 'asc') {
+        //             return a[sortBy] - b[sortBy];
+        //         }
+        //         else {
+        //             return b[sortBy] - a[sortBy];
+        //         }
+        //     });
+        // }
+        res.status(200).json(maps);
+    } catch (error) {
+        res.status(500).json({ message: "Error searching maps", error: error.message });
+    }
+}
+
 exports.createMap = async (req, res) => {
     try {
         const userId = req.query.userId;
@@ -79,6 +109,34 @@ exports.createMap = async (req, res) => {
     }
 };
 
+exports.rateMap = async (req, res) => {
+    try {
+        const mapId = req.query.mapId;
+        const userId = req.query.userId;
+        const rating = req.query.rating;
+        const map = await Map.findById(mapId);
+        const ratingObj = { userId: userId, rating: rating };
+        const ratings = map.ratings;
+        const existingRating = ratings.find(rating => rating.userId === userId);
+        if (existingRating) {
+            existingRating.rating = rating;
+        }
+        else {
+            ratings.push(ratingObj);
+        }
+        map.ratings = ratings;
+        const ratingCount = ratings.length;
+        const ratingSum = ratings.reduce((sum, rating) => sum + rating.rating, 0);
+        map.averageRating = ratingSum / ratingCount;
+        map.ratingCount = ratingCount;
+        await map.save();
+        res.status(200).send('Map rated successfully');
+    }
+    catch (error) {
+        res.status(404).send(error.message);
+    }
+}
+
 exports.importMap = async (req, res) => {
     try {
         const userId = req.query.userId;
@@ -103,7 +161,7 @@ exports.importMap = async (req, res) => {
     } catch (error) {
         res.status(500).send(`Error importing map: ${error.message}`);
     }
-};
+}
 
 async function convertToGeoJson(data, format) {
     switch (format) {
@@ -150,45 +208,6 @@ async function findFileInZip(zip, extension) {
     return await zip.files[files[0]].async("nodebuffer");
 }
 
-exports.getAllPublicMaps = async (req, res) => {
-    try {
-        // Find all maps that are public
-        const maps = await Map.find({ public: true });
-
-        // Send the maps in the response
-        res.status(200).json(maps);
-    } catch (error) {
-        // Handle any errors that occur during the process
-        res.status(500).json({ message: "Error getting maps", error: error.message });
-    }
-}
-
-exports.getAllMaps = async (req, res) => {
-    try {
-        // Find all maps that are public
-        const maps = await Map.find({});
-
-        // Send the maps in the response
-        res.status(200).json(maps);
-    } catch (error) {
-        // Handle any errors that occur during the process
-        res.status(500).json({ message: "Error getting maps", error: error.message });
-    }
-}
-
-exports.updateMapMetadata = async (req, res) => {
-    try {
-        const mapId = req.query.mapId;
-        const map = await Map.findOne({ _id: mapId });
-        Object.assign(map, req.body);
-        await map.save();
-        res.status(200).json(map);
-    }
-    catch (error) {
-        res.status(404).send(error.message);
-    }
-}
-
 exports.deleteMap = async (req, res) => {
     try {
         const mapId = req.query.mapId;
@@ -198,34 +217,6 @@ exports.deleteMap = async (req, res) => {
         await axios.delete(`https://zaunmap.pages.dev/file/?user_id=${userId}&object_id=${objectId}`);
         await map.delete();
         res.status(200).send('Map deleted successfully');
-    }
-    catch (error) {
-        res.status(404).send(error.message);
-    }
-}
-
-exports.rateMap = async (req, res) => {
-    try {
-        const mapId = req.query.mapId;
-        const userId = req.query.userId;
-        const rating = req.query.rating;
-        const map = await Map.findById(mapId);
-        const ratingObj = { userId: userId, rating: rating };
-        const ratings = map.ratings;
-        const existingRating = ratings.find(rating => rating.userId === userId);
-        if (existingRating) {
-            existingRating.rating = rating;
-        }
-        else {
-            ratings.push(ratingObj);
-        }
-        map.ratings = ratings;
-        const ratingCount = ratings.length;
-        const ratingSum = ratings.reduce((sum, rating) => sum + rating.rating, 0);
-        map.averageRating = ratingSum / ratingCount;
-        map.ratingCount = ratingCount;
-        await map.save();
-        res.status(200).send('Map rated successfully');
     }
     catch (error) {
         res.status(404).send(error.message);
