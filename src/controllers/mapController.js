@@ -88,7 +88,7 @@ exports.createMap = async (req, res) => {
         const objectId = postResponse.data.object_id;
 
         // Create a new Map instance with the userId and objectId
-        const newMap = new Map({ author: userId, objectId: objectId, mapId: Date.now() });
+        const newMap = new Map({ owner: userId, objectId: objectId});
 
         // Save the new map to the database
         await newMap.save();

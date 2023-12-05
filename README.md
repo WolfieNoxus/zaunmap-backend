@@ -492,7 +492,6 @@
     DELETE https://zaunmap-6b1455b08c9b.herokuapp.com/api/message?messageId=65680d250505420b42427a82
     ```
 
-   
 ### User Endpoints
 
 #### Get User
