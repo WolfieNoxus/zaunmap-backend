@@ -353,10 +353,10 @@
 - **Parameters:**
   - `userId` (required): The id of the user who imported the map.
   - `mapId` (required): The id of the map to import.
-  - `object_id` (required): The id of the map to import.
+  - `objectId` (required): The id of the map to import.
 - **Example Request:**
     ```
-    PUT https://zaunmap-6b1455b08c9b.herokuapp.com/api/map/import?userId=auth0|656669d317b4bdb501178567&mapId=65680d250505420b42427a82&object_id=65680d250505420b42427a82
+    PUT https://zaunmap-6b1455b08c9b.herokuapp.com/api/map/import?userId=auth0|656669d317b4bdb501178567&mapId=65680d250505420b42427a82&objectId=65680d250505420b42427a82
     ```
 - **Example Response**
     ```json
