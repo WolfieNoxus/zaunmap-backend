@@ -391,7 +391,7 @@
   - `mapId` (required): The id of the map to delete.
 - **Example Request:**
     ```
-    DELETE https://zaunmap-6b1455b08c9b.herokuapp.com/api/map?mapId=65680d250505420b42427a82&userId=auth0|656669d317b4bdb501178567
+    DELETE https://zaunmap-6b1455b08c9b.herokuapp.com/api/map?mapId=65680d250505420b42427a82
     ```
 - **Example Response:**
     ```json
