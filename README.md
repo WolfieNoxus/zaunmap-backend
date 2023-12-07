@@ -665,10 +665,10 @@
 - **Method:** PUT
 - **Parameters:**
   - `userId` (required): The id of the user to disable.
-  - 'newRole' (required): The new role of the user.
+  - `newRole` (required): The new role of the user.
 - **Example Request:**
     ```
-    PUT https://zaunmap-6b1455b08c9b.herokuapp.com/api/disable?userId=auth0|656669d317b4bdb501178567&newRole=restricted
+    PUT https://zaunmap-6b1455b08c9b.herokuapp.com/api/role?userId=auth0|656669d317b4bdb501178567&newRole=restricted
     ```
 - **Example Response:**
     ```json
