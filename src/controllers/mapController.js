@@ -87,7 +87,7 @@ exports.createMap = async (req, res) => {
         const objectId = postResponse.data.object_id;
 
         // Create a new Map instance with the userId and objectId
-        const newMap = new Map({ owner: userId, objectId: objectId});
+        const newMap = new Map({ owner: userId, objectId: objectId });
 
         // Save the new map to the database
         await newMap.save();
@@ -282,6 +282,8 @@ exports.deleteMap = async (req, res) => {
         const objectId = map.objectId;
         await axios.delete(`https://zaunmap.pages.dev/file/?user_id=${userId}&object_id=${objectId}`);
         await map.delete();
+        user = await User.findOne({ userId: userId });
+        user.maps.pull(mapId);
         res.status(200).send('Map deleted successfully');
     }
     catch (error) {
