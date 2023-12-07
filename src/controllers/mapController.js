@@ -284,6 +284,7 @@ exports.deleteMap = async (req, res) => {
         await map.delete();
         const user = await User.findOne({ userId: userId });
         user.maps = user.maps.filter(map => map._id !== mapId);
+        await user.save();
         res.status(200).send('Map deleted successfully');
     }
     catch (error) {
