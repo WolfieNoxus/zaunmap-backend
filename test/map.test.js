@@ -85,7 +85,7 @@ describe('PUT /map', () => {
             .send({
                 name: 'Test Map 2'
             })
-            expect(res.statusCode).toEqual(200);
+        expect(res.statusCode).toEqual(200);
         expect(res.body).toHaveProperty('name', 'Test Map 2');
     });
 });
