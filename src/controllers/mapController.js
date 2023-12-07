@@ -129,12 +129,8 @@ exports.updateMap = async (req, res) => {
         if (newTags) {
             map.tags = newTags;
         }
-        if (newIsPublic) {
-            if (newIsPublic === true || newIsPublic === false) {
-                map.isPublic = newIsPublic === true;
-            } else {
-                return res.status(400).json({ message: "isPublic must be a boolean" });
-            }
+        if (newIsPublic === true || newIsPublic === false) {
+            map.isPublic = newIsPublic;
         }
         await map.save();
         res.status(200).json(map);
