@@ -166,15 +166,15 @@ exports.blockUser = async (req, res) => {
 exports.changeUserRole = async (req, res) => {
   try {
     const userId = req.query.userId;
-    const role = req.query.role;
-    if (!userId || !role) {
+    const newRole = req.query.newRole;
+    if (!userId || !newRole) {
       return res.status(400).send('Invalid query parameters');
     }
     const user = await User.findOne({ userId: userId });
     if (!user) {
       return res.status(404).send('User not found');
     }
-    user.role = role;
+    user.role = newRole;
     await user.save();
     res.status(200).send('User updated successfully');
   } catch (error) {
