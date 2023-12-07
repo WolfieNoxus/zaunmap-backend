@@ -283,7 +283,10 @@ exports.deleteMap = async (req, res) => {
         await axios.delete(`https://zaunmap.pages.dev/file/?user_id=${userId}&object_id=${objectId}`);
         await map.delete();
         const user = await User.findOne({ userId: userId });
-        user.maps = user.maps.filter(map => map._id !== mapId);
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        user.maps.pull(mapId);
         await user.save();
         res.status(200).send('Map deleted successfully');
     }
