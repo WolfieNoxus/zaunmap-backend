@@ -139,7 +139,7 @@ describe('PUT /user/role', () => {
     it('should change the role of a user', async () => {
         const userId = 'user12345';
         const newRole = 'admin';
-        const response = await request(app).put(`/api/user/role?userId=${userId}&newRole=${role}`);
+        const response = await request(app).put(`/api/user/role?userId=${userId}&newRole=${newRole}`);
         expect(response.status).toBe(200);
     });
 });
