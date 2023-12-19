@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 // Define a schema for comments
 const commentSchema = new mongoose.Schema({
+    mapId: String,
     content: String, // Content of the comment
     postedBy: String, // User who posted the comment
     likes: [String], // Array of users who liked the comment

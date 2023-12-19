@@ -23,6 +23,7 @@ exports.createComment = async (req, res) => {
             return res.status(400).json({ message: 'Map ID not provided' });
         }
         const comment = new Comment({
+            mapId: mapId,
             content: req.body.content,
             postedBy: userId
         });
@@ -147,6 +148,28 @@ exports.dislikeComment = async (req, res) => {
 
 exports.deleteComment = async (req, res) => {
     try {
+        const commentId = req.query.commentId;
+        if (!commentId) {
+            return res.status(400).json({ message: 'Comment ID not provided' });
+        }
+        const comment = await Comment.findById(commentId);
+        if (!comment) {
+            return res.status(404).json({ message: 'Comment not found' });
+        }
+        const mapId = await Map.findById(comment.mapId);
+        if (!mapId) {
+            return res.status(404).json({ message: 'This comment does not belong to any map' });
+        }
+        const map = await Map.findById(mapId);
+        if (!map) {
+            return res.status(404).json({ message: 'Map not found' });
+        }
+        if (map.comments.includes(commentId)) {
+            map.comments.pull(commentId);
+            await map.save();
+        } else {
+            return res.status(404).json({ message: 'Comment not found in map' });
+        }
         await deleteCommentHelper(req.query.commentId);
         res.status(200).json({ message: 'Comment deleted successfully' });
     }
