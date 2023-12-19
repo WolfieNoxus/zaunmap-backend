@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema({
     // The user's name.
     name: {
         type: String,
-        default: ''
+        default: 'Anonymous'
     },
 
     // The user's role, with predefined options. Defaults to 'user'.
