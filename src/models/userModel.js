@@ -20,6 +20,10 @@ const userSchema = new mongoose.Schema({
         default: 'user'
     },
 
+    picture: {
+        type: String
+    },
+    
     // References to map objects associated with the user.
     maps: [{
         type: mongoose.Schema.Types.ObjectId,
