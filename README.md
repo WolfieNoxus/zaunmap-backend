@@ -346,11 +346,10 @@ ZaunMap Backend API uses Auth0 for authentication. To authenticate, a user must 
 - **Method:** PUT
 - **Parameters:**
   - `mapId` (required): The id of the map to import.
-  - `objectOwnerId` (required): The id of the user who owns the object to import.
   - `objectId` (required): The id of the map to import.
 - **Example Request:**
     ```
-    PUT https://zaunmap-6b1455b08c9b.herokuapp.com/api/map/import?mapId=65680d250505420b42427a82&objectOwnerId=auth0|656669d317b4bdb501178567&objectId=65680d250505420b42427a82
+    PUT https://zaunmap-6b1455b08c9b.herokuapp.com/api/map/import?mapId=65680d250505420b42427a82&objectId=65680d250505420b42427a82
     ```
     ```
 - **Example Response**

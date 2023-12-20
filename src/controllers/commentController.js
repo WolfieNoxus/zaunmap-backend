@@ -1,34 +1,78 @@
+const User = require('../models/userModel');
 const Comment = require('../models/commentModel');
 const Map = require('../models/mapModel');
+const jwt = require('jsonwebtoken');
 
 exports.getComment = async (req, res) => {
     try {
         const commentId = req.query.commentId;
+        if (!commentId) {
+            return res.status(400).json({ message: 'Comment ID not provided' });
+        }
         const comment = await Comment.findById(commentId);
+        if (!comment) {
+            return res.status(404).json({ message: 'Comment not found' });
+        }
         res.status(200).json(comment);
     }
     catch (error) {
-        res.status(404).send(error.message);
+        res.status(500).json({ message: 'Error getting comment', error: error.message });
     }
 }
 
 exports.createComment = async (req, res) => {
     try {
-        const userId = req.query.userId;
+        const bearerHeader = req.headers['authorization'];
+        if (!bearerHeader) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const bearer = bearerHeader.split(' ');
+        if (bearer.length !== 2) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const token = bearer[1];
+        if (!token) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const decoded = jwt.decode(token);
+        if (!decoded) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const userId = decoded.sub;
         const mapId = req.body.mapId;
+        const content = req.body.content;
         if (!userId) {
             return res.status(400).json({ message: 'User ID not provided' });
         }
         if (!mapId) {
             return res.status(400).json({ message: 'Map ID not provided' });
         }
+        if (!content) {
+            return res.status(400).json({ message: 'Comment content not provided' });
+        }
+        const user = await User.findOne({ userId: userId });
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        if (user.role === 'restricted') {
+            return res.status(403).json({ message: 'User is restricted' });
+        }
+        if (user.role === 'disabled') {
+            return res.status(403).json({ message: 'User is disabled' });
+        }
+        const map = await Map.findById(mapId);
+        if (!map) {
+            return res.status(404).json({ message: 'Map not found' });
+        }
+        if (!map.isPublic) {
+            return res.status(403).json({ message: 'Map is private' });
+        }
         const comment = new Comment({
             mapId: mapId,
-            content: req.body.content,
+            content: content,
             postedBy: userId
         });
         await comment.save();
-        const map = await Map.findById(mapId);
         map.comments.push(comment._id);
         await map.save();
         res.status(200).json(comment);
@@ -39,11 +83,50 @@ exports.createComment = async (req, res) => {
 
 exports.replyComment = async (req, res) => {
     try {
-        const userId = req.query.userId;
+        const bearerHeader = req.headers['authorization'];
+        if (!bearerHeader) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const bearer = bearerHeader.split(' ');
+        if (bearer.length !== 2) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const token = bearer[1];
+        if (!token) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const decoded = jwt.decode(token);
+        if (!decoded) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const userId = decoded.sub;
         const commentId = req.body.commentId;
+        const content = req.body.content;
+        if (!userId) {
+            return res.status(400).json({ message: 'User ID not provided' });
+        }
+        if (!commentId) {
+            return res.status(400).json({ message: 'Comment ID not provided' });
+        }
+        if (!content) {
+            return res.status(400).json({ message: 'Comment content not provided' });
+        }
+        const user = await User.findOne({ userId: userId });
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        if (user.role === 'restricted') {
+            return res.status(403).json({ message: 'User is restricted' });
+        }
+        if (user.role === 'disabled') {
+            return res.status(403).json({ message: 'User is disabled' });
+        }
         const comment = await Comment.findById(commentId);
+        if (!comment) {
+            return res.status(404).json({ message: 'Comment not found' });
+        }
         const reply = new Comment({
-            content: req.body.content,
+            content: content,
             postedBy: userId
         });
         await reply.save();
@@ -57,22 +140,35 @@ exports.replyComment = async (req, res) => {
 
 exports.likeComment = async (req, res) => {
     try {
-        const commentId = req.query.commentId;
-        if (!commentId) {
-            return res.status(400).json({ message: 'Comment ID not provided' });
+        const bearerHeader = req.headers['authorization'];
+        if (!bearerHeader) {
+            return res.status(401).json({ message: 'Unauthorized' });
         }
-
-        const userId = req.query.userId;
+        const bearer = bearerHeader.split(' ');
+        if (bearer.length !== 2) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const token = bearer[1];
+        if (!token) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const decoded = jwt.decode(token);
+        if (!decoded) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const userId = decoded.sub;
+        const commentId = req.query.commentId;
         if (!userId) {
             return res.status(400).json({ message: 'User ID not provided' });
         }
-
-        const likeStr = req.query.like.toLowerCase();
-        if (likeStr !== 'true' && likeStr !== 'false') {
+        if (!commentId) {
+            return res.status(400).json({ message: 'Comment ID not provided' });
+        }
+        const likeStr = req.query.like?.toLowerCase();
+        if (!['true', 'false'].includes(likeStr)) {
             return res.status(400).json({ message: 'Invalid like parameter' });
         }
         const like = likeStr === 'true';
-
         const comment = await Comment.findById(commentId);
         if (!comment) {
             return res.status(404).json({ message: 'Comment not found' });
@@ -103,25 +199,39 @@ exports.likeComment = async (req, res) => {
 
 exports.dislikeComment = async (req, res) => {
     try {
-        const commentId = req.query.commentId;
-        if (!commentId) {
-            return res.status(400).json({ message: 'Comment ID not provided' });
+        const bearerHeader = req.headers['authorization'];
+        if (!bearerHeader) {
+            return res.status(401).json({ message: 'Unauthorized' });
         }
-        const userId = req.query.userId;
+        const bearer = bearerHeader.split(' ');
+        if (bearer.length !== 2) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const token = bearer[1];
+        if (!token) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const decoded = jwt.decode(token);
+        if (!decoded) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const userId = decoded.sub;
+        const commentId = req.query.commentId;
         if (!userId) {
             return res.status(400).json({ message: 'User ID not provided' });
         }
-        const dislikeStr = req.query.dislike.toLowerCase();
-        if (dislikeStr !== 'true' && dislikeStr !== 'false') {
+        if (!commentId) {
+            return res.status(400).json({ message: 'Comment ID not provided' });
+        }
+        const dislikeStr = req.query.dislike?.toLowerCase();
+        if (['true', 'false'].includes(dislikeStr)) {
             return res.status(400).json({ message: 'Invalid dislike parameter' });
         }
         const dislike = dislikeStr === 'true';
-
         const comment = await Comment.findById(commentId);
         if (!comment) {
             return res.status(404).json({ message: 'Comment not found' });
         }
-
         if (dislike) {
             if (comment.dislikes.includes(userId)) {
                 res.status(200).json({ message: 'Comment already disliked' });
@@ -148,7 +258,27 @@ exports.dislikeComment = async (req, res) => {
 
 exports.deleteComment = async (req, res) => {
     try {
+        const bearerHeader = req.headers['authorization'];
+        if (!bearerHeader) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const bearer = bearerHeader.split(' ');
+        if (bearer.length !== 2) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const token = bearer[1];
+        if (!token) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const decoded = jwt.decode(token);
+        if (!decoded) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const userId = decoded.sub;
         const commentId = req.query.commentId;
+        if (!userId) {
+            return res.status(400).json({ message: 'User ID not provided' });
+        }
         if (!commentId) {
             return res.status(400).json({ message: 'Comment ID not provided' });
         }

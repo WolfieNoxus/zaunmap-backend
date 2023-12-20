@@ -1,19 +1,17 @@
 const User = require('../models/userModel');
 const Map = require('../models/mapModel');
+const jwt = require('jsonwebtoken');
 
 exports.getUser = async (req, res) => {
   try {
     const userId = req.query.userId;
-
     if (!userId) {
       return res.status(400).send('Invalid query parameters');
     }
-
     const user = await User.findOne({ userId: userId });
     if (!user) {
       return res.status(404).send('User not found');
     }
-
     res.status(200).json(user);
   }
   catch (error) {
@@ -24,15 +22,19 @@ exports.getUser = async (req, res) => {
 exports.searchUsers = async (req, res) => {
   try {
     const name = req.query.name;
-    const role = req.query.role;
     const sortBy = req.query.sortBy;
     const sortOrder = req.query.sortOrder;
-
     let users = await User.find();
     if (name) {
       users = users.filter(user => user.name.toLowerCase().includes(name.toLowerCase()));
     }
     if (sortBy && sortOrder) {
+      if (sortBy !== 'name') {
+        return res.status(400).send('Invalid query parameters: sortBy must be name');
+      }
+      if (sortOrder !== 'asc' && sortOrder !== 'desc') {
+        return res.status(400).send('Invalid query parameters: sortOrder must be asc or desc');
+      }
       users = users.sort((a, b) => {
         if (a[sortBy] < b[sortBy]) {
           return sortOrder === 'asc' ? -1 : 1;
@@ -52,34 +54,49 @@ exports.searchUsers = async (req, res) => {
 
 exports.createUser = async (req, res) => {
   try {
-    // Validate request body
-    if (!req.body || Object.keys(req.body).length === 0) {
-      return res.status(400).send('Invalid user data');
+    if (!req.body) {
+      return res.status(400).send('Request body is missing');
     }
-
-    const newUser = new User(req.body);
+    if (!req.body.userId) {
+      return res.status(400).send('Request body is missing userId');
+    }
+    if (!req.body.name) {
+      return res.status(400).send('Request body is missing name');
+    }
+    if (!req.body.picture) {
+      return res.status(400).send('Request body is missing picture');
+    }
+    const newUser = new User({
+      userId: req.body.userId,
+      name: req.body.name,
+      picture: req.body.picture
+    });
     await newUser.save();
     res.status(201).json(newUser);
   }
   catch (error) {
-    // Assuming the error is due to invalid data provided by the client
-    res.status(400).send('Error creating user: ' + error.message);
+    res.status(500).send('Internal Server Error: ' + error.message);
   }
 }
 
 exports.renameUser = async (req, res) => {
   try {
-    // Validate query parameters
-    if (!req.query.userId || !req.query.newName) {
+    const newName = req.query.newName;
+    const bearerHeader = req.headers['authorization'];
+    const token = bearerHeader.split(' ')[1];
+    const decoded = jwt.decode(token);
+    const userId = decoded.sub;
+    if (!userId) {
+      return res.status(401).send('Unauthorized');
+    }
+    if (!newName) {
       return res.status(400).send('Invalid query parameters');
     }
-
-    const user = await User.findOne({ userId: req.query.userId });
+    const user = await User.findOne({ userId: userId });
     if (!user) {
       return res.status(404).send('User not found');
     }
-
-    user.name = req.query.newName;
+    user.name = newName;
     await user.save();
     res.status(200).json(user);
   }
@@ -90,9 +107,12 @@ exports.renameUser = async (req, res) => {
 
 exports.followUser = async (req, res) => {
   try {
-    const userId = req.query.userId;
+    const bearerHeader = req.headers['authorization'];
+    const token = bearerHeader.split(' ')[1];
+    const decoded = jwt.decode(token);
+    const userId = decoded.sub;
     const followId = req.query.followId;
-    const followStr = req.query.follow.toLowerCase();
+    const followStr = req.query.follow?.toLowerCase();
     if (followStr !== 'true' && followStr !== 'false') {
       return res.status(400).send('Invalid query parameters: follow must be true or false');
     }
@@ -129,7 +149,10 @@ exports.followUser = async (req, res) => {
 
 exports.blockUser = async (req, res) => {
   try {
-    const userId = req.query.userId;
+    const bearerHeader = req.headers['authorization'];
+    const token = bearerHeader.split(' ')[1];
+    const decoded = jwt.decode(token);
+    const userId = decoded.sub;
     const blockId = req.query.blockId;
     const blockStr = req.query.block.toLowerCase();
     if (blockStr !== 'true' && blockStr !== 'false') {
@@ -165,6 +188,20 @@ exports.blockUser = async (req, res) => {
 
 exports.changeUserRole = async (req, res) => {
   try {
+    const bearerHeader = req.headers['authorization'];
+    const token = bearerHeader.split(' ')[1];
+    const decoded = jwt.decode(token);
+    const adminId = decoded.sub;
+    if (!adminId) {
+      return res.status(401).send('Unauthorized');
+    }
+    const admin = await User.findOne({ userId: adminId });
+    if (!admin) {
+      return res.status(404).send('Admin not found');
+    }
+    if (admin.role !== 'admin') {
+      return res.status(403).send('User is not an admin');
+    }
     const userId = req.query.userId;
     const newRole = req.query.newRole;
     if (!userId || !newRole) {
@@ -185,14 +222,25 @@ exports.changeUserRole = async (req, res) => {
 exports.deleteUser = async (req, res) => {
   try {
     const userId = req.query.userId;
+    const bearerHeader = req.headers['authorization'];
+    const token = bearerHeader.split(' ')[1];
+    const decoded = jwt.decode(token);
+    const userIdFromToken = decoded.sub;
     if (!userId) {
       return res.status(400).send('Invalid query parameters');
+    }
+    if (!userIdFromToken) {
+      return res.status(401).send('Unauthorized');
+    }
+    if (userId !== userIdFromToken) {
+      return res.status(403).send('Forbidden');
     }
     const user = await User.findOne({ userId: userId });
     if (!user) {
       return res.status(404).send('User not found');
     }
-    await user.remove();
+    await User.deleteOne({ userId: userId });
+    await Map.deleteMany({ _id: { $in: user.maps } });
     res.status(200).send('User deleted successfully');
   } catch (error) {
     res.status(500).send('Internal Server Error: ' + error.message);

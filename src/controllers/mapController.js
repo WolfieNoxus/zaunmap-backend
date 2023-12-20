@@ -61,7 +61,23 @@ exports.searchMaps = async (req, res) => {
 
 exports.createMap = async (req, res) => {
     try {
-        const userId = req.query.userId;
+        const bearerHeader = req.headers['authorization'];
+        if (!bearerHeader) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const bearer = bearerHeader.split(' ');
+        if (bearer.length !== 2) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const token = bearer[1];
+        if (!token) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const decoded = jwt.decode(token);
+        if (!decoded) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const userId = decoded.sub;
         // Validate the query parameters
         if (!userId) {
             return res.status(400).json({ message: "Missing userId in query parameters" });
@@ -111,6 +127,26 @@ exports.createMap = async (req, res) => {
 
 exports.updateMap = async (req, res) => {
     try {
+        const bearerHeader = req.headers['authorization'];
+        if (!bearerHeader) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const bearer = bearerHeader.split(' ');
+        if (bearer.length !== 2) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const token = bearer[1];
+        if (!token) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const decoded = jwt.decode(token);
+        if (!decoded) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const userId = decoded.sub;
+        if (!userId) {
+            return res.status(400).json({ message: "Missing userId in query parameters" });
+        }
         const mapId = req.query.mapId;
         const map = await Map.findById(mapId);
         if (!map) {
@@ -141,8 +177,24 @@ exports.updateMap = async (req, res) => {
 
 exports.rateMap = async (req, res) => {
     try {
+        const bearerHeader = req.headers['authorization'];
+        if (!bearerHeader) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const bearer = bearerHeader.split(' ');
+        if (bearer.length !== 2) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const token = bearer[1];
+        if (!token) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const decoded = jwt.decode(token);
+        if (!decoded) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const userId = decoded.sub;
         const mapId = req.query.mapId;
-        const userId = req.query.userId;
         const rating = req.query.rating;
         if (!mapId) {
             return res.status(400).json({ message: "Missing mapId in query parameters" });
@@ -185,7 +237,23 @@ exports.rateMap = async (req, res) => {
 
 exports.importMap = async (req, res) => {
     try {
-        const userId = req.query.userId;
+        const bearerHeader = req.headers['authorization'];
+        if (!bearerHeader) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const bearer = bearerHeader.split(' ');
+        if (bearer.length !== 2) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const token = bearer[1];
+        if (!token) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const decoded = jwt.decode(token);
+        if (!decoded) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const userId = decoded.sub;
         const mapId = req.query.mapId;
         const objectId = req.query.objectId;
         // check the query parameters
@@ -207,8 +275,9 @@ exports.importMap = async (req, res) => {
         if (!await Map.findById(mapId)) {
             return res.status(404).json({ message: "Map not found" });
         }
-
-        const rawDataResponse = await axios.get(`https://zaunmap.pages.dev/file/?user_id=${userId}&object_id=${objectId}`, { responseType: 'arraybuffer' });
+        const objectOwner = await Map.findOne({ objectId: objectId });
+        const objectOwnerId = objectOwner.owner;
+        const rawDataResponse = await axios.get(`https://zaunmap.pages.dev/file/?user_id=${objectOwnerId}&object_id=${objectId}`, { responseType: 'arraybuffer' });
         const rawData = rawDataResponse.data;
         let format = 'json'; // Default format
         if (rawDataResponse.headers['content-type']) {
@@ -276,9 +345,34 @@ async function findFileInZip(zip, extension) {
 
 exports.deleteMap = async (req, res) => {
     try {
+        const bearerHeader = req.headers['authorization'];
+        if (!bearerHeader) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const bearer = bearerHeader.split(' ');
+        if (bearer.length !== 2) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const token = bearer[1];
+        if (!token) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const decoded = jwt.decode(token);
+        if (!decoded) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const userId = decoded.sub;
+        if (!userId) {
+            return res.status(400).json({ message: "Missing userId in query parameters" });
+        }
         const mapId = req.query.mapId;
+        if (!mapId) {
+            return res.status(400).json({ message: "Missing mapId in query parameters" });
+        }
         const map = await Map.findById(mapId);
-        const userId = map.owner;
+        if (!map) {
+            return res.status(404).json({ message: "Map not found" });
+        }
         const objectId = map.objectId;
         await axios.delete(`https://zaunmap.pages.dev/file/?user_id=${userId}&object_id=${objectId}`);
         await map.delete();

@@ -93,7 +93,9 @@ describe('GET /user/search', () => {
 //     it('should create a new user', async () => {
 //         // create a contentful user to check if it is created
 //         const response = await request(app).post('/api/user').send({
-//             userId: 'testuser'
+//             userId: 'testuser',
+//             name: 'Test User',
+//             picture: 'https://testuser.com/picture.jpg'
 //         });
 //         expect(response.status).toBe(201);
 //         expect(response.body).toHaveProperty('userId', 'testuser');

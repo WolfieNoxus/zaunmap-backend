@@ -40,7 +40,10 @@ jobs:
       - name: Run Tests
         run: npm test
         env:
-          CI: true
+          CI: true,
+          AUTH0_AUDIENCE: https://zaunmap.com,
+          AUTH0_ISSUER_URL: https://zaunmap.us.auth0.com/,
+          MONGO_URI: mongodb+srv://our-first-user:MJhshHlUpoOAuYgb@zaunmap.lgbnudq.mongodb.net/?retryWrites=true&w=majority
 
   deploy:
     needs: test

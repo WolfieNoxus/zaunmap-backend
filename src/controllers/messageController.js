@@ -8,6 +8,23 @@ function isValidObjectId(id) {
 
 exports.getMessage = async (req, res) => {
     try {
+        const bearerHeader = req.headers['authorization'];
+        if (!bearerHeader) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const bearer = bearerHeader.split(' ');
+        if (bearer.length !== 2) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const token = bearer[1];
+        if (!token) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const decoded = jwt.decode(token);
+        if (!decoded) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const userId = decoded.sub;
         const messageId = req.query.messageId;
         if (!messageId) {
             return res.status(400).send('Missing messageId in query parameters');
@@ -28,7 +45,23 @@ exports.getMessage = async (req, res) => {
 
 exports.createMessage = async (req, res) => {
     try {
-        const userId = req.query.userId;
+        const bearerHeader = req.headers['authorization'];
+        if (!bearerHeader) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const bearer = bearerHeader.split(' ');
+        if (bearer.length !== 2) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const token = bearer[1];
+        if (!token) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const decoded = jwt.decode(token);
+        if (!decoded) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const userId = decoded.sub;
         if (!userId) {
             return res.status(400).send('Missing userId in query parameters');
         }
@@ -63,6 +96,23 @@ exports.createMessage = async (req, res) => {
 
 exports.readMessage = async (req, res) => {
     try {
+        const bearerHeader = req.headers['authorization'];
+        if (!bearerHeader) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const bearer = bearerHeader.split(' ');
+        if (bearer.length !== 2) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const token = bearer[1];
+        if (!token) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const decoded = jwt.decode(token);
+        if (!decoded) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const userId = decoded.sub;
         const messageId = req.query.messageId;
         if (!messageId) {
             return res.status(400).send('Missing messageId');
@@ -89,6 +139,23 @@ exports.readMessage = async (req, res) => {
 
 exports.deleteMessage = async (req, res) => {
     try {
+        const bearerHeader = req.headers['authorization'];
+        if (!bearerHeader) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const bearer = bearerHeader.split(' ');
+        if (bearer.length !== 2) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const token = bearer[1];
+        if (!token) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const decoded = jwt.decode(token);
+        if (!decoded) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const userId = decoded.sub;
         const messageId = req.query.messageId;
         if (!messageId) {
             return res.status(400).send('Missing messageId');
