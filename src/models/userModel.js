@@ -19,10 +19,6 @@ const userSchema = new mongoose.Schema({
         enum: ['user', 'disabled', 'restricted', 'admin'],
         default: 'user'
     },
-
-    picture: {
-        type: String
-    },
     
     // References to map objects associated with the user.
     maps: [{
