@@ -41,7 +41,7 @@ exports.searchMaps = async (req, res) => {
         }
         if (tags) {
             tagsArray = tags.split(',');
-            maps = maps.filter(map => map.tagsArray.some(tag => tagsArray.includes(tag)));
+            maps = maps.filter(map => map.tags.some(tag => tagsArray.includes(tag)));
         }
         if (sortBy && sortOrder) {
             maps = maps.sort((a, b) => {
