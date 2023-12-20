@@ -83,8 +83,21 @@ exports.renameUser = async (req, res) => {
   try {
     const newName = req.query.newName;
     const bearerHeader = req.headers['authorization'];
-    const token = bearerHeader.split(' ')[1];
+    if (!bearerHeader) {
+        return res.status(401).json({ message: 'Unauthorized' });
+    }
+    const bearer = bearerHeader.split(' ');
+    if (bearer.length !== 2) {
+        return res.status(401).json({ message: 'Unauthorized' });
+    }
+    const token = bearer[1];
+    if (!token) {
+        return res.status(401).json({ message: 'Unauthorized' });
+    }
     const decoded = jwt.decode(token);
+    if (!decoded) {
+        return res.status(401).json({ message: 'Unauthorized' });
+    }
     const userId = decoded.sub;
     if (!userId) {
       return res.status(401).send('Unauthorized');
@@ -223,8 +236,21 @@ exports.deleteUser = async (req, res) => {
   try {
     const userId = req.query.userId;
     const bearerHeader = req.headers['authorization'];
-    const token = bearerHeader.split(' ')[1];
+    if (!bearerHeader) {
+        return res.status(401).json({ message: 'Unauthorized' });
+    }
+    const bearer = bearerHeader.split(' ');
+    if (bearer.length !== 2) {
+        return res.status(401).json({ message: 'Unauthorized' });
+    }
+    const token = bearer[1];
+    if (!token) {
+        return res.status(401).json({ message: 'Unauthorized' });
+    }
     const decoded = jwt.decode(token);
+    if (!decoded) {
+        return res.status(401).json({ message: 'Unauthorized' });
+    }
     const userIdFromToken = decoded.sub;
     if (!userId) {
       return res.status(400).send('Invalid query parameters');
