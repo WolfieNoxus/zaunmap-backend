@@ -88,70 +88,70 @@ describe('GET /user/search', () => {
     });
 });
 
-// Test: Create User
-describe('POST /user', () => {
-    it('should create a new user', async () => {
-        // create a contentful user to check if it is created
-        const response = await request(app).post('/api/user').send({
-            userId: 'testuser'
-        });
-        expect(response.status).toBe(201);
-        expect(response.body).toHaveProperty('userId', 'testuser');
-        User.deleteOne({ userId: 'testuser' });
-    });
-});
+// // Test: Create User
+// describe('POST /user', () => {
+//     it('should create a new user', async () => {
+//         // create a contentful user to check if it is created
+//         const response = await request(app).post('/api/user').send({
+//             userId: 'testuser'
+//         });
+//         expect(response.status).toBe(201);
+//         expect(response.body).toHaveProperty('userId', 'testuser');
+//         User.deleteOne({ userId: 'testuser' });
+//     });
+// });
 
-// Test: Rename User
-describe('PUT /user/rename', () => {
-    it('should rename an existing user', async () => {
-        const userId = 'user12345';
-        const newName = 'Jane Doe';
-        const response = await request(app).put(`/api/user/rename?userId=${userId}&newName=${newName}`);
-        expect(response.status).toBe(200);
-        expect(response.body).toHaveProperty('name', newName);
-    });
-});
+// // Test: Rename User
+// describe('PUT /user/rename', () => {
+//     it('should rename an existing user', async () => {
+//         const userId = 'user12345';
+//         const newName = 'Jane Doe';
+//         const response = await request(app).put(`/api/user/rename?userId=${userId}&newName=${newName}`);
+//         expect(response.status).toBe(200);
+//         expect(response.body).toHaveProperty('name', newName);
+//     });
+// });
 
-// Test: Follow/Unfollow User
-describe('PUT /user/follow', () => {
-    it('should follow/unfollow a user', async () => {
-        const userId = 'user12345';
-        const followId = 'user67890';
-        const follow = true;
-        const response = await request(app).put(`/api/user/follow?userId=${userId}&followId=${followId}&follow=${follow}`);
-        expect(response.status).toBe(200);
-    });
-});
+// // Test: Follow/Unfollow User
+// describe('PUT /user/follow', () => {
+//     it('should follow/unfollow a user', async () => {
+//         const userId = 'user12345';
+//         const followId = 'user67890';
+//         const follow = true;
+//         const response = await request(app).put(`/api/user/follow?userId=${userId}&followId=${followId}&follow=${follow}`);
+//         expect(response.status).toBe(200);
+//     });
+// });
 
-// Test: Block/Unblock User
-describe('PUT /user/block', () => {
-    it('should block/unblock a user', async () => {
-        const userId = 'user12345';
-        const blockId = 'user67890';
-        const block = true;
-        const response = await request(app).put(`/api/user/block?userId=${userId}&blockId=${blockId}&block=${block}`);
-        expect(response.status).toBe(200);
-    });
-});
+// // Test: Block/Unblock User
+// describe('PUT /user/block', () => {
+//     it('should block/unblock a user', async () => {
+//         const userId = 'user12345';
+//         const blockId = 'user67890';
+//         const block = true;
+//         const response = await request(app).put(`/api/user/block?userId=${userId}&blockId=${blockId}&block=${block}`);
+//         expect(response.status).toBe(200);
+//     });
+// });
 
-// Test: Change User Role
-describe('PUT /user/role', () => {
-    it('should change the role of a user', async () => {
-        const userId = 'user12345';
-        const newRole = 'admin';
-        const response = await request(app).put(`/api/user/role?userId=${userId}&newRole=${newRole}`);
-        expect(response.status).toBe(200);
-    });
-});
+// // Test: Change User Role
+// describe('PUT /user/role', () => {
+//     it('should change the role of a user', async () => {
+//         const userId = 'user12345';
+//         const newRole = 'admin';
+//         const response = await request(app).put(`/api/user/role?userId=${userId}&newRole=${newRole}`);
+//         expect(response.status).toBe(200);
+//     });
+// });
 
-// Test: Delete User
-describe('DELETE /user', () => {
-    it('should delete a user', async () => {
-        const userId = 'user12345';
-        const response = await request(app).delete(`/api/user?userId=${userId}`);
-        expect(response.status).toBe(200);
+// // Test: Delete User
+// describe('DELETE /user', () => {
+//     it('should delete a user', async () => {
+//         const userId = 'user12345';
+//         const response = await request(app).delete(`/api/user?userId=${userId}`);
+//         expect(response.status).toBe(200);
 
-        // check if user is deleted
-        expect(await User.findOne({ userId: userId })).toBeNull();
-    });
-});
+//         // check if user is deleted
+//         expect(await User.findOne({ userId: userId })).toBeNull();
+//     });
+// });

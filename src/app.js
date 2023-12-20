@@ -1,32 +1,40 @@
+// Load environment variables from a .env file
 require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const { connectDB } = require('./config/db');
-const userRoutes = require('./routes/userRoutes');
-const mapRoutes = require('./routes/mapRoutes');
-const commentRoutes = require('./routes/commentRoutes');
-const messageRoutes = require('./routes/messageRoutes');
-const bodyParser = require('body-parser');
 
+// Import necessary modules
+const express = require('express'); // Express framework for creating the server
+const cors = require('cors'); // CORS middleware to enable cross-origin requests
+const { connectDB } = require('./config/db'); // Function to connect to the database
+
+// Import route handlers
+const userRoutes = require('./routes/userRoutes'); // Routes for user-related operations
+const mapRoutes = require('./routes/mapRoutes'); // Routes for map-related operations
+const commentRoutes = require('./routes/commentRoutes'); // Routes for comment-related operations
+const messageRoutes = require('./routes/messageRoutes'); // Routes for message-related operations
+
+// Create an Express application
 const app = express();
+
+// Connect to the database unless the environment is set to 'test'
 if (process.env.NODE_ENV !== 'test') {
   connectDB();
 }
-app.use(express.urlencoded({ extended: true }));
-app.use(cors());
-app.use(express.json());
-app.use(bodyParser.json());
 
-// Only start the server if not in test environment
+// Middlewares
+app.use(cors()); // Enable CORS for all routes
+app.use(express.json()); // Enable JSON body parsing for incoming requests
+
+// Start the server unless the environment is set to 'test'
 if (process.env.NODE_ENV !== 'test') {
-  const PORT = process.env.PORT || 3000;
-  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+  const PORT = process.env.PORT || 3000; // Use the port from environment variables or default to 3000
+  app.listen(PORT, () => console.log(`Server running on port ${PORT}`)); // Start listening on the specified port
 }
 
-app.use('/api/user', userRoutes);
-app.use('/api/map', mapRoutes);
-app.use('/api/comment', commentRoutes);
-app.use('/api/message', messageRoutes);
+// Route handlers
+app.use('/api/user', userRoutes); // Use user routes for requests to '/api/user'
+app.use('/api/map', mapRoutes); // Use map routes for requests to '/api/map'
+app.use('/api/comment', commentRoutes); // Use comment routes for requests to '/api/comment'
+app.use('/api/message', messageRoutes); // Use message routes for requests to '/api/message'
 
-// Export the app for testing purposes
+// Export the Express application for use in other files (like for testing)
 module.exports = app;

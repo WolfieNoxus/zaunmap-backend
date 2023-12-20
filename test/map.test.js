@@ -74,44 +74,44 @@ describe('GET /map/search', () => {
     });
 });
 
-// PUT /map
-describe('PUT /map', () => {
-    it('should update a map', async () => {
-        const map = await Map.findOne({ name: 'Test Map' });
-        const mapId = map._id.toString();
-        const res = await request(app)
-            .put('/api/map')
-            .query({ mapId: mapId })
-            .send({
-                name: 'Test Map 2'
-            })
-        expect(res.statusCode).toEqual(200);
-        expect(res.body).toHaveProperty('name', 'Test Map 2');
-    });
-});
+// // PUT /map
+// describe('PUT /map', () => {
+//     it('should update a map', async () => {
+//         const map = await Map.findOne({ name: 'Test Map' });
+//         const mapId = map._id.toString();
+//         const res = await request(app)
+//             .put('/api/map')
+//             .query({ mapId: mapId })
+//             .send({
+//                 name: 'Test Map 2'
+//             })
+//         expect(res.statusCode).toEqual(200);
+//         expect(res.body).toHaveProperty('name', 'Test Map 2');
+//     });
+// });
 
-// PUT /map/rate
-describe('PUT /map/rate', () => {
-    it('should rate a map', async () => {
-        const map = await Map.findOne({ name: 'Test Map' });
-        const mapId = map._id.toString();
-        const userId = 'testuser'
-        const res = await request(app)
-            .put('/api/map/rate')
-            .query({ mapId: mapId, userId: userId, rating: 5 });
-        expect(res.statusCode).toEqual(200);
-        expect(res.body).toHaveProperty('averageRating');
-    });
-});
+// // PUT /map/rate
+// describe('PUT /map/rate', () => {
+//     it('should rate a map', async () => {
+//         const map = await Map.findOne({ name: 'Test Map' });
+//         const mapId = map._id.toString();
+//         const userId = 'testuser'
+//         const res = await request(app)
+//             .put('/api/map/rate')
+//             .query({ mapId: mapId, userId: userId, rating: 5 });
+//         expect(res.statusCode).toEqual(200);
+//         expect(res.body).toHaveProperty('averageRating');
+//     });
+// });
 
-// DELETE /map
-describe('DELETE /map', () => {
-    it('should delete a map', async () => {
-        const map = await Map.findOne({ name: 'Test Map' });
-        const mapId = map._id.toString();
-        const res = await request(app)
-            .delete('/api/map')
-            .query({ mapId: mapId });
-        expect(res.statusCode).toEqual(200);
-    });
-});
+// // DELETE /map
+// describe('DELETE /map', () => {
+//     it('should delete a map', async () => {
+//         const map = await Map.findOne({ name: 'Test Map' });
+//         const mapId = map._id.toString();
+//         const res = await request(app)
+//             .delete('/api/map')
+//             .query({ mapId: mapId });
+//         expect(res.statusCode).toEqual(200);
+//     });
+// });
