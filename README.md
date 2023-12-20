@@ -190,7 +190,6 @@
     ```json
     {
             "_id": "",
-            "map_id": "",
             "name": "",
             "owner": "",
             "isPublic": true,
@@ -222,7 +221,6 @@
     [
         {
             "_id": "",
-            "map_id": "",
             "name": "",
             "owner": "",
             "isPublic": true,
@@ -238,7 +236,6 @@
         },
         {
             "_id": "",
-            "map_id": "",
             "name": "",
             "owner": "",
             "isPublic": true,
@@ -268,7 +265,6 @@
     ```json
     {
             "_id": "",
-            "map_id": "",
             "name": "",
             "owner": "",
             "isPublic": true,
@@ -306,7 +302,6 @@
     ```json
     {
             "_id": "",
-            "map_id": "",
             "name": "",
             "owner": "",
             "isPublic": true,
@@ -337,7 +332,6 @@
     ```json
     {
             "_id": "",
-            "map_id": "",
             "name": "",
             "owner": "",
             "isPublic": true,
@@ -368,7 +362,6 @@
     ```json
     {
             "_id": "",
-            "map_id": "",
             "name": "",
             "owner": "",
             "isPublic": true,
@@ -397,7 +390,6 @@
     ```json
     {
             "_id": "",
-            "map_id": "",
             "name": "",
             "owner": "",
             "isPublic": true,

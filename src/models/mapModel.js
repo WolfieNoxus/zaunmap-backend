@@ -5,12 +5,6 @@ const mongoose = require('mongoose');
  * Includes details about the map, its owner, visibility, tags, and ratings.
  */
 const mapSchema = new mongoose.Schema({
-    map_id: {
-        type: Number,
-        default: Date.now,
-        unique: false,
-        required: false
-    },
     name: {
         type: String      // name of the map
     },
