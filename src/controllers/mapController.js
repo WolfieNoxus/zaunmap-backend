@@ -40,7 +40,8 @@ exports.searchMaps = async (req, res) => {
             maps = maps.filter(map => map.name.toLowerCase().includes(name.toLowerCase()));
         }
         if (tags) {
-            maps = maps.filter(map => map.tags.some(tag => tags.includes(tag)));
+            tagsArray = tags.split(',');
+            maps = maps.filter(map => map.tagsArray.some(tag => tagsArray.includes(tag)));
         }
         if (sortBy && sortOrder) {
             maps = maps.sort((a, b) => {
