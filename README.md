@@ -3,6 +3,9 @@
 ## Base URL
 `https://zaunmap-6b1455b08c9b.herokuapp.com/api`
 
+## Authentication
+ZaunMap Backend API uses Auth0 for authentication. To authenticate, a user must first register an account with Auth0. Once registered, the user can then login to receive an access token. Some endpoints require an access token to be provided in the request header. The access token is used to identify the user and determine whether the user has permission to access the endpoint.
+
 ## Endpoints
 
 ### Comment Endpoints
@@ -35,11 +38,9 @@
 #### Create Comment
 - **Endpoint:** `/comment`
 - **Method:** POST
-- **Parameters:**
-  - `userId` (required): The id of the user who created the comment.
 - **Example Request:**
     ```
-    POST https://zaunmap-6b1455b08c9b.herokuapp.com/api/comment?userId=auth0|656669d317b4bdb501178567
+    POST https://zaunmap-6b1455b08c9b.herokuapp.com/api/comment
     ```
 - **Example Payload:**
     ```json
@@ -65,11 +66,9 @@
 #### Reply Comment
 - **Endpoint:** `/comment/reply`
 - **Method:** POST
-- **Parameters:**
-  - `userId` (required): The id of the user who created the comment.
 - **Example Request:**
     ```
-    POST https://zaunmap-6b1455b08c9b.herokuapp.com/api/reply?userId=auth0|656669d317b4bdb501178567
+    POST https://zaunmap-6b1455b08c9b.herokuapp.com/api/reply
     ```
 - **Example Payload:**
     ```json
@@ -96,12 +95,11 @@
 - **Endpoint:** `/comment/like`
 - **Method:** PUT
 - **Parameters:**
-  - `userId` (required): The id of the user who liked the comment.
   - `commentId` (required): The id of the comment to like.
   - `like` (required): Boolean value indicating whether to like or unlike.
 - **Example Request:**
     ```
-    POST https://zaunmap-6b1455b08c9b.herokuapp.com/api/like?userId=auth0|656669d317b4bdb501178567&commentId=65680d250505420b42427a82&like=true
+    POST https://zaunmap-6b1455b08c9b.herokuapp.com/api/like?commentId=65680d250505420b42427a82&like=true
     ```
 - **Example Response:**
     ```json
@@ -125,12 +123,11 @@
 - **Endpoint:** `/comment/dislike`
 - **Method:** PUT
 - **Parameters:**
-  - `userId` (required): The id of the user who disliked the comment.
   - `commentId` (required): The id of the comment to dislike.
   - `dislike` (required): Boolean value indicating whether to dislike or undislike.
 - **Example Request:**
     ```
-    POST https://zaunmap-6b1455b08c9b.herokuapp.com/api/dislike?userId=auth0|656669d317b4bdb501178567&commentId=65680d250505420b42427a82&dislike=true
+    POST https://zaunmap-6b1455b08c9b.herokuapp.com/api/dislike?commentId=65680d250505420b42427a82&dislike=true
     ```
 - **Example Response:**
     ```json
@@ -255,11 +252,9 @@
 #### Create Map
 - **Endpoint:** `/map`
 - **Method:** POST
-- **Parameters:**
-  - `userId` (required): The id of the user who created the map.
 - **Example Request:**
     ```
-    POST https://zaunmap-6b1455b08c9b.herokuapp.com/api/map?userId=auth0|656669d317b4bdb501178567
+    POST https://zaunmap-6b1455b08c9b.herokuapp.com/api/map
     ```
 - **Example Response**
     ```json
@@ -321,12 +316,11 @@
 - **Endpoint:** `/map/rate`
 - **Method:** PUT
 - **Parameters:**
-  - `userId` (required): The id of the user who rated the map.
   - `mapId` (required): The id of the map to rate.
   - `rating` (required): The rating to give the map.
 - **Example Request:**
     ```
-    PUT https://zaunmap-6b1455b08c9b.herokuapp.com/api/map/rate?userId=auth0|656669d317b4bdb501178567&mapId=65680d250505420b42427a82&rating=5
+    PUT https://zaunmap-6b1455b08c9b.herokuapp.com/api/map/rate?mapId=65680d250505420b42427a82&rating=5
     ```
 - **Example Response**
     ```json
@@ -351,12 +345,13 @@
 - **Endpoint:** `/map/import`
 - **Method:** PUT
 - **Parameters:**
-  - `userId` (required): The id of the user who imported the map.
   - `mapId` (required): The id of the map to import.
+  - `objectOwnerId` (required): The id of the user who owns the object to import.
   - `objectId` (required): The id of the map to import.
 - **Example Request:**
     ```
-    PUT https://zaunmap-6b1455b08c9b.herokuapp.com/api/map/import?userId=auth0|656669d317b4bdb501178567&mapId=65680d250505420b42427a82&objectId=65680d250505420b42427a82
+    PUT https://zaunmap-6b1455b08c9b.herokuapp.com/api/map/import?mapId=65680d250505420b42427a82&objectOwnerId=auth0|656669d317b4bdb501178567&objectId=65680d250505420b42427a82
+    ```
     ```
 - **Example Response**
     ```json
@@ -542,8 +537,14 @@
 #### Create User
 - **Endpoint:** `/user`
 - **Method:** POST
-- **Parameters:**
-  - `userId` (required): The id of the user to create.
+- **Example Payload:**
+    ```json
+    {
+        "userId": "auth0|656669d317b4bdb501178567",
+        "name": "testuser",
+        "picture": "https://s.gravatar.com/avatar/656669d317b4bdb501178567?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png"
+    }
+    ```
 - **Example Request:**
     ```
     POST https://zaunmap-6b1455b08c9b.herokuapp.com/api/user?userId=auth0|656669d317b4bdb501178567
@@ -569,11 +570,10 @@
 - **Endpoint:** `/user/rename`
 - **Method:** PUT
 - **Parameters:**
-  - `userId` (required): The id of the user to rename.
   - `newName` (required): The new name of the user.
 - **Example Request:**
     ```
-    PUT https://zaunmap-6b1455b08c9b.herokuapp.com/api/user/rename?userId=auth0|656669d317b4bdb501178567&newName=testuser2
+    PUT https://zaunmap-6b1455b08c9b.herokuapp.com/api/user/rename?newName=testuser2
     ```
 - **Example Response:**
     ```json
@@ -596,12 +596,11 @@
 - **Endpoint:** `/user/follow`
 - **Method:** PUT
 - **Parameters:**
-  - `userId` (required): The id of the user who is following.
   - `followId` (required): The id of the user to follow.
   - `follow` (required): Boolean value indicating whether to follow or unfollow.
 - **Example Request:**
     ```
-    PUT https://zaunmap-6b1455b08c9b.herokuapp.com/api/follow?userId=auth0|656669d317b4bdb501178567&followId=auth0|656669d317b4bdb501178567&follow=true
+    PUT https://zaunmap-6b1455b08c9b.herokuapp.com/api/follow?followId=auth0|656669d317b4bdb501178567&follow=true
     ```
 - **Example Response:**
     ```json
@@ -626,12 +625,11 @@
 - **Endpoint:** `/user/block`
 - **Method:** PUT
 - **Parameters:**
-  - `userId` (required): The id of the user who is blocking.
   - `blockId` (required): The id of the user to block.
   - `block` (required): Boolean value indicating whether to block or unblock.
 - **Example Request:**
     ```
-    PUT https://zaunmap-6b1455b08c9b.herokuapp.com/api/block?userId=auth0|656669d317b4bdb501178567&blockId=auth0|656669d317b4bdb501178567&block=true
+    PUT https://zaunmap-6b1455b08c9b.herokuapp.com/api/block?blockId=auth0|656669d317b4bdb501178567&block=true
     ```
 - **Example Response:**
     ```json
