@@ -233,7 +233,7 @@ async function convertToGeoJson(data, format) {
     switch (format) {
         case 'json':
             return JSON.parse(data);
-        case 'xml':
+        case 'vnd.google-earth.kml+xml' || 'kml':
             return convertXmlToGeoJson(data);
         case 'x-esri-shape':
             return convertShapeToGeoJson(data);

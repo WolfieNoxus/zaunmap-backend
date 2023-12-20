@@ -1,53 +1,55 @@
+// Import mongoose to work with MongoDB
 const mongoose = require('mongoose');
 
 /**
- * Schema for Map.
- * Includes details about the map, its owner, visibility, tags, and ratings.
+ * Define the schema for the Map model.
+ * This schema includes various details about a map such as its name, owner, visibility,
+ * unique identifier, tags, description, ratings, and associated comments.
  */
 const mapSchema = new mongoose.Schema({
     name: {
-        type: String      // name of the map
+        type: String      // Name of the map
     },
     owner: {
-        type: String      // owner of the map
+        type: String      // User ID of the map's owner
     },
     isPublic: {
-        type: Boolean     // visibility of the map
+        type: Boolean     // Boolean indicating if the map is public
     },
     objectId: {
-        type: String      // unique object identifier
+        type: String      // Unique identifier for the map
     },
     tags: [{
-        type: String      // tags associated with the map
+        type: String      // Array of tags associated with the map
     }],
     description: {
-        type: String      // description of the map
+        type: String      // Description of the map
     },
-    ratings: [{          // user ratings for the map
+    ratings: [{          // Array of user ratings for the map
         userId: {
-            type: String  // identifier of the user who rated
+            type: String  // User ID of the individual who provided the rating
         },
         rating: {
-            type: Number,
-            min: 0,       // minimum rating value
-            max: 5        // maximum rating value
+            type: Number, // Numeric rating value
+            min: 0,       // Minimum possible rating value
+            max: 5        // Maximum possible rating value
         }
     }],
     averageRating: {
-        type: Number,
-        default: 0       // default average rating
+        type: Number,     // Average rating calculated from individual ratings
+        default: 0       // Default value for the average rating
     },
     ratingCount: {
-        type: Number,
-        default: 0       // default count of ratings
+        type: Number,     // Count of the total ratings received
+        default: 0       // Default value for the count of ratings
     },
     comments: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Comment'   // reference to the comments on the map
+        ref: 'Comment'   // Reference to Comment model for comments related to the map
     }],
 }, {
-    timestamps: true     // timestamps for creation and last update
+    timestamps: true     // Automatically add 'createdAt' and 'updatedAt' fields
 });
 
-// Exporting the model
+// Export the Map model to be used in other parts of the application
 module.exports = mongoose.model('Map', mapSchema);

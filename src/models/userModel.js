@@ -1,55 +1,42 @@
+// Import mongoose to work with MongoDB
 const mongoose = require('mongoose');
 
+// Define a schema for the User model
 const userSchema = new mongoose.Schema({
-    // The Auth0 user ID, required for each user.
     userId: {
-        type: String,
-        required: true
+        type: String, // Define the data type as String
+        required: true // Make this field required
     },
-
-    // The user's name.
     name: {
-        type: String,
-        default: 'Unnamed User'
+        type: String, // Define the data type as String
+        default: 'Unnamed User' // Set a default value if none is provided
     },
-
-    // The user's role, with predefined options. Defaults to 'user'.
     role: {
-        type: String,
-        enum: ['user', 'disabled', 'restricted', 'admin'],
-        default: 'user'
+        type: String, // Define the data type as String
+        enum: ['user', 'disabled', 'restricted', 'admin'], // Limit the value to one of these options
+        default: 'user' // Set a default value if none is provided
     },
-
-    picture: String, // The user's profile picture.
-    
-    // References to map objects associated with the user.
+    picture: String, // Simple String field for user's picture
     maps: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Map'
+        type: mongoose.Schema.Types.ObjectId, // Reference to another model (Map)
+        ref: 'Map' // This indicates which model is being referenced
     }],
-
-    // User IDs of users that this user is following.
     following: [{
-        type: String
+        type: String // Array of Strings representing user IDs the user is following
     }],
-
-    // User IDs of users that are following this user.
     followers: [{
-        type: String
+        type: String // Array of Strings representing user IDs of followers
     }],
-
-    // List of user IDs representing users blocked from messaging.
     blocked: [{
-        type: String
+        type: String // Array of Strings representing user IDs who are blocked
     }],
-
-    // References to messages received by the user.
     messagesReceived: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Message'
+        type: mongoose.Schema.Types.ObjectId, // Reference to another model (Message)
+        ref: 'Message' // This indicates which model is being referenced
     }]
 }, {
-    timestamps: true // Enables automatic creation of createdAt and updatedAt fields.
+    timestamps: true // Automatically add 'createdAt' and 'updatedAt' fields
 });
 
+// Export the model, allowing it to be imported and used in other files
 module.exports = mongoose.model('User', userSchema);
