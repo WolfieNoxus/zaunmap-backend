@@ -80,8 +80,9 @@ exports.likeComment = async (req, res) => {
         if (like) {
             if (comment.likes.includes(userId)) {
                 res.status(200).json({ message: 'Comment already liked' });
-            }
-            else {
+            } else if (comment.dislikes.includes(userId)) {
+                res.status(200).json({ message: 'Comment already disliked' });
+            } else {
                 comment.likes.push(userId);
                 await comment.save();
                 res.status(200).json({ message: 'Comment liked successfully' });
@@ -125,8 +126,9 @@ exports.dislikeComment = async (req, res) => {
         if (dislike) {
             if (comment.dislikes.includes(userId)) {
                 res.status(200).json({ message: 'Comment already disliked' });
-            }
-            else {
+            } else if (comment.likes.includes(userId)) {
+                res.status(200).json({ message: 'Comment already liked' });
+            } else {
                 comment.dislikes.push(userId);
                 await comment.save();
                 res.status(200).json({ message: 'Comment disliked successfully' });
