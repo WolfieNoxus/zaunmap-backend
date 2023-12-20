@@ -266,13 +266,12 @@ exports.importMap = async (req, res) => {
         if (!objectId) {
             return res.status(400).json({ message: "Missing objectId in query parameters" });
         }
-        // check if the user and map exist
-        if (!await User.findOne({ userId: userId })) {
+        const user = await User.findOne({ userId: userId });
+        if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
-
-        // check if the map exists
-        if (!await Map.findById(mapId)) {
+        const map = await Map.findById(mapId);
+        if (!map) {
             return res.status(404).json({ message: "Map not found" });
         }
         const objectOwner = await Map.findOne({ objectId: objectId });
