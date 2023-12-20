@@ -186,6 +186,7 @@ exports.rateMap = async (req, res) => {
 exports.importMap = async (req, res) => {
     try {
         const userId = req.query.userId;
+        const objectOwner = req.query.objectOwner || userId;
         const mapId = req.query.mapId;
         const objectId = req.query.objectId;
         // check the query parameters
@@ -208,7 +209,7 @@ exports.importMap = async (req, res) => {
             return res.status(404).json({ message: "Map not found" });
         }
 
-        const rawDataResponse = await axios.get(`https://zaunmap.pages.dev/file/?user_id=${userId}&object_id=${objectId}`, { responseType: 'arraybuffer' });
+        const rawDataResponse = await axios.get(`https://zaunmap.pages.dev/file/?user_id=${objectOwner}&object_id=${objectId}`, { responseType: 'arraybuffer' });
         const rawData = rawDataResponse.data;
         let format = 'json'; // Default format
         if (rawDataResponse.headers['content-type']) {
