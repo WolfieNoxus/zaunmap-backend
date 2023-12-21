@@ -109,9 +109,13 @@ exports.createUser = async (req, res) => {
   }
 };
 
+// Function to rename an existing user
 exports.renameUser = async (req, res) => {
   try {
+    // Extract the new name from the query parameters
     const newName = req.query.newName;
+
+    // Validate the authorization token from the request header
     const bearerHeader = req.headers['authorization'];
     if (!bearerHeader) {
         return res.status(401).json({ message: 'Unauthorized' });
@@ -124,36 +128,50 @@ exports.renameUser = async (req, res) => {
     if (!token) {
         return res.status(401).json({ message: 'Unauthorized' });
     }
+
+    // Decode the JWT token to get user information
     const decoded = jwt.decode(token);
     if (!decoded) {
         return res.status(401).json({ message: 'Unauthorized' });
     }
+
+    // Retrieve userId from the decoded token
     const userId = decoded.sub;
     if (!userId) {
       return res.status(401).send('Unauthorized');
     }
+
+    // Validate the newName parameter
     if (!newName) {
       return res.status(400).send('Invalid query parameters');
     }
+
+    // Find the user in the database
     const user = await User.findOne({ userId: userId });
     if (!user) {
       return res.status(404).send('User not found');
     }
+
+    // Check if the requesting user is the same as the user being renamed
     if (userId !== user.userId) {
       return res.status(403).send('Forbidden');
     }
+
+    // Update the user's name
     user.name = newName;
     await user.save();
+
+    // Respond with the updated user
     res.status(200).json(user);
   }
   catch (error) {
+    // Handle any errors during the process
     res.status(500).send('Internal Server Error: ' + error.message);
   }
-}
+};
 
 exports.followUser = async (req, res) => {
   try {
-    const newName = req.query.newName;
     const bearerHeader = req.headers['authorization'];
     if (!bearerHeader) {
         return res.status(401).json({ message: 'Unauthorized' });
