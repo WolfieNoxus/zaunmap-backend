@@ -120,6 +120,30 @@ exports.updateMap = async (req, res) => {
         const newDescription = req.body.description;
         const newTags = req.body.tags;
         const newIsPublic = req.body.isPublic;
+        const newMode = req.body.mode;
+        const newColorHeat = req.body.colorHeat;
+        const newHeatLevel = req.body.heatLevel;
+        const newHeatValueMin = req.body.heatValueMin;
+        const newHeatValueMax = req.body.heatValueMax;
+        const newColorTags = req.body.colorTags;
+        if (newMode) {
+            map.mode = newMode;
+        }
+        if (newColorHeat) {
+            map.colorHeat = newColorHeat;
+        }
+        if (newHeatLevel) {
+            map.heatLevel = newHeatLevel;
+        }
+        if (newHeatValueMin) {
+            map.heatValueMin = newHeatValueMin;
+        }
+        if (newHeatValueMax) {
+            map.heatValueMax = newHeatValueMax;
+        }
+        if (newColorTags) {
+            map.colorTags = newColorTags;
+        }
         if (newName) {
             map.name = newName;
         }

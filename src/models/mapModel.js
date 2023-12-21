@@ -47,6 +47,29 @@ const mapSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Comment'   // Reference to Comment model for comments related to the map
     }],
+    mode: {
+        type: String      // Game mode associated with the map
+    },
+    colorHeat: {
+        type: String      // Color scheme for the heatmap
+    },
+    heatLevel: {
+        type: Number      // Heat level for the heatmap
+    },
+    heatValueMin: {
+        type: Number      // Minimum value for the heatmap
+    },
+    heatValueMax: {
+        type: Number      // Maximum value for the heatmap
+    },
+    colorTags: [{
+        tag: {
+            type: String
+        },
+        color: {
+            type: String
+        }
+    }],
 }, {
     timestamps: true     // Automatically add 'createdAt' and 'updatedAt' fields
 });
