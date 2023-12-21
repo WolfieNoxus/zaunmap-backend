@@ -13,6 +13,7 @@ ZaunMap Backend API uses Auth0 for authentication. To authenticate, a user must 
 #### Get Comment
 - **Endpoint:** `/comment`
 - **Method:** GET
+- **Authentication:** None
 - **Parameters:**
   - `commentId` (required): The id of the comment to retrieve.
 - **Example Request:**
@@ -23,6 +24,7 @@ ZaunMap Backend API uses Auth0 for authentication. To authenticate, a user must 
     ```json
     {
         "_id": "65680d250505420b42427a82",
+        "mapId": "65680d250505420b42427a73",
         "content": "This is a test comment",
         "postedBy": "auth0|656669d317b4bdb501178567",
         "likes": [],
@@ -38,6 +40,7 @@ ZaunMap Backend API uses Auth0 for authentication. To authenticate, a user must 
 #### Create Comment
 - **Endpoint:** `/comment`
 - **Method:** POST
+- **Authentication:** Required
 - **Example Request:**
     ```
     POST https://zaunmap-6b1455b08c9b.herokuapp.com/api/comment
@@ -45,7 +48,7 @@ ZaunMap Backend API uses Auth0 for authentication. To authenticate, a user must 
 - **Example Payload:**
     ```json
     {
-        "mapId": "65680d250505420b42427a82",
+        "mapId": "65680d250505420b42427a73",
         "content": "This is a test comment"
     }
     ```
@@ -53,6 +56,7 @@ ZaunMap Backend API uses Auth0 for authentication. To authenticate, a user must 
     ```json
     {
         "_id": "65680d250505420b42427a82",
+        "mapId": "65680d250505420b42427a73",
         "content": "This is a test comment",
         "postedBy": "auth0|656669d317b4bdb501178567",
         "likes": [],
@@ -66,6 +70,7 @@ ZaunMap Backend API uses Auth0 for authentication. To authenticate, a user must 
 #### Reply Comment
 - **Endpoint:** `/comment/reply`
 - **Method:** POST
+- **Authentication:** Required
 - **Example Request:**
     ```
     POST https://zaunmap-6b1455b08c9b.herokuapp.com/api/reply
@@ -81,6 +86,7 @@ ZaunMap Backend API uses Auth0 for authentication. To authenticate, a user must 
     ```json
     {
         "_id": "65680d840505420b42427a8e",
+        "mapId": "65680d250505420b42427a73",
         "content": "This is a test reply",
         "postedBy": "auth0|656669d317b4bdb501178567",
         "likes": [],
@@ -94,6 +100,7 @@ ZaunMap Backend API uses Auth0 for authentication. To authenticate, a user must 
 #### Like/Unlike Comment
 - **Endpoint:** `/comment/like`
 - **Method:** PUT
+- **Authentication:** Required
 - **Parameters:**
   - `commentId` (required): The id of the comment to like.
   - `like` (required): Boolean value indicating whether to like or unlike.
@@ -122,6 +129,7 @@ ZaunMap Backend API uses Auth0 for authentication. To authenticate, a user must 
 #### Dislike/Undislike Comment
 - **Endpoint:** `/comment/dislike`
 - **Method:** PUT
+- **Authentication:** Required
 - **Parameters:**
   - `commentId` (required): The id of the comment to dislike.
   - `dislike` (required): Boolean value indicating whether to dislike or undislike.
@@ -150,26 +158,12 @@ ZaunMap Backend API uses Auth0 for authentication. To authenticate, a user must 
 #### Delete Comment
 - **Endpoint:** `/comment`
 - **Method:** DELETE
+- **Authentication:** Required
 - **Parameters:**
   - `commentId` (required): The id of the comment to delete.
 - **Example Request:**
     ```
-    DELETE https://zaunmap-6b1455b08c9b.herokuapp.com/api/comment?commentId=65680d250505420b42427a82&userId=auth0|656669d317b4bdb501178567
-    ```
-- **Example Response:**
-    ```json
-    {
-        "_id": "65680d250505420b42427a82",
-        "content": "This is a test comment",
-        "postedBy": "auth0|656669d317b4bdb501178567",
-        "likes": [],
-        "dislikes": [],
-        "replies": [
-            "65680d840505420b42427a8e"
-        ],
-        "createdAt": "2023-11-30T04:18:45.285Z",
-        "updatedAt": "2023-11-30T04:20:20.244Z"
-    }
+    DELETE https://zaunmap-6b1455b08c9b.herokuapp.com/api/comment?commentId=65680d250505420b42427a82
     ```
 
 ### Map Endpoints
@@ -177,6 +171,7 @@ ZaunMap Backend API uses Auth0 for authentication. To authenticate, a user must 
 #### Get Map
 - **Endpoint:** `/map`
 - **Method:** GET
+- **Authentication:** None
 - **Parameters:**
   - `mapId` (required): The id of the map to retrieve.
 - **Example Request:**
@@ -186,13 +181,13 @@ ZaunMap Backend API uses Auth0 for authentication. To authenticate, a user must 
 - **Example Response:**
     ```json
     {
-            "_id": "",
-            "name": "",
-            "owner": "",
+            "_id": "a65680d250505420b42427a82",
+            "name": "testmap",
+            "owner": "auth0|656669d317b4bdb501178567",
             "isPublic": true,
-            "objectId": "",
-            "tags": [],
-            "description": "",
+            "objectId": "65680d250505420b424cd7a83",
+            "tags": ["tag1", "tag2"],
+            "description": "This is a test map",
             "ratings": [],
             "averageRating": 0,
             "ratingCount": 0,
@@ -205,6 +200,7 @@ ZaunMap Backend API uses Auth0 for authentication. To authenticate, a user must 
 #### Search Public Maps
 - **Endpoint:** `/map/search`
 - **Method:** GET
+- **Authentication:** None
 - **Parameters:**
   - `name` (optional): The name of the map to search for.
   - `tags` (optional): The tags of the map to search for.
@@ -217,13 +213,13 @@ ZaunMap Backend API uses Auth0 for authentication. To authenticate, a user must 
     ```json
     [
         {
-            "_id": "",
-            "name": "",
-            "owner": "",
+            "_id": "b65680d250505420b42427a82",
+            "name": "testmap",
+            "owner": "auth0|656669d317b4bdb501178567",
             "isPublic": true,
-            "objectId": "",
-            "tags": [],
-            "description": "",
+            "objectId": "65680d250505420b424cd7a83",
+            "tags": ["tag1", "tag2"],
+            "description": "This is a test map",
             "ratings": [],
             "averageRating": 0,
             "ratingCount": 0,
@@ -232,13 +228,13 @@ ZaunMap Backend API uses Auth0 for authentication. To authenticate, a user must 
             "updatedAt": "2023-11-30T04:18:45.285Z"
         },
         {
-            "_id": "",
-            "name": "",
-            "owner": "",
+            "_id": "a65680d250505420b42427a82",
+            "name": "testmap",
+            "owner": "auth0|656669d317b4bdb501178567",
             "isPublic": true,
-            "objectId": "",
-            "tags": [],
-            "description": "",
+            "objectId": "bbbbbbbbbbbbbbbbbbbbbbbb",
+            "tags": ["tag1", "tag2", "tag3"],
+            "description": "This is a test map 2",
             "ratings": [],
             "averageRating": 0,
             "ratingCount": 0,
@@ -252,6 +248,7 @@ ZaunMap Backend API uses Auth0 for authentication. To authenticate, a user must 
 #### Create Map
 - **Endpoint:** `/map`
 - **Method:** POST
+- **Authentication:** Required
 - **Example Request:**
     ```
     POST https://zaunmap-6b1455b08c9b.herokuapp.com/api/map
@@ -259,13 +256,13 @@ ZaunMap Backend API uses Auth0 for authentication. To authenticate, a user must 
 - **Example Response**
     ```json
     {
-            "_id": "",
-            "name": "",
-            "owner": "",
+            "_id": "cbc65680d250505420b42427a82",
+            "name": "testmap",
+            "owner": "auth0|656669d317b4bdb501178567",
             "isPublic": true,
-            "objectId": "",
-            "tags": [],
-            "description": "",
+            "objectId": "65680d250505420b424cd7a83",
+            "tags": ["tag1", "tag2"],
+            "description": "This is a test map",
             "ratings": [],
             "averageRating": 0,
             "ratingCount": 0,
@@ -278,6 +275,7 @@ ZaunMap Backend API uses Auth0 for authentication. To authenticate, a user must 
 #### Update Map
 - **Endpoint:** `/map`
 - **Method:** PUT
+- **Authentication:** Required
 - **Parameters:**
   - `mapId` (required): The id of the map to update.
 - **Example Request:**
@@ -296,9 +294,9 @@ ZaunMap Backend API uses Auth0 for authentication. To authenticate, a user must 
 - **Example Response**
     ```json
     {
-            "_id": "",
-            "name": "",
-            "owner": "",
+            "_id": "cbc65680d250505420b42427a82",
+            "name": "testmap",
+            "owner": "auth0|656669d317b4bdb501178567",
             "isPublic": true,
             "objectId": "",
             "tags": [],
@@ -315,6 +313,7 @@ ZaunMap Backend API uses Auth0 for authentication. To authenticate, a user must 
 #### Rate Map
 - **Endpoint:** `/map/rate`
 - **Method:** PUT
+- **Authentication:** Required
 - **Parameters:**
   - `mapId` (required): The id of the map to rate.
   - `rating` (required): The rating to give the map.
@@ -325,14 +324,14 @@ ZaunMap Backend API uses Auth0 for authentication. To authenticate, a user must 
 - **Example Response**
     ```json
     {
-            "_id": "",
-            "name": "",
-            "owner": "",
+            "_id": "cbc65680d250505420b42427a82",
+            "name": "testmap",
+            "owner": "auth0|656669d317b4bdb501178567",
             "isPublic": true,
-            "objectId": "",
-            "tags": [],
-            "description": "",
-            "ratings": [],
+            "objectId": "xsede65680d250505420b42427a82",
+            "tags": ["tag1", "tag2"],
+            "description": "This is a test map",
+            "ratings": [{"cdc65680d250505420b42427a82": 5}],
             "averageRating": 0,
             "ratingCount": 0,
             "comments": [],
@@ -344,6 +343,7 @@ ZaunMap Backend API uses Auth0 for authentication. To authenticate, a user must 
 #### Import Map
 - **Endpoint:** `/map/import`
 - **Method:** PUT
+- **Authentication:** Required
 - **Parameters:**
   - `mapId` (required): The id of the map to import.
   - `objectId` (required): The id of the map to import.
@@ -355,13 +355,13 @@ ZaunMap Backend API uses Auth0 for authentication. To authenticate, a user must 
 - **Example Response**
     ```json
     {
-            "_id": "",
-            "name": "",
-            "owner": "",
+            "_id": "cbc65680d250505420b42427a82",
+            "name": "testmap",
+            "owner": "auth0|656669d317b4bdb501178567",
             "isPublic": true,
-            "objectId": "",
-            "tags": [],
-            "description": "",
+            "objectId": "65680d250505420b42427a82",
+            "tags": ["tag1", "tag2"],
+            "description": "This is a test map",
             "ratings": [],
             "averageRating": 0,
             "ratingCount": 0,
@@ -374,29 +374,12 @@ ZaunMap Backend API uses Auth0 for authentication. To authenticate, a user must 
 #### Delete Map
 - **Endpoint:** `/map`
 - **Method:** DELETE
+- **Authentication:** Required
 - **Parameters:**
   - `mapId` (required): The id of the map to delete.
 - **Example Request:**
     ```
     DELETE https://zaunmap-6b1455b08c9b.herokuapp.com/api/map?mapId=65680d250505420b42427a82
-    ```
-- **Example Response:**
-    ```json
-    {
-            "_id": "",
-            "name": "",
-            "owner": "",
-            "isPublic": true,
-            "objectId": "",
-            "tags": [],
-            "description": "",
-            "ratings": [],
-            "averageRating": 0,
-            "ratingCount": 0,
-            "comments": [],
-            "createdAt": "2023-11-30T04:18:45.285Z",
-            "updatedAt": "2023-11-30T04:18:45.285Z"
-    }
     ```
 
 ### Message Endpoints
@@ -404,6 +387,7 @@ ZaunMap Backend API uses Auth0 for authentication. To authenticate, a user must 
 #### Get Message
 - **Endpoint:** `/message`
 - **Method:** GET
+- **Authentication:** Required
 - **Parameters:**
   - `messageId` (required): The id of the message to retrieve.
 - **Example Request:**
@@ -425,11 +409,10 @@ ZaunMap Backend API uses Auth0 for authentication. To authenticate, a user must 
 #### Create Message
 - **Endpoint:** `/message`
 - **Method:** POST
-- **Parameters:**
-  - `senderId` (required): The id of the user who created the message.
+- **Authentication:** Required
 - **Example Request:**
     ```
-    POST https://zaunmap-6b1455b08c9b.herokuapp.com/api/message?senderId=auth0|656669d317b4bdb501178567
+    POST https://zaunmap-6b1455b08c9b.herokuapp.com/api/message
     ```
 - **Example Payload:**
     ```json
@@ -455,6 +438,7 @@ ZaunMap Backend API uses Auth0 for authentication. To authenticate, a user must 
 #### Read/Unread Message
 - **Endpoint:** `/message/read`
 - **Method:** PUT
+- **Authentication:** Required
 - **Parameters:**
   - `messageId` (required): The id of the message to mark as read/unread.
   - `read` (required): Boolean value indicating whether to mark as read or unread.
@@ -479,6 +463,7 @@ ZaunMap Backend API uses Auth0 for authentication. To authenticate, a user must 
 #### Delete Message
 - **Endpoint:** `/message`
 - **Method:** DELETE
+- **Authentication:** Required
 - **Parameters:**
   - `messageId` (required): The id of the message to delete.
 - **Example Request:**
@@ -491,6 +476,7 @@ ZaunMap Backend API uses Auth0 for authentication. To authenticate, a user must 
 #### Get User
 - **Endpoint:** `/user`
 - **Method:** GET
+- **Authentication:** None
 - **Parameters:**
   - `userId` (required): The id of the user to retrieve.
 - **Example Request:**
@@ -536,6 +522,7 @@ ZaunMap Backend API uses Auth0 for authentication. To authenticate, a user must 
 #### Create User
 - **Endpoint:** `/user`
 - **Method:** POST
+- **Authentication:** Required (IP Address must be whitelisted)
 - **Example Payload:**
     ```json
     {
@@ -546,7 +533,7 @@ ZaunMap Backend API uses Auth0 for authentication. To authenticate, a user must 
     ```
 - **Example Request:**
     ```
-    POST https://zaunmap-6b1455b08c9b.herokuapp.com/api/user?userId=auth0|656669d317b4bdb501178567
+    POST https://zaunmap-6b1455b08c9b.herokuapp.com/api/user
     ```
 - **Example Response:**
     ```json
@@ -568,6 +555,7 @@ ZaunMap Backend API uses Auth0 for authentication. To authenticate, a user must 
 #### Rename User
 - **Endpoint:** `/user/rename`
 - **Method:** PUT
+- **Authentication:** Required
 - **Parameters:**
   - `newName` (required): The new name of the user.
 - **Example Request:**
@@ -594,6 +582,7 @@ ZaunMap Backend API uses Auth0 for authentication. To authenticate, a user must 
 #### Follow/Unfollow User
 - **Endpoint:** `/user/follow`
 - **Method:** PUT
+- **Authentication:** Required
 - **Parameters:**
   - `followId` (required): The id of the user to follow.
   - `follow` (required): Boolean value indicating whether to follow or unfollow.
@@ -623,6 +612,7 @@ ZaunMap Backend API uses Auth0 for authentication. To authenticate, a user must 
 #### Block/Unblock User
 - **Endpoint:** `/user/block`
 - **Method:** PUT
+- **Authentication:** Required
 - **Parameters:**
   - `blockId` (required): The id of the user to block.
   - `block` (required): Boolean value indicating whether to block or unblock.
@@ -652,6 +642,7 @@ ZaunMap Backend API uses Auth0 for authentication. To authenticate, a user must 
 #### Change User Role
 - **Endpoint:** `/user/role`
 - **Method:** PUT
+- **Authentication:** Required
 - **Parameters:**
   - `userId` (required): The id of the user to disable.
   - `newRole` (required): The new role of the user.
@@ -665,7 +656,7 @@ ZaunMap Backend API uses Auth0 for authentication. To authenticate, a user must 
         "_id": "65680d250505420b42427a82",
         "userId": "auth0|656669d317b4bdb501178567",
         "name": "testuser",
-        "role": "user",
+        "role": "restricted",
         "maps": [],
         "following": [],
         "followers": [],
@@ -679,6 +670,7 @@ ZaunMap Backend API uses Auth0 for authentication. To authenticate, a user must 
 #### Delete User
 - **Endpoint:** `/user`
 - **Method:** DELETE
+- **Authentication:** Required
 - **Parameters:**
   - `userId` (required): The id of the user to delete.
 - **Example Request:**

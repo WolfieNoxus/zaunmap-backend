@@ -6,59 +6,66 @@ const shpjs = require('shpjs');
 const { DOMParser } = require('xmldom');
 const toGeoJSON = require('@tmcw/togeojson');
 
+// Function to retrieve a specific map by mapId
 exports.getMap = async (req, res) => {
     try {
+        // Extract mapId from query parameters
         const mapId = req.query.mapId;
-        // Validate the query parameters
         if (!mapId) {
+            // Respond with an error if mapId is not provided
             return res.status(400).json({ message: "Missing mapId in query parameters" });
         }
 
         // Find the map with the provided mapId
         const map = await Map.findOne({ _id: mapId });
         if (!map) {
+            // Respond with an error if the map is not found
             return res.status(404).json({ message: "Map not found" });
         }
 
-        // Send the map in the response
+        // Send the found map in the response
         res.status(200).json(map);
     } catch (error) {
         // Handle any errors that occur during the process
         res.status(500).json({ message: "Error getting map", error: error.message });
     }
-}
+};
 
+// Function to search for maps based on name, tags, and optional sorting
 exports.searchMaps = async (req, res) => {
     try {
+        // Extract search and sorting parameters from query
         const name = req.query.name;
         const tags = req.query.tags;
         const sortBy = req.query.sortBy;
         const sortOrder = req.query.sortOrder;
 
+        // Retrieve all public maps
         let maps = await Map.find({ isPublic: true });
+
+        // Filter maps by name if provided
         if (name) {
             maps = maps.filter(map => map.name.toLowerCase().includes(name.toLowerCase()));
         }
+
+        // Filter maps by tags if provided
         if (tags) {
-            tagsArray = tags.split(',');
+            const tagsArray = tags.split(',');
             maps = maps.filter(map => map.tags.some(tag => tagsArray.includes(tag)));
         }
+
+        // Sort maps if sorting parameters are provided
         if (sortBy && sortOrder) {
-            maps = maps.sort((a, b) => {
-                if (a[sortBy] < b[sortBy]) {
-                    return sortOrder === 'asc' ? -1 : 1;
-                }
-                if (a[sortBy] > b[sortBy]) {
-                    return sortOrder === 'asc' ? 1 : -1;
-                }
-                return 0;
-            });
+            maps = maps.sort((a, b) => sortOrder === 'asc' ? (a[sortBy] < b[sortBy] ? -1 : 1) : (a[sortBy] > b[sortBy] ? 1 : -1));
         }
+
+        // Send the sorted/filtered map list in the response
         res.status(200).json(maps);
     } catch (error) {
+        // Handle any errors that occur during the process
         res.status(500).json({ message: "Error searching maps", error: error.message });
     }
-}
+};
 
 exports.createMap = async (req, res) => {
     try {
@@ -106,16 +113,19 @@ exports.createMap = async (req, res) => {
         // Create a new Map instance with the userId and objectId
         const newMap = new Map({ owner: userId, objectId: objectId });
 
-        // Save the new map to the database
-        await newMap.save();
-
         // Simulated database operations for finding the user and saving the map
         const user = await User.findOne({ userId: userId });
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
-
+        if (user.role == 'restricted') {
+            newMap.isPublic = false;
+        }
+        if (user.role == 'disabled') {
+            return res.status(403).json({ message: "User is disabled" });
+        }
         user.maps.push(newMap._id);
+        await newMap.save();
         await user.save();
 
         // Send a successful response with the new map details

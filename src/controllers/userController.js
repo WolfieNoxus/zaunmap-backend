@@ -2,82 +2,112 @@ const User = require('../models/userModel');
 const Map = require('../models/mapModel');
 const jwt = require('jsonwebtoken');
 
+// Function to retrieve a specific user by userId
 exports.getUser = async (req, res) => {
   try {
+    // Extract userId from query parameters
     const userId = req.query.userId;
     if (!userId) {
+      // Respond with an error if userId is not provided
       return res.status(400).send('Invalid query parameters');
     }
+
+    // Find the user in the database
     const user = await User.findOne({ userId: userId });
     if (!user) {
+      // Respond with an error if the user is not found
       return res.status(404).send('User not found');
     }
+
+    // Send the found user in the response
     res.status(200).json(user);
   }
   catch (error) {
+    // Handle any server errors
     res.status(500).send('Internal Server Error: ' + error.message);
   }
-}
+};
 
+// Function to search for users based on name, with optional sorting
 exports.searchUsers = async (req, res) => {
   try {
+    // Extract search and sorting parameters from query
     const name = req.query.name;
     const sortBy = req.query.sortBy;
     const sortOrder = req.query.sortOrder;
+
+    // Retrieve all users
     let users = await User.find();
+
+    // Filter users by name if provided
     if (name) {
       users = users.filter(user => user.name.toLowerCase().includes(name.toLowerCase()));
     }
+
+    // Sort users if sorting parameters are provided
     if (sortBy && sortOrder) {
       if (sortBy !== 'name') {
+        // Respond with an error if sortBy parameter is invalid
         return res.status(400).send('Invalid query parameters: sortBy must be name');
       }
       if (sortOrder !== 'asc' && sortOrder !== 'desc') {
+        // Respond with an error if sortOrder parameter is invalid
         return res.status(400).send('Invalid query parameters: sortOrder must be asc or desc');
       }
-      users = users.sort((a, b) => {
-        if (a[sortBy] < b[sortBy]) {
-          return sortOrder === 'asc' ? -1 : 1;
-        }
-        if (a[sortBy] > b[sortBy]) {
-          return sortOrder === 'asc' ? 1 : -1;
-        }
-        return 0;
-      });
+      users = users.sort((a, b) => sortOrder === 'asc' ? (a[sortBy] < b[sortBy] ? -1 : 1) : (a[sortBy] > b[sortBy] ? 1 : -1));
     }
+
+    // Send the sorted/filtered user list in the response
     res.status(200).json(users);
   }
   catch (error) {
+    // Handle any server errors
     res.status(500).send('Internal Server Error: ' + error.message);
   }
-}
+};
 
+// Function to create a new user
 exports.createUser = async (req, res) => {
   try {
+    // Check if the request body is present
     if (!req.body) {
       return res.status(400).send('Request body is missing');
     }
-    if (!req.body.userId) {
+
+    // Extract user details from request body
+    const userId = req.body.userId;
+    const name = req.body.name;
+    const picture = req.body.picture;
+
+    // Validate the required fields
+    if (!userId) {
       return res.status(400).send('Request body is missing userId');
     }
-    if (!req.body.name) {
+    if (!name) {
       return res.status(400).send('Request body is missing name');
     }
-    if (!req.body.picture) {
+    if (!picture) {
       return res.status(400).send('Request body is missing picture');
     }
+
+    // Create a new user object
     const newUser = new User({
-      userId: req.body.userId,
-      name: req.body.name,
-      picture: req.body.picture
+      userId: userId,
+      name: name,
+      picture: picture
     });
+
+    // Save the new user to the database
     await newUser.save();
+
+    // Respond with the created user
     res.status(201).json(newUser);
   }
   catch (error) {
+    // Handle any errors during the process
     res.status(500).send('Internal Server Error: ' + error.message);
   }
-}
+};
 
 exports.renameUser = async (req, res) => {
   try {
@@ -109,6 +139,9 @@ exports.renameUser = async (req, res) => {
     if (!user) {
       return res.status(404).send('User not found');
     }
+    if (userId !== user.userId) {
+      return res.status(403).send('Forbidden');
+    }
     user.name = newName;
     await user.save();
     res.status(200).json(user);
@@ -120,12 +153,29 @@ exports.renameUser = async (req, res) => {
 
 exports.followUser = async (req, res) => {
   try {
+    const newName = req.query.newName;
     const bearerHeader = req.headers['authorization'];
-    const token = bearerHeader.split(' ')[1];
+    if (!bearerHeader) {
+        return res.status(401).json({ message: 'Unauthorized' });
+    }
+    const bearer = bearerHeader.split(' ');
+    if (bearer.length !== 2) {
+        return res.status(401).json({ message: 'Unauthorized' });
+    }
+    const token = bearer[1];
+    if (!token) {
+        return res.status(401).json({ message: 'Unauthorized' });
+    }
     const decoded = jwt.decode(token);
+    if (!decoded) {
+        return res.status(401).json({ message: 'Unauthorized' });
+    }
     const userId = decoded.sub;
     const followId = req.query.followId;
     const followStr = req.query.follow?.toLowerCase();
+    if (!userId || !followId || !followStr) {
+      return res.status(400).send('Invalid query parameters');
+    }
     if (followStr !== 'true' && followStr !== 'false') {
       return res.status(400).send('Invalid query parameters: follow must be true or false');
     }
@@ -133,6 +183,9 @@ exports.followUser = async (req, res) => {
     const user = await User.findOne({ userId: userId });
     if (!user) {
       return res.status(404).send('User not found');
+    }
+    if (userId !== user.userId) {
+      return res.status(403).send('Forbidden');
     }
     const followedUser = await User.findOne({ userId: followId });
     if (!followedUser) {
