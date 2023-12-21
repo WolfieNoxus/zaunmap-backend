@@ -48,19 +48,24 @@ const mapSchema = new mongoose.Schema({
         ref: 'Comment'   // Reference to Comment model for comments related to the map
     }],
     mode: {
-        type: String      // Game mode associated with the map
+        type: String,
+        default: "general"      // Game mode associated with the map
     },
     colorHeat: {
-        type: String      // Color scheme for the heatmap
+        type: String,
+        default: "#ff0000"      // Color scheme for the heatmap
     },
     heatLevel: {
-        type: Number      // Heat level for the heatmap
+        type: Number,
+        dafault: 5      // Heat level for the heatmap
     },
     heatValueMin: {
-        type: Number      // Minimum value for the heatmap
+        type: Number,
+        default: 0      // Minimum value for the heatmap
     },
     heatValueMax: {
-        type: Number      // Maximum value for the heatmap
+        type: Number,
+        default: 100      // Maximum value for the heatmap
     },
     colorTags: [{
         tag: {
