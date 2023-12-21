@@ -12,7 +12,7 @@ const metaSchema = new mongoose.Schema({
     },
     heatLevel: {
         type: Number,
-        dafault: 5      // Heat level for the heatmap
+        default: 5      // Heat level for the heatmap
     },
     heatValueMin: {
         type: Number,
@@ -78,7 +78,10 @@ const mapSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Comment'   // Reference to Comment model for comments related to the map
     }],
-    meta: metaSchema
+    meta: {
+        type: metaSchema,
+        default: () => ({})
+    }
 }, {
     timestamps: true     // Automatically add 'createdAt' and 'updatedAt' fields
 });
