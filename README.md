@@ -192,6 +192,23 @@ ZaunMap Backend API uses Auth0 for authentication. To authenticate, a user must 
             "averageRating": 0,
             "ratingCount": 0,
             "comments": [],
+            "meta": {
+                "mode": "general",
+                "colorHeat": "#ff0000",
+                "heatLevel": 5,
+                "heatValueMin": 0,
+                "heatValueMax": 10,
+                "colorTags": [
+                    {
+                        "name": "tag1",
+                        "color": "#ff0000"
+                    },
+                    {
+                        "name": "tag2",
+                        "color": "#00ff00"
+                    }
+                ]
+            },
             "createdAt": "2023-11-30T04:18:45.285Z",
             "updatedAt": "2023-11-30T04:18:45.285Z"
     }
@@ -224,6 +241,23 @@ ZaunMap Backend API uses Auth0 for authentication. To authenticate, a user must 
             "averageRating": 0,
             "ratingCount": 0,
             "comments": [],
+            "meta": {
+                "mode": "general",
+                "colorHeat": "#ff0000",
+                "heatLevel": 5,
+                "heatValueMin": 0,
+                "heatValueMax": 10,
+                "colorTags": [
+                    {
+                        "name": "tag1",
+                        "color": "#ff0000"
+                    },
+                    {
+                        "name": "tag2",
+                        "color": "#00ff00"
+                    }
+                ]
+            },
             "createdAt": "2023-11-30T04:18:45.285Z",
             "updatedAt": "2023-11-30T04:18:45.285Z"
         },
@@ -239,6 +273,27 @@ ZaunMap Backend API uses Auth0 for authentication. To authenticate, a user must 
             "averageRating": 0,
             "ratingCount": 0,
             "comments": [],
+            "meta": {
+                "mode": "general",
+                "colorHeat": "#ff0000",
+                "heatLevel": 5,
+                "heatValueMin": 0,
+                "heatValueMax": 10,
+                "colorTags": [
+                    {
+                        "name": "tag1",
+                        "color": "#ff0000"
+                    },
+                    {
+                        "name": "tag2",
+                        "color": "#00ff00"
+                    },
+                    {
+                        "name": "tag3",
+                        "color": "#0000ff"
+                    }
+                ]
+            },
             "createdAt": "2023-11-30T04:18:45.285Z",
             "updatedAt": "2023-11-30T04:18:45.285Z"
         }
@@ -267,6 +322,14 @@ ZaunMap Backend API uses Auth0 for authentication. To authenticate, a user must 
             "averageRating": 0,
             "ratingCount": 0,
             "comments": [],
+            "meta": {
+                "mode": "general",
+                "colorHeat": "#ff0000",
+                "heatLevel": 5,
+                "heatValueMin": 0,
+                "heatValueMax": 10,
+                "colorTags": []
+            },
             "createdAt": "2023-11-30T04:18:45.285Z",
             "updatedAt": "2023-11-30T04:18:45.285Z"
     }
@@ -305,6 +368,14 @@ ZaunMap Backend API uses Auth0 for authentication. To authenticate, a user must 
             "averageRating": 0,
             "ratingCount": 0,
             "comments": [],
+            "meta": {
+                "mode": "general",
+                "colorHeat": "#ff0000",
+                "heatLevel": 5,
+                "heatValueMin": 0,
+                "heatValueMax": 10,
+                "colorTags": []
+            },
             "createdAt": "2023-11-30T04:18:45.285Z",
             "updatedAt": "2023-11-30T04:18:45.285Z"
     }
@@ -335,6 +406,14 @@ ZaunMap Backend API uses Auth0 for authentication. To authenticate, a user must 
             "averageRating": 0,
             "ratingCount": 0,
             "comments": [],
+            "meta": {
+                "mode": "general",
+                "colorHeat": "#ff0000",
+                "heatLevel": 5,
+                "heatValueMin": 0,
+                "heatValueMax": 10,
+                "colorTags": []
+            },
             "createdAt": "2023-11-30T04:18:45.285Z",
             "updatedAt": "2023-11-30T04:18:45.285Z"
     }
@@ -366,6 +445,14 @@ ZaunMap Backend API uses Auth0 for authentication. To authenticate, a user must 
             "averageRating": 0,
             "ratingCount": 0,
             "comments": [],
+            "meta": {
+                "mode": "general",
+                "colorHeat": "#ff0000",
+                "heatLevel": 5,
+                "heatValueMin": 0,
+                "heatValueMax": 10,
+                "colorTags": []
+            },
             "createdAt": "2023-11-30T04:18:45.285Z",
             "updatedAt": "2023-11-30T04:18:45.285Z"
     }
