@@ -1,5 +1,7 @@
 # ZaunMap Backend API Documentation
 
+# <span style="color: red;">Deployment of the APIs has been discontinued owing to budgetary constraints</span>
+
 ## Base URL
 `https://zaunmap-6b1455b08c9b.herokuapp.com/api`
 
