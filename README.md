@@ -1,7 +1,12 @@
 # ZaunMap Backend API Documentation
 
+# <span style="color: red;">Deployment of the APIs has been discontinued owing to budgetary constraints</span>
+
 ## Base URL
 `https://zaunmap-6b1455b08c9b.herokuapp.com/api`
+
+## Authentication
+ZaunMap Backend API uses Auth0 for authentication. To authenticate, a user must first register an account with Auth0. Once registered, the user can then login to receive an access token. Some endpoints require an access token to be provided in the request header. The access token is used to identify the user and determine whether the user has permission to access the endpoint.
 
 ## Endpoints
 
@@ -10,6 +15,7 @@
 #### Get Comment
 - **Endpoint:** `/comment`
 - **Method:** GET
+- **Authentication:** None
 - **Parameters:**
   - `commentId` (required): The id of the comment to retrieve.
 - **Example Request:**
@@ -20,6 +26,7 @@
     ```json
     {
         "_id": "65680d250505420b42427a82",
+        "mapId": "65680d250505420b42427a73",
         "content": "This is a test comment",
         "postedBy": "auth0|656669d317b4bdb501178567",
         "likes": [],
@@ -35,16 +42,15 @@
 #### Create Comment
 - **Endpoint:** `/comment`
 - **Method:** POST
-- **Parameters:**
-  - `userId` (required): The id of the user who created the comment.
+- **Authentication:** Required
 - **Example Request:**
     ```
-    POST https://zaunmap-6b1455b08c9b.herokuapp.com/api/comment?userId=auth0|656669d317b4bdb501178567
+    POST https://zaunmap-6b1455b08c9b.herokuapp.com/api/comment
     ```
 - **Example Payload:**
     ```json
     {
-        "mapId": "65680d250505420b42427a82",
+        "mapId": "65680d250505420b42427a73",
         "content": "This is a test comment"
     }
     ```
@@ -52,6 +58,7 @@
     ```json
     {
         "_id": "65680d250505420b42427a82",
+        "mapId": "65680d250505420b42427a73",
         "content": "This is a test comment",
         "postedBy": "auth0|656669d317b4bdb501178567",
         "likes": [],
@@ -65,11 +72,10 @@
 #### Reply Comment
 - **Endpoint:** `/comment/reply`
 - **Method:** POST
-- **Parameters:**
-  - `userId` (required): The id of the user who created the comment.
+- **Authentication:** Required
 - **Example Request:**
     ```
-    POST https://zaunmap-6b1455b08c9b.herokuapp.com/api/reply?userId=auth0|656669d317b4bdb501178567
+    POST https://zaunmap-6b1455b08c9b.herokuapp.com/api/reply
     ```
 - **Example Payload:**
     ```json
@@ -82,6 +88,7 @@
     ```json
     {
         "_id": "65680d840505420b42427a8e",
+        "mapId": "65680d250505420b42427a73",
         "content": "This is a test reply",
         "postedBy": "auth0|656669d317b4bdb501178567",
         "likes": [],
@@ -95,13 +102,13 @@
 #### Like/Unlike Comment
 - **Endpoint:** `/comment/like`
 - **Method:** PUT
+- **Authentication:** Required
 - **Parameters:**
-  - `userId` (required): The id of the user who liked the comment.
   - `commentId` (required): The id of the comment to like.
   - `like` (required): Boolean value indicating whether to like or unlike.
 - **Example Request:**
     ```
-    POST https://zaunmap-6b1455b08c9b.herokuapp.com/api/like?userId=auth0|656669d317b4bdb501178567&commentId=65680d250505420b42427a82&like=true
+    POST https://zaunmap-6b1455b08c9b.herokuapp.com/api/like?commentId=65680d250505420b42427a82&like=true
     ```
 - **Example Response:**
     ```json
@@ -124,13 +131,13 @@
 #### Dislike/Undislike Comment
 - **Endpoint:** `/comment/dislike`
 - **Method:** PUT
+- **Authentication:** Required
 - **Parameters:**
-  - `userId` (required): The id of the user who disliked the comment.
   - `commentId` (required): The id of the comment to dislike.
   - `dislike` (required): Boolean value indicating whether to dislike or undislike.
 - **Example Request:**
     ```
-    POST https://zaunmap-6b1455b08c9b.herokuapp.com/api/dislike?userId=auth0|656669d317b4bdb501178567&commentId=65680d250505420b42427a82&dislike=true
+    POST https://zaunmap-6b1455b08c9b.herokuapp.com/api/dislike?commentId=65680d250505420b42427a82&dislike=true
     ```
 - **Example Response:**
     ```json
@@ -153,26 +160,12 @@
 #### Delete Comment
 - **Endpoint:** `/comment`
 - **Method:** DELETE
+- **Authentication:** Required
 - **Parameters:**
   - `commentId` (required): The id of the comment to delete.
 - **Example Request:**
     ```
-    DELETE https://zaunmap-6b1455b08c9b.herokuapp.com/api/comment?commentId=65680d250505420b42427a82&userId=auth0|656669d317b4bdb501178567
-    ```
-- **Example Response:**
-    ```json
-    {
-        "_id": "65680d250505420b42427a82",
-        "content": "This is a test comment",
-        "postedBy": "auth0|656669d317b4bdb501178567",
-        "likes": [],
-        "dislikes": [],
-        "replies": [
-            "65680d840505420b42427a8e"
-        ],
-        "createdAt": "2023-11-30T04:18:45.285Z",
-        "updatedAt": "2023-11-30T04:20:20.244Z"
-    }
+    DELETE https://zaunmap-6b1455b08c9b.herokuapp.com/api/comment?commentId=65680d250505420b42427a82
     ```
 
 ### Map Endpoints
@@ -180,6 +173,7 @@
 #### Get Map
 - **Endpoint:** `/map`
 - **Method:** GET
+- **Authentication:** None
 - **Parameters:**
   - `mapId` (required): The id of the map to retrieve.
 - **Example Request:**
@@ -189,17 +183,34 @@
 - **Example Response:**
     ```json
     {
-            "_id": "",
-            "name": "",
-            "owner": "",
+            "_id": "a65680d250505420b42427a82",
+            "name": "testmap",
+            "owner": "auth0|656669d317b4bdb501178567",
             "isPublic": true,
-            "objectId": "",
-            "tags": [],
-            "description": "",
+            "objectId": "65680d250505420b424cd7a83",
+            "tags": ["tag1", "tag2"],
+            "description": "This is a test map",
             "ratings": [],
             "averageRating": 0,
             "ratingCount": 0,
             "comments": [],
+            "meta": {
+                "mode": "general",
+                "colorHeat": "#ff0000",
+                "heatLevel": 5,
+                "heatValueMin": 0,
+                "heatValueMax": 10,
+                "colorTags": [
+                    {
+                        "name": "tag1",
+                        "color": "#ff0000"
+                    },
+                    {
+                        "name": "tag2",
+                        "color": "#00ff00"
+                    }
+                ]
+            },
             "createdAt": "2023-11-30T04:18:45.285Z",
             "updatedAt": "2023-11-30T04:18:45.285Z"
     }
@@ -208,6 +219,7 @@
 #### Search Public Maps
 - **Endpoint:** `/map/search`
 - **Method:** GET
+- **Authentication:** None
 - **Parameters:**
   - `name` (optional): The name of the map to search for.
   - `tags` (optional): The tags of the map to search for.
@@ -220,32 +232,70 @@
     ```json
     [
         {
-            "_id": "",
-            "name": "",
-            "owner": "",
+            "_id": "b65680d250505420b42427a82",
+            "name": "testmap",
+            "owner": "auth0|656669d317b4bdb501178567",
             "isPublic": true,
-            "objectId": "",
-            "tags": [],
-            "description": "",
+            "objectId": "65680d250505420b424cd7a83",
+            "tags": ["tag1", "tag2"],
+            "description": "This is a test map",
             "ratings": [],
             "averageRating": 0,
             "ratingCount": 0,
             "comments": [],
+            "meta": {
+                "mode": "general",
+                "colorHeat": "#ff0000",
+                "heatLevel": 5,
+                "heatValueMin": 0,
+                "heatValueMax": 10,
+                "colorTags": [
+                    {
+                        "name": "tag1",
+                        "color": "#ff0000"
+                    },
+                    {
+                        "name": "tag2",
+                        "color": "#00ff00"
+                    }
+                ]
+            },
             "createdAt": "2023-11-30T04:18:45.285Z",
             "updatedAt": "2023-11-30T04:18:45.285Z"
         },
         {
-            "_id": "",
-            "name": "",
-            "owner": "",
+            "_id": "a65680d250505420b42427a82",
+            "name": "testmap",
+            "owner": "auth0|656669d317b4bdb501178567",
             "isPublic": true,
-            "objectId": "",
-            "tags": [],
-            "description": "",
+            "objectId": "bbbbbbbbbbbbbbbbbbbbbbbb",
+            "tags": ["tag1", "tag2", "tag3"],
+            "description": "This is a test map 2",
             "ratings": [],
             "averageRating": 0,
             "ratingCount": 0,
             "comments": [],
+            "meta": {
+                "mode": "general",
+                "colorHeat": "#ff0000",
+                "heatLevel": 5,
+                "heatValueMin": 0,
+                "heatValueMax": 10,
+                "colorTags": [
+                    {
+                        "name": "tag1",
+                        "color": "#ff0000"
+                    },
+                    {
+                        "name": "tag2",
+                        "color": "#00ff00"
+                    },
+                    {
+                        "name": "tag3",
+                        "color": "#0000ff"
+                    }
+                ]
+            },
             "createdAt": "2023-11-30T04:18:45.285Z",
             "updatedAt": "2023-11-30T04:18:45.285Z"
         }
@@ -255,26 +305,33 @@
 #### Create Map
 - **Endpoint:** `/map`
 - **Method:** POST
-- **Parameters:**
-  - `userId` (required): The id of the user who created the map.
+- **Authentication:** Required
 - **Example Request:**
     ```
-    POST https://zaunmap-6b1455b08c9b.herokuapp.com/api/map?userId=auth0|656669d317b4bdb501178567
+    POST https://zaunmap-6b1455b08c9b.herokuapp.com/api/map
     ```
 - **Example Response**
     ```json
     {
-            "_id": "",
-            "name": "",
-            "owner": "",
+            "_id": "cbc65680d250505420b42427a82",
+            "name": "testmap",
+            "owner": "auth0|656669d317b4bdb501178567",
             "isPublic": true,
-            "objectId": "",
-            "tags": [],
-            "description": "",
+            "objectId": "65680d250505420b424cd7a83",
+            "tags": ["tag1", "tag2"],
+            "description": "This is a test map",
             "ratings": [],
             "averageRating": 0,
             "ratingCount": 0,
             "comments": [],
+            "meta": {
+                "mode": "general",
+                "colorHeat": "#ff0000",
+                "heatLevel": 5,
+                "heatValueMin": 0,
+                "heatValueMax": 10,
+                "colorTags": []
+            },
             "createdAt": "2023-11-30T04:18:45.285Z",
             "updatedAt": "2023-11-30T04:18:45.285Z"
     }
@@ -283,6 +340,7 @@
 #### Update Map
 - **Endpoint:** `/map`
 - **Method:** PUT
+- **Authentication:** Required
 - **Parameters:**
   - `mapId` (required): The id of the map to update.
 - **Example Request:**
@@ -301,9 +359,9 @@
 - **Example Response**
     ```json
     {
-            "_id": "",
-            "name": "",
-            "owner": "",
+            "_id": "cbc65680d250505420b42427a82",
+            "name": "testmap",
+            "owner": "auth0|656669d317b4bdb501178567",
             "isPublic": true,
             "objectId": "",
             "tags": [],
@@ -312,6 +370,14 @@
             "averageRating": 0,
             "ratingCount": 0,
             "comments": [],
+            "meta": {
+                "mode": "general",
+                "colorHeat": "#ff0000",
+                "heatLevel": 5,
+                "heatValueMin": 0,
+                "heatValueMax": 10,
+                "colorTags": []
+            },
             "createdAt": "2023-11-30T04:18:45.285Z",
             "updatedAt": "2023-11-30T04:18:45.285Z"
     }
@@ -320,28 +386,36 @@
 #### Rate Map
 - **Endpoint:** `/map/rate`
 - **Method:** PUT
+- **Authentication:** Required
 - **Parameters:**
-  - `userId` (required): The id of the user who rated the map.
   - `mapId` (required): The id of the map to rate.
   - `rating` (required): The rating to give the map.
 - **Example Request:**
     ```
-    PUT https://zaunmap-6b1455b08c9b.herokuapp.com/api/map/rate?userId=auth0|656669d317b4bdb501178567&mapId=65680d250505420b42427a82&rating=5
+    PUT https://zaunmap-6b1455b08c9b.herokuapp.com/api/map/rate?mapId=65680d250505420b42427a82&rating=5
     ```
 - **Example Response**
     ```json
     {
-            "_id": "",
-            "name": "",
-            "owner": "",
+            "_id": "cbc65680d250505420b42427a82",
+            "name": "testmap",
+            "owner": "auth0|656669d317b4bdb501178567",
             "isPublic": true,
-            "objectId": "",
-            "tags": [],
-            "description": "",
-            "ratings": [],
+            "objectId": "xsede65680d250505420b42427a82",
+            "tags": ["tag1", "tag2"],
+            "description": "This is a test map",
+            "ratings": [{"cdc65680d250505420b42427a82": 5}],
             "averageRating": 0,
             "ratingCount": 0,
             "comments": [],
+            "meta": {
+                "mode": "general",
+                "colorHeat": "#ff0000",
+                "heatLevel": 5,
+                "heatValueMin": 0,
+                "heatValueMax": 10,
+                "colorTags": []
+            },
             "createdAt": "2023-11-30T04:18:45.285Z",
             "updatedAt": "2023-11-30T04:18:45.285Z"
     }
@@ -350,28 +424,37 @@
 #### Import Map
 - **Endpoint:** `/map/import`
 - **Method:** PUT
+- **Authentication:** Required
 - **Parameters:**
-  - `userId` (required): The id of the user who imported the map.
   - `mapId` (required): The id of the map to import.
   - `objectId` (required): The id of the map to import.
 - **Example Request:**
     ```
-    PUT https://zaunmap-6b1455b08c9b.herokuapp.com/api/map/import?userId=auth0|656669d317b4bdb501178567&mapId=65680d250505420b42427a82&objectId=65680d250505420b42427a82
+    PUT https://zaunmap-6b1455b08c9b.herokuapp.com/api/map/import?mapId=65680d250505420b42427a82&objectId=65680d250505420b42427a82
+    ```
     ```
 - **Example Response**
     ```json
     {
-            "_id": "",
-            "name": "",
-            "owner": "",
+            "_id": "cbc65680d250505420b42427a82",
+            "name": "testmap",
+            "owner": "auth0|656669d317b4bdb501178567",
             "isPublic": true,
-            "objectId": "",
-            "tags": [],
-            "description": "",
+            "objectId": "65680d250505420b42427a82",
+            "tags": ["tag1", "tag2"],
+            "description": "This is a test map",
             "ratings": [],
             "averageRating": 0,
             "ratingCount": 0,
             "comments": [],
+            "meta": {
+                "mode": "general",
+                "colorHeat": "#ff0000",
+                "heatLevel": 5,
+                "heatValueMin": 0,
+                "heatValueMax": 10,
+                "colorTags": []
+            },
             "createdAt": "2023-11-30T04:18:45.285Z",
             "updatedAt": "2023-11-30T04:18:45.285Z"
     }
@@ -380,29 +463,12 @@
 #### Delete Map
 - **Endpoint:** `/map`
 - **Method:** DELETE
+- **Authentication:** Required
 - **Parameters:**
   - `mapId` (required): The id of the map to delete.
 - **Example Request:**
     ```
     DELETE https://zaunmap-6b1455b08c9b.herokuapp.com/api/map?mapId=65680d250505420b42427a82
-    ```
-- **Example Response:**
-    ```json
-    {
-            "_id": "",
-            "name": "",
-            "owner": "",
-            "isPublic": true,
-            "objectId": "",
-            "tags": [],
-            "description": "",
-            "ratings": [],
-            "averageRating": 0,
-            "ratingCount": 0,
-            "comments": [],
-            "createdAt": "2023-11-30T04:18:45.285Z",
-            "updatedAt": "2023-11-30T04:18:45.285Z"
-    }
     ```
 
 ### Message Endpoints
@@ -410,6 +476,7 @@
 #### Get Message
 - **Endpoint:** `/message`
 - **Method:** GET
+- **Authentication:** Required
 - **Parameters:**
   - `messageId` (required): The id of the message to retrieve.
 - **Example Request:**
@@ -431,11 +498,10 @@
 #### Create Message
 - **Endpoint:** `/message`
 - **Method:** POST
-- **Parameters:**
-  - `senderId` (required): The id of the user who created the message.
+- **Authentication:** Required
 - **Example Request:**
     ```
-    POST https://zaunmap-6b1455b08c9b.herokuapp.com/api/message?senderId=auth0|656669d317b4bdb501178567
+    POST https://zaunmap-6b1455b08c9b.herokuapp.com/api/message
     ```
 - **Example Payload:**
     ```json
@@ -461,6 +527,7 @@
 #### Read/Unread Message
 - **Endpoint:** `/message/read`
 - **Method:** PUT
+- **Authentication:** Required
 - **Parameters:**
   - `messageId` (required): The id of the message to mark as read/unread.
   - `read` (required): Boolean value indicating whether to mark as read or unread.
@@ -485,6 +552,7 @@
 #### Delete Message
 - **Endpoint:** `/message`
 - **Method:** DELETE
+- **Authentication:** Required
 - **Parameters:**
   - `messageId` (required): The id of the message to delete.
 - **Example Request:**
@@ -497,6 +565,7 @@
 #### Get User
 - **Endpoint:** `/user`
 - **Method:** GET
+- **Authentication:** None
 - **Parameters:**
   - `userId` (required): The id of the user to retrieve.
 - **Example Request:**
@@ -542,11 +611,18 @@
 #### Create User
 - **Endpoint:** `/user`
 - **Method:** POST
-- **Parameters:**
-  - `userId` (required): The id of the user to create.
+- **Authentication:** Required (IP Address must be whitelisted)
+- **Example Payload:**
+    ```json
+    {
+        "userId": "auth0|656669d317b4bdb501178567",
+        "name": "testuser",
+        "picture": "https://s.gravatar.com/avatar/656669d317b4bdb501178567?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png"
+    }
+    ```
 - **Example Request:**
     ```
-    POST https://zaunmap-6b1455b08c9b.herokuapp.com/api/user?userId=auth0|656669d317b4bdb501178567
+    POST https://zaunmap-6b1455b08c9b.herokuapp.com/api/user
     ```
 - **Example Response:**
     ```json
@@ -568,12 +644,12 @@
 #### Rename User
 - **Endpoint:** `/user/rename`
 - **Method:** PUT
+- **Authentication:** Required
 - **Parameters:**
-  - `userId` (required): The id of the user to rename.
   - `newName` (required): The new name of the user.
 - **Example Request:**
     ```
-    PUT https://zaunmap-6b1455b08c9b.herokuapp.com/api/user/rename?userId=auth0|656669d317b4bdb501178567&newName=testuser2
+    PUT https://zaunmap-6b1455b08c9b.herokuapp.com/api/user/rename?newName=testuser2
     ```
 - **Example Response:**
     ```json
@@ -595,13 +671,13 @@
 #### Follow/Unfollow User
 - **Endpoint:** `/user/follow`
 - **Method:** PUT
+- **Authentication:** Required
 - **Parameters:**
-  - `userId` (required): The id of the user who is following.
   - `followId` (required): The id of the user to follow.
   - `follow` (required): Boolean value indicating whether to follow or unfollow.
 - **Example Request:**
     ```
-    PUT https://zaunmap-6b1455b08c9b.herokuapp.com/api/follow?userId=auth0|656669d317b4bdb501178567&followId=auth0|656669d317b4bdb501178567&follow=true
+    PUT https://zaunmap-6b1455b08c9b.herokuapp.com/api/follow?followId=auth0|656669d317b4bdb501178567&follow=true
     ```
 - **Example Response:**
     ```json
@@ -625,13 +701,13 @@
 #### Block/Unblock User
 - **Endpoint:** `/user/block`
 - **Method:** PUT
+- **Authentication:** Required
 - **Parameters:**
-  - `userId` (required): The id of the user who is blocking.
   - `blockId` (required): The id of the user to block.
   - `block` (required): Boolean value indicating whether to block or unblock.
 - **Example Request:**
     ```
-    PUT https://zaunmap-6b1455b08c9b.herokuapp.com/api/block?userId=auth0|656669d317b4bdb501178567&blockId=auth0|656669d317b4bdb501178567&block=true
+    PUT https://zaunmap-6b1455b08c9b.herokuapp.com/api/block?blockId=auth0|656669d317b4bdb501178567&block=true
     ```
 - **Example Response:**
     ```json
@@ -655,6 +731,7 @@
 #### Change User Role
 - **Endpoint:** `/user/role`
 - **Method:** PUT
+- **Authentication:** Required
 - **Parameters:**
   - `userId` (required): The id of the user to disable.
   - `newRole` (required): The new role of the user.
@@ -668,7 +745,7 @@
         "_id": "65680d250505420b42427a82",
         "userId": "auth0|656669d317b4bdb501178567",
         "name": "testuser",
-        "role": "user",
+        "role": "restricted",
         "maps": [],
         "following": [],
         "followers": [],
@@ -682,6 +759,7 @@
 #### Delete User
 - **Endpoint:** `/user`
 - **Method:** DELETE
+- **Authentication:** Required
 - **Parameters:**
   - `userId` (required): The id of the user to delete.
 - **Example Request:**

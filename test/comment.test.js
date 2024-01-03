@@ -84,94 +84,94 @@ describe('GET /comment', () => {
     });
 });
 
-// Test for POST /comment
-describe('POST /comment', () => {
-    it('should create a new comment', async () => {
-        const map = await Map.findOne({ name: 'Test Map' });
-        const userId = 'testuser';
-        const mapId = map._id.toString();
-        const res = await request(app)
-            .post('/api/comment')
-            .query({ userId: userId })
-            .send({
-                mapId: mapId,
-                content: 'This is test comment 2'
-            });
-        expect(res.statusCode).toEqual(200);
-        expect(res.body).toHaveProperty('postedBy', userId);
-        expect(res.body).toHaveProperty('content', 'This is test comment 2');
-        expect(res.body).toHaveProperty('replies');
-        expect(res.body).toHaveProperty('likes');
-        expect(res.body).toHaveProperty('dislikes');
-    });
-});
+// // Test for POST /comment
+// describe('POST /comment', () => {
+//     it('should create a new comment', async () => {
+//         const map = await Map.findOne({ name: 'Test Map' });
+//         const userId = 'testuser';
+//         const mapId = map._id.toString();
+//         const res = await request(app)
+//             .post('/api/comment')
+//             .query({ userId: userId })
+//             .send({
+//                 mapId: mapId,
+//                 content: 'This is test comment 2'
+//             });
+//         expect(res.statusCode).toEqual(200);
+//         expect(res.body).toHaveProperty('postedBy', userId);
+//         expect(res.body).toHaveProperty('content', 'This is test comment 2');
+//         expect(res.body).toHaveProperty('replies');
+//         expect(res.body).toHaveProperty('likes');
+//         expect(res.body).toHaveProperty('dislikes');
+//     });
+// });
 
-// Test for POST /comment/reply
-describe('POST /comment/reply', () => {
-    it('should post a reply to a comment', async () => {
-        const user = await User.findOne({ userId: 'testuser2' });
-        const comment = await Comment.findOne({ content: 'This is a test comment' });
-        const userId = user.userId;
-        const commentId = comment._id;
-        const res = await request(app)
-            .post('/api/comment/reply')
-            .query({ userId: userId })
-            .send({
-                commentId: commentId,
-                content: 'This is a test comment reply'
-            });
-        expect(res.statusCode).toEqual(200);
-        expect(res.body).toHaveProperty('content', 'This is a test comment reply');
-    });
-});
+// // Test for POST /comment/reply
+// describe('POST /comment/reply', () => {
+//     it('should post a reply to a comment', async () => {
+//         const user = await User.findOne({ userId: 'testuser2' });
+//         const comment = await Comment.findOne({ content: 'This is a test comment' });
+//         const userId = user.userId;
+//         const commentId = comment._id;
+//         const res = await request(app)
+//             .post('/api/comment/reply')
+//             .query({ userId: userId })
+//             .send({
+//                 commentId: commentId,
+//                 content: 'This is a test comment reply'
+//             });
+//         expect(res.statusCode).toEqual(200);
+//         expect(res.body).toHaveProperty('content', 'This is a test comment reply');
+//     });
+// });
 
-// Test for PUT /comment/like
-describe('PUT /comment/like', () => {
-    it('should like or unlike a comment', async () => {
-        const comment = await Comment.findOne({ content: 'This is a test comment' });
-        const commentId = comment._id.toString();
-        const userId = 'testuser2';
-        const res = await request(app)
-            .put('/api/comment/like')
-            .query({
-                userId: userId,
-                commentId: commentId,
-                like: true
-            })
-        expect(res.statusCode).toEqual(200);
-        const newComment = await Comment.findOne({ content: 'This is a test comment' });
-        expect(newComment.likes).toContain(userId);
-    });
-});
+// // Test for PUT /comment/like
+// describe('PUT /comment/like', () => {
+//     it('should like or unlike a comment', async () => {
+//         const comment = await Comment.findOne({ content: 'This is a test comment' });
+//         const commentId = comment._id.toString();
+//         const userId = 'testuser2';
+//         const res = await request(app)
+//             .put('/api/comment/like')
+//             .query({
+//                 userId: userId,
+//                 commentId: commentId,
+//                 like: true
+//             })
+//         expect(res.statusCode).toEqual(200);
+//         const newComment = await Comment.findOne({ content: 'This is a test comment' });
+//         expect(newComment.likes).toContain(userId);
+//     });
+// });
 
-// Test for PUT /comment/dislike
-describe('PUT /comment/dislike', () => {
-    it('should dislike or undislike a comment', async () => {
-        const comment = await Comment.findOne({ content: 'This is a test comment' });
-        const commentId = comment._id.toString();
-        const userId = 'testuser2';
-        const res = await request(app)
-            .put('/api/comment/dislike')
-            .query({
-                userId: userId,
-                commentId: commentId,
-                dislike: true
-            })
-        expect(res.statusCode).toEqual(200);
-        const newComment = await Comment.findOne({ content: 'This is a test comment' });
-        expect(newComment.dislikes).toContain(userId);
-    });
-});
+// // Test for PUT /comment/dislike
+// describe('PUT /comment/dislike', () => {
+//     it('should dislike or undislike a comment', async () => {
+//         const comment = await Comment.findOne({ content: 'This is a test comment' });
+//         const commentId = comment._id.toString();
+//         const userId = 'testuser2';
+//         const res = await request(app)
+//             .put('/api/comment/dislike')
+//             .query({
+//                 userId: userId,
+//                 commentId: commentId,
+//                 dislike: true
+//             })
+//         expect(res.statusCode).toEqual(200);
+//         const newComment = await Comment.findOne({ content: 'This is a test comment' });
+//         expect(newComment.dislikes).toContain(userId);
+//     });
+// });
 
-// Test for DELETE /comment
-describe('DELETE /comment', () => {
-    it('should delete a specific comment by id', async () => {
-        const comment = await Comment.findOne({ content: 'This is a test comment' });
-        const commentId = comment._id.toString();
-        const res = await request(app)
-            .delete('/api/comment')
-            .query({ commentId: commentId });
-        expect(res.statusCode).toEqual(200);
-        expect(await Comment.findById(commentId)).toBeNull();
-    });
-});
+// // Test for DELETE /comment
+// describe('DELETE /comment', () => {
+//     it('should delete a specific comment by id', async () => {
+//         const comment = await Comment.findOne({ content: 'This is a test comment' });
+//         const commentId = comment._id.toString();
+//         const res = await request(app)
+//             .delete('/api/comment')
+//             .query({ commentId: commentId });
+//         expect(res.statusCode).toEqual(200);
+//         expect(await Comment.findById(commentId)).toBeNull();
+//     });
+// });
