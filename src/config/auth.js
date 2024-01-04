@@ -10,8 +10,8 @@ const { auth, requiredScopes } = require('express-oauth2-jwt-bearer');
  * from the environment variables.
  */
 const checkJwt = auth({
-  audience: process.env.AUTH0_AUDIENCE, // The intended audience of the JWT (usually your API)
-  issuerBaseURL: process.env.AUTH0_ISSUER_URL // Base URL of the token issuer (Auth0 domain)
+  audience: process.env.AUTH0_AUDIENCE || 'https://zaunmap.com', // The intended audience of the JWT (usually your API)
+  issuerBaseURL: process.env.AUTH0_ISSUER_URL || 'https://zaunmap.us.auth0.com/' // Base URL of the token issuer (Auth0 domain)
 });
 
 /**
