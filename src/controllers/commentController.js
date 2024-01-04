@@ -198,18 +198,9 @@ exports.likeComment = async (req, res) => {
             if (comment.likes.includes(userId)) {
                 res.status(200).json({ message: 'Comment already liked' });
             } else if (comment.dislikes.includes(userId)) {
-<<<<<<< HEAD
-                res.status(200).json({ message: 'Comment already disliked' });
-            } else {
-                comment.likes.push(userId);
-                await comment.save();
-                res.status(200).json({ message: 'Comment liked successfully' });
-            }
-=======
                 comment.dislikes.pull(userId);
             }
             comment.likes.push(userId);
->>>>>>> jwt
         } else {
             if (!comment.likes.includes(userId)) {
                 res.status(200).json({ message: 'Comment not liked' });
@@ -281,18 +272,9 @@ exports.dislikeComment = async (req, res) => {
             if (comment.dislikes.includes(userId)) {
                 res.status(200).json({ message: 'Comment already disliked' });
             } else if (comment.likes.includes(userId)) {
-<<<<<<< HEAD
-                res.status(200).json({ message: 'Comment already liked' });
-            } else {
-                comment.dislikes.push(userId);
-                await comment.save();
-                res.status(200).json({ message: 'Comment disliked successfully' });
-            }
-=======
                 comment.likes.pull(userId);
             }
             comment.dislikes.push(userId);
->>>>>>> jwt
         } else {
             if (!comment.dislikes.includes(userId)) {
                 res.status(200).json({ message: 'Comment not disliked' });

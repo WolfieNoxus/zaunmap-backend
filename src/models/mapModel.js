@@ -1,35 +1,6 @@
 // Import mongoose to work with MongoDB
 const mongoose = require('mongoose');
 
-<<<<<<< HEAD
-const metaSchema = new mongoose.Schema({
-    mode: {
-        type: String,
-        default: "general"      // Game mode associated with the map
-    },
-    colorHeat: {
-        type: String,
-        default: "#ff0000"      // Color scheme for the heatmap
-    },
-    heatLevel: {
-        type: Number,
-        default: 5      // Heat level for the heatmap
-    },
-    heatValueMin: {
-        type: Number,
-        default: 0      // Minimum value for the heatmap
-    },
-    heatValueMax: {
-        type: Number,
-        default: 100      // Maximum value for the heatmap
-    },
-    colorTags: [{
-        tag: {
-            type: String
-        },
-        color: {
-            type: String
-=======
 // Define a sub-schema for meta information about the map
 const metaSchema = new mongoose.Schema({
     mode: {
@@ -58,7 +29,6 @@ const metaSchema = new mongoose.Schema({
         },
         color: {
             type: String       // Associated color for the tag
->>>>>>> jwt
         }
     }],
 });
@@ -110,13 +80,8 @@ const mapSchema = new mongoose.Schema({
         ref: 'Comment'        // Reference to Comment model for comments related to the map
     }],
     meta: {
-<<<<<<< HEAD
-        type: metaSchema,
-        default: () => ({})
-=======
         type: metaSchema,     // Embedded sub-schema for additional metadata
         default: () => ({})   // Default empty object if no metadata is provided
->>>>>>> jwt
     }
 }, {
     timestamps: true         // Automatically add 'createdAt' and 'updatedAt' fields

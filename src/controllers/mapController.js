@@ -215,44 +215,7 @@ exports.updateMap = async (req, res) => {
     }
 };
 
-<<<<<<< HEAD
-exports.updateMap = async (req, res) => {
-    try {
-        const mapId = req.query.mapId;
-        const map = await Map.findById(mapId);
-        if (!map) {
-            return res.status(404).json({ message: "Map not found" });
-        }
-        const newName = req.body.name;
-        const newDescription = req.body.description;
-        const newTags = req.body.tags;
-        const newIsPublic = req.body.isPublic;
-        const newMeta = req.body.meta;
-        if (newMeta) {
-            map.meta = newMeta;
-        }
-        if (newName) {
-            map.name = newName;
-        }
-        if (newDescription) {
-            map.description = newDescription;
-        }
-        if (newTags) {
-            map.tags = newTags;
-        }
-        if (newIsPublic === true || newIsPublic === false) {
-            map.isPublic = newIsPublic;
-        }
-        await map.save();
-        res.status(200).json(map);
-    } catch (error) {
-        res.status(500).json({ message: "Error updating map", error: error.message });
-    }
-}
-
-=======
 // Function to handle rating a map
->>>>>>> jwt
 exports.rateMap = async (req, res) => {
     try {
         // Validate the authorization token from the request header
@@ -333,20 +296,10 @@ exports.rateMap = async (req, res) => {
 // Function to import a map from another map's data
 exports.importMap = async (req, res) => {
     try {
-<<<<<<< HEAD
-        const userId = req.query.userId;
-        const objectOwner = req.query.objectOwner || userId;
-        const mapId = req.query.mapId;
-        const objectId = req.query.objectId;
-        // check the query parameters
-        if (!userId) {
-            return res.status(400).json({ message: "Missing userId in query parameters" });
-=======
         // Validate the authorization token from the request header
         const bearerHeader = req.headers['authorization'];
         if (!bearerHeader) {
             return res.status(401).json({ message: 'Unauthorized' });
->>>>>>> jwt
         }
         const bearer = bearerHeader.split(' ');
         if (bearer.length !== 2) {
@@ -387,12 +340,8 @@ exports.importMap = async (req, res) => {
             return res.status(404).json({ message: "Map not found" });
         }
 
-<<<<<<< HEAD
-        const rawDataResponse = await axios.get(`https://zaunmap.pages.dev/file/?user_id=${objectOwner}&object_id=${objectId}`, { responseType: 'arraybuffer' });
-=======
         // Retrieve the raw data of the object to be imported
         const rawDataResponse = await axios.get(`https://zaunmap.pages.dev/file/?user_id=${objectMap.owner}&object_id=${objectId}`, { responseType: 'arraybuffer' });
->>>>>>> jwt
         const rawData = rawDataResponse.data;
 
         // Determine the format of the raw data
