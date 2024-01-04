@@ -5,66 +5,66 @@ const Map = require('../src/models/mapModel');
 const Comment = require('../src/models/commentModel');
 const User = require('../src/models/userModel');
 
-beforeAll(async () => {
-    await connectDB();
-});
+// beforeAll(async () => {
+//     await connectDB();
+// });
 
-afterAll(async () => {
-    await disconnectDB();
-});
+// afterAll(async () => {
+//     await disconnectDB();
+// });
 
-beforeEach(async () => {
-    const map = new Map({
-        name: 'Test Map',
-        owner: 'testuser2',
-        description: 'This is a test map',
-        isPublic: true,
-        tags: ['tag1', 'tag2'],
-        comments: []
-    });
-    const comment = new Comment({
-        content: 'This is a test comment',
-        postedBy: 'testuser',
-        replies: [],
-        likes: [],
-        dislikes: []
-    });
-    const user1 = new User({
-        userId: 'testuser',
-        name: 'Test User',
-        role: 'user',
-        maps: [],
-        following: [],
-        followers: [],
-        blocked: [],
-        messagesReceived: []
-    });
-    const user2 = new User({
-        userId: 'testuser2',
-        name: 'Test User 2',
-        role: 'user',
-        maps: [],
-        following: [],
-        followers: [],
-        blocked: [],
-        messagesReceived: []
-    });
-    await comment.save();
-    map.comments.push(comment._id);
-    await map.save();
-    await user1.save();
-    user2.maps.push(map._id);
-    await user2.save();
-});
+// beforeEach(async () => {
+//     const map = new Map({
+//         name: 'Test Map',
+//         owner: 'testuser2',
+//         description: 'This is a test map',
+//         isPublic: true,
+//         tags: ['tag1', 'tag2'],
+//         comments: []
+//     });
+//     const comment = new Comment({
+//         content: 'This is a test comment',
+//         postedBy: 'testuser',
+//         replies: [],
+//         likes: [],
+//         dislikes: []
+//     });
+//     const user1 = new User({
+//         userId: 'testuser',
+//         name: 'Test User',
+//         role: 'user',
+//         maps: [],
+//         following: [],
+//         followers: [],
+//         blocked: [],
+//         messagesReceived: []
+//     });
+//     const user2 = new User({
+//         userId: 'testuser2',
+//         name: 'Test User 2',
+//         role: 'user',
+//         maps: [],
+//         following: [],
+//         followers: [],
+//         blocked: [],
+//         messagesReceived: []
+//     });
+//     await comment.save();
+//     map.comments.push(comment._id);
+//     await map.save();
+//     await user1.save();
+//     user2.maps.push(map._id);
+//     await user2.save();
+// });
 
-afterEach(async () => {
-    await User.deleteOne({ userId: 'testuser' });
-    await User.deleteOne({ userId: 'testuser2' });
-    await Map.deleteOne({ name: 'Test Map' });
-    await Comment.deleteOne({ content: 'This is a test comment' });
-    await Comment.deleteOne({ content: 'This is test comment 2' });
-    await Comment.deleteOne({ content: 'This is a test comment reply' });
-});
+// afterEach(async () => {
+//     await User.deleteOne({ userId: 'testuser' });
+//     await User.deleteOne({ userId: 'testuser2' });
+//     await Map.deleteOne({ name: 'Test Map' });
+//     await Comment.deleteOne({ content: 'This is a test comment' });
+//     await Comment.deleteOne({ content: 'This is test comment 2' });
+//     await Comment.deleteOne({ content: 'This is a test comment reply' });
+// });
 
 // Always pass
 describe('Always pass', () => {

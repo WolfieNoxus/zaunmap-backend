@@ -3,64 +3,64 @@ const app = require('../src/app');
 const { connectDB, disconnectDB } = require('../src/config/db');
 const User = require('../src/models/userModel');
 
-beforeAll(async () => {
-    await connectDB();
-});
+// beforeAll(async () => {
+//     await connectDB();
+// });
 
-afterAll(async () => {
-    await disconnectDB();
-});
+// afterAll(async () => {
+//     await disconnectDB();
+// });
 
-beforeEach(async () => {
-    await User.create({
-        userId: "user12345",
-        name: "John Doe",
-        role: "user",
-        maps: ["5f50c31e467a5d1234567890"],
-        following: ["user23456"],
-        followers: ["user34567"],
-        blocked: ["user45678"],
-        messagesReceived: ["5f50c31e467a5d9876543210"]
-    });
-    await User.create({
-        userId: "admin67890",
-        name: "Alice Smith",
-        role: "admin",
-        maps: ["5f50c31e467a5d1234567890", "5f50c31e467a5d1234567891"],
-        following: ["user12345", "user67890"],
-        followers: ["user23456", "user34567"],
-        blocked: ["user45678", "user56789"],
-        messagesReceived: ["5f50c31e467a5d9876543210", "5f50c31e467a5d9876543211"]
-    });
-    await User.create({
-        userId: "user67890",
-        name: "Bob Brown",
-        role: "user",
-        maps: ["5f50c31e467a5d1234567892", "5f50c31e467a5d1234567893"],
-        following: ["admin67890", "user12345", "user45678"],
-        followers: ["user23456", "user34567", "user56789"],
-        blocked: ["user67891"],
-        messagesReceived: ["5f50c31e467a5d9876543212", "5f50c31e467a5d9876543213"]
-    });
-    await User.create({
-        userId: "disabled123",
-        name: "Eve White",
-        role: "disabled",
-        maps: ["5f50c31e467a5d1234567894"],
-        following: ["user12345"],
-        followers: ["user67890"],
-        blocked: ["user67890", "user12345"],
-        messagesReceived: ["5f50c31e467a5d9876543214"]
-    });
-});
+// beforeEach(async () => {
+//     await User.create({
+//         userId: "user12345",
+//         name: "John Doe",
+//         role: "user",
+//         maps: ["5f50c31e467a5d1234567890"],
+//         following: ["user23456"],
+//         followers: ["user34567"],
+//         blocked: ["user45678"],
+//         messagesReceived: ["5f50c31e467a5d9876543210"]
+//     });
+//     await User.create({
+//         userId: "admin67890",
+//         name: "Alice Smith",
+//         role: "admin",
+//         maps: ["5f50c31e467a5d1234567890", "5f50c31e467a5d1234567891"],
+//         following: ["user12345", "user67890"],
+//         followers: ["user23456", "user34567"],
+//         blocked: ["user45678", "user56789"],
+//         messagesReceived: ["5f50c31e467a5d9876543210", "5f50c31e467a5d9876543211"]
+//     });
+//     await User.create({
+//         userId: "user67890",
+//         name: "Bob Brown",
+//         role: "user",
+//         maps: ["5f50c31e467a5d1234567892", "5f50c31e467a5d1234567893"],
+//         following: ["admin67890", "user12345", "user45678"],
+//         followers: ["user23456", "user34567", "user56789"],
+//         blocked: ["user67891"],
+//         messagesReceived: ["5f50c31e467a5d9876543212", "5f50c31e467a5d9876543213"]
+//     });
+//     await User.create({
+//         userId: "disabled123",
+//         name: "Eve White",
+//         role: "disabled",
+//         maps: ["5f50c31e467a5d1234567894"],
+//         following: ["user12345"],
+//         followers: ["user67890"],
+//         blocked: ["user67890", "user12345"],
+//         messagesReceived: ["5f50c31e467a5d9876543214"]
+//     });
+// });
 
-afterEach(async () => {
-    await User.deleteOne({ userId: 'user12345' });
-    await User.deleteOne({ userId: 'admin67890' });
-    await User.deleteOne({ userId: 'user67890' });
-    await User.deleteOne({ userId: 'disabled123' });
-    await User.deleteOne({ userId: 'testuser' });
-});
+// afterEach(async () => {
+//     await User.deleteOne({ userId: 'user12345' });
+//     await User.deleteOne({ userId: 'admin67890' });
+//     await User.deleteOne({ userId: 'user67890' });
+//     await User.deleteOne({ userId: 'disabled123' });
+//     await User.deleteOne({ userId: 'testuser' });
+// });
 
 // Always pass
 describe('Always pass', () => {

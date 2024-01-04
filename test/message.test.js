@@ -4,54 +4,54 @@ const { connectDB, disconnectDB } = require('../src/config/db');
 const Message = require('../src/models/messageModel');
 const User = require('../src/models/userModel');
 
-beforeAll(async () => {
-    await connectDB();
-});
+// beforeAll(async () => {
+//     await connectDB();
+// });
 
-afterAll(async () => {
-    await disconnectDB();
-});
+// afterAll(async () => {
+//     await disconnectDB();
+// });
 
-beforeEach(async () => {
-    const user1 = new User({
-        userId: '12345',
-        name: 'John Doe',
-        role: 'user',
-        maps: [],
-        following: [],
-        followers: [],
-        blocked: [],
-        messagesReceived: []
-    });
-    const user2 = new User({
-        userId: '67890',
-        name: 'Jane Doe',
-        role: 'user',
-        maps: [],
-        following: [],
-        followers: [],
-        blocked: [],
-        messagesReceived: ['656f1eb5230d7f5c745170b2']
-    });
-    const message = new Message({
-        senderId: '12345',
-        receiverId: '67890',
-        subject: 'About your map',
-        content: 'I found your map very interesting. Can we discuss?',
-        isRead: false
-    });
-    await message.save();
-    user1.messagesReceived.push(message._id);
-    await user1.save();
-    await user2.save();
-});
+// beforeEach(async () => {
+//     const user1 = new User({
+//         userId: '12345',
+//         name: 'John Doe',
+//         role: 'user',
+//         maps: [],
+//         following: [],
+//         followers: [],
+//         blocked: [],
+//         messagesReceived: []
+//     });
+//     const user2 = new User({
+//         userId: '67890',
+//         name: 'Jane Doe',
+//         role: 'user',
+//         maps: [],
+//         following: [],
+//         followers: [],
+//         blocked: [],
+//         messagesReceived: ['656f1eb5230d7f5c745170b2']
+//     });
+//     const message = new Message({
+//         senderId: '12345',
+//         receiverId: '67890',
+//         subject: 'About your map',
+//         content: 'I found your map very interesting. Can we discuss?',
+//         isRead: false
+//     });
+//     await message.save();
+//     user1.messagesReceived.push(message._id);
+//     await user1.save();
+//     await user2.save();
+// });
 
-afterEach(async () => {
-    await Message.deleteOne({ senderId: '12345' });
-    await Message.deleteOne({ senderId: '67890' });
-    await User.deleteOne({ userId: '12345' });
-    await User.deleteOne({ userId: '67890' });
-});
+// afterEach(async () => {
+//     await Message.deleteOne({ senderId: '12345' });
+//     await Message.deleteOne({ senderId: '67890' });
+//     await User.deleteOne({ userId: '12345' });
+//     await User.deleteOne({ userId: '67890' });
+// });
 
 // Always true test
 describe('Always true test', () => {

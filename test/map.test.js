@@ -4,55 +4,55 @@ const { connectDB, disconnectDB } = require('../src/config/db');
 const Map = require('../src/models/mapModel');
 const User = require('../src/models/userModel');
 
-beforeAll(async () => {
-    await connectDB();
-});
+// beforeAll(async () => {
+//     await connectDB();
+// });
 
-afterAll(async () => {
-    await disconnectDB();
-});
+// afterAll(async () => {
+//     await disconnectDB();
+// });
 
-beforeEach(async () => {
-    const map = new Map({
-        name: 'Test Map',
-        owner: 'testuser2',
-        description: 'This is a test map',
-        isPublic: true,
-        tags: ['tag1', 'tag2'],
-        comments: []
-    });
-    const user1 = new User({
-        userId: 'testuser',
-        name: 'Test User',
-        role: 'user',
-        maps: [],
-        following: [],
-        followers: [],
-        blocked: [],
-        messagesReceived: []
-    });
-    const user2 = new User({
-        userId: 'testuser2',
-        name: 'Test User 2',
-        role: 'user',
-        maps: [],
-        following: [],
-        followers: [],
-        blocked: [],
-        messagesReceived: []
-    });
-    await map.save();
-    await user1.save();
-    user2.maps.push(map._id);
-    await user2.save();
-});
+// beforeEach(async () => {
+//     const map = new Map({
+//         name: 'Test Map',
+//         owner: 'testuser2',
+//         description: 'This is a test map',
+//         isPublic: true,
+//         tags: ['tag1', 'tag2'],
+//         comments: []
+//     });
+//     const user1 = new User({
+//         userId: 'testuser',
+//         name: 'Test User',
+//         role: 'user',
+//         maps: [],
+//         following: [],
+//         followers: [],
+//         blocked: [],
+//         messagesReceived: []
+//     });
+//     const user2 = new User({
+//         userId: 'testuser2',
+//         name: 'Test User 2',
+//         role: 'user',
+//         maps: [],
+//         following: [],
+//         followers: [],
+//         blocked: [],
+//         messagesReceived: []
+//     });
+//     await map.save();
+//     await user1.save();
+//     user2.maps.push(map._id);
+//     await user2.save();
+// });
 
-afterEach(async () => {
-    await Map.deleteOne({ name: 'Test Map' });
-    await Map.deleteOne({ name: 'Test Map 2' });
-    await User.deleteOne({ userId: 'testuser' });
-    await User.deleteOne({ userId: 'testuser2' });
-});
+// afterEach(async () => {
+//     await Map.deleteOne({ name: 'Test Map' });
+//     await Map.deleteOne({ name: 'Test Map 2' });
+//     await User.deleteOne({ userId: 'testuser' });
+//     await User.deleteOne({ userId: 'testuser2' });
+// });
 
 // Always pass
 describe('Always pass', () => {
