@@ -1,7 +1,7 @@
 # ZaunMap Backend API Documentation
 
-## Base URL (no longer deployed due to lack of funding)
-`https://zaunmap-6b1455b08c9b.herokuapp.com/api`
+## Base URL
+`https://zaunmap-6b1455b08c9b.herokuapp.com/api` (no longer deployed due to lack of funding)
 
 ## Authentication
 ZaunMap Backend API uses Auth0 for authentication. To authenticate, a user must first register an account with Auth0. Once registered, the user can then login to receive an access token. Some endpoints require an access token to be provided in the request header. The access token is used to identify the user and determine whether the user has permission to access the endpoint.
