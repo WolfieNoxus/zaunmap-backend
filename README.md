@@ -1,8 +1,6 @@
 # ZaunMap Backend API Documentation
 
-# APIs are no longer deployed due to lack of funding
-
-## Base URL
+## Base URL (no longer deployed due to lack of funding)
 `https://zaunmap-6b1455b08c9b.herokuapp.com/api`
 
 ## Authentication
